@@ -1,13 +1,10 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vdurmont.emoji.EmojiParser;
 import de.twaslowski.moodtracker.domain.entity.Metric;
-import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.TreeMap;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -19,25 +16,21 @@ public class MetricCallbackGenerator {
   private final ObjectMapper objectMapper;
 
   @SneakyThrows
-  public LinkedHashMap<String, String> createCallbacks(Metric metric) {
-    var orderedCallbacks = getCallbackMappingForMetric(metric);
-
-    LinkedHashMap<String, String> callbacks = new LinkedHashMap<>();
-    for (var entry : orderedCallbacks.entrySet()) {
-      callbacks.put(entry.getValue(), objectMapper.writeValueAsString(entry.getKey()));
-    }
-    return callbacks;
+  public CallbackContainer createCallbacks(Metric metric) {
+    return CallbackContainer.builder()
+        .callbacks(callbackForMetric(metric))
+        .comparator(Comparator.comparing(Callback::getText))
+        .build();
   }
 
-  private Map<MetricDatapoint, String> getCallbackMappingForMetric(Metric metric) {
-    TreeMap<MetricDatapoint, String> sortedMap = new TreeMap<>(metric.getComparator());
+  private List<Callback> callbackForMetric(Metric metric) {
+    return metric.getLabels().entrySet().stream()
+        .map(entry -> new Callback(entry.getValue(), unsafeWrite(metric, entry.getKey())))
+        .collect(Collectors.toList());
+  }
 
-    for (Entry<Integer, String> entry : metric.getLabels().entrySet()) {
-      sortedMap.put(
-          metric.datapointWithValue(entry.getKey()),
-          EmojiParser.parseToUnicode(entry.getValue())
-      );
-    }
-    return sortedMap;
+  @SneakyThrows
+  private String unsafeWrite(Metric metric, Integer value) {
+    return objectMapper.writeValueAsString(metric.datapointWithValue(value));
   }
 }

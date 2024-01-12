@@ -76,7 +76,7 @@ public class MetricDatapointUpdateHandler implements UpdateHandler {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .answerCallbackQueryId(update.getCallbackQueryId())
-        .content(metricCallbackGenerator.createCallbacks(nextMetric))
+        .callbackContainer(metricCallbackGenerator.createCallbacks(nextMetric))
         .text(nextMetric.getDescription())
         .build();
   }

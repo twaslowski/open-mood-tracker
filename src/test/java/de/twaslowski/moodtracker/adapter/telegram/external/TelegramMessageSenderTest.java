@@ -12,8 +12,10 @@ import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramRespon
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import de.twaslowski.moodtracker.adapter.telegram.handler.callback.Callback;
+import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackContainer;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -74,10 +76,15 @@ public class TelegramMessageSenderTest {
   @SneakyThrows
   void shouldAddMessageToEditableMessagePersistenceQueue() {
     // Given
+    var callbackContainer = CallbackContainer.builder()
+        .callbacks(List.of(new Callback("1", "Button")))
+        .comparator(Comparator.comparing(Callback::getText))
+        .build();
+
     var response = TelegramInlineKeyboardResponse.builder()
         .chatId(1)
         .text("Hello")
-        .content(new LinkedHashMap<>(Map.of("1", "Button")))
+        .callbackContainer(callbackContainer)
         .build();
 
     var chat = TelegramObjectFactory.chat().build();
@@ -110,10 +117,15 @@ public class TelegramMessageSenderTest {
     when(editableMarkupMessageService.findMessageForChatId(1))
         .thenReturn(Optional.of(editableMessage));
 
+    var callbackContainer = CallbackContainer.builder()
+        .callbacks(List.of(new Callback("1", "Button")))
+        .comparator(Comparator.comparing(Callback::getText))
+        .build();
+
     var response = TelegramInlineKeyboardResponse.builder()
         .chatId(1)
         .text("Hello")
-        .content(new LinkedHashMap<>())
+        .callbackContainer(callbackContainer)
         .build();
 
     outgoingQueue.add(response);
