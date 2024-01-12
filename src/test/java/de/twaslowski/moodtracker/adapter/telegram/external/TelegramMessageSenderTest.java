@@ -7,14 +7,12 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
+import de.twaslowski.moodtracker.adapter.telegram.domain.callback.Callback;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.Callback;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackContainer;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
@@ -76,15 +74,12 @@ public class TelegramMessageSenderTest {
   @SneakyThrows
   void shouldAddMessageToEditableMessagePersistenceQueue() {
     // Given
-    var callbackContainer = CallbackContainer.builder()
-        .callbacks(List.of(new Callback("1", "Button")))
-        .comparator(Comparator.comparing(Callback::getText))
-        .build();
+    var callbacks = List.of(new Callback("1", "Button"));
 
     var response = TelegramInlineKeyboardResponse.builder()
         .chatId(1)
         .text("Hello")
-        .callbackContainer(callbackContainer)
+        .callbacks(callbacks)
         .build();
 
     var chat = TelegramObjectFactory.chat().build();
@@ -117,15 +112,12 @@ public class TelegramMessageSenderTest {
     when(editableMarkupMessageService.findMessageForChatId(1))
         .thenReturn(Optional.of(editableMessage));
 
-    var callbackContainer = CallbackContainer.builder()
-        .callbacks(List.of(new Callback("1", "Button")))
-        .comparator(Comparator.comparing(Callback::getText))
-        .build();
+    var callbacks = List.of(new Callback("1", "Button"));
 
     var response = TelegramInlineKeyboardResponse.builder()
         .chatId(1)
         .text("Hello")
-        .callbackContainer(callbackContainer)
+        .callbacks(callbacks)
         .build();
 
     outgoingQueue.add(response);

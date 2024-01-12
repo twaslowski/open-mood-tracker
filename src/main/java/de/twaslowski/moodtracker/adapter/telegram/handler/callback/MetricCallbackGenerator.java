@@ -1,9 +1,11 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.twaslowski.moodtracker.adapter.telegram.domain.callback.Callback;
 import de.twaslowski.moodtracker.domain.entity.Metric;
-import java.util.Comparator;
+import de.twaslowski.moodtracker.domain.entity.Metric.SortOrder;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -16,17 +18,20 @@ public class MetricCallbackGenerator {
   private final ObjectMapper objectMapper;
 
   @SneakyThrows
-  public CallbackContainer createCallbacks(Metric metric) {
-    return CallbackContainer.builder()
-        .callbacks(callbackForMetric(metric))
-        .comparator(Comparator.comparing(Callback::getText))
-        .build();
+  public List<Callback> createCallbacks(Metric metric) {
+    return callbackForMetric(metric);
   }
 
   private List<Callback> callbackForMetric(Metric metric) {
-    return metric.getLabels().entrySet().stream()
+    var callbacks = metric.getLabels().entrySet().stream()
+        .sorted(Entry.comparingByKey())
         .map(entry -> new Callback(entry.getValue(), unsafeWrite(metric, entry.getKey())))
         .collect(Collectors.toList());
+
+    if (metric.getSortOrder() == SortOrder.DESC) {
+      return callbacks.reversed();
+    }
+    return callbacks;
   }
 
   @SneakyThrows

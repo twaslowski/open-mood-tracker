@@ -1,10 +1,10 @@
 package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 
+import de.twaslowski.moodtracker.adapter.telegram.domain.callback.Callback;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.Callback;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -66,16 +66,15 @@ public class BotApiMessageFactory {
 
   private static ArrayList<InlineKeyboardRow> generateInlineKeyboardRows(TelegramInlineKeyboardResponse response) {
     // Generates a list of InlineKeyboardButtons, retaining order of the response's LinkedHashMap
-    return response.getCallbackContainer().callbacks().stream()
-        .sorted(response.getCallbackContainer().comparator())
+    return response.getCallbacks().stream()
         .map(callback -> new InlineKeyboardRow(buttonFromCallback(callback)))
         .collect(Collectors.toCollection(ArrayList::new));
   }
 
   private static InlineKeyboardButton buttonFromCallback(Callback callback) {
     return InlineKeyboardButton.builder()
-        .text(callback.getText())
-        .callbackData(callback.getData().toString())
+        .text(callback.text())
+        .callbackData(callback.data().toString())
         .build();
   }
 

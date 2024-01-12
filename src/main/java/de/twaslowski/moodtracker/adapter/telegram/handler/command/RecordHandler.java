@@ -58,7 +58,7 @@ public class RecordHandler extends AbstractCommandHandler {
     log.info("Created new record {}", record.getId());
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
-        .callbackContainer(metricCallbackGenerator.createCallbacks(firstMetric))
+        .callbacks(metricCallbackGenerator.createCallbacks(firstMetric))
         .text(firstMetric.getDescription())
         .build();
   }
@@ -72,7 +72,7 @@ public class RecordHandler extends AbstractCommandHandler {
 
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
-        .callbackContainer(metricCallbackGenerator.createCallbacks(nextMetric))
+        .callbacks(metricCallbackGenerator.createCallbacks(nextMetric))
         .text(format("%s%n%n%s",
             messageUtil.getMessage("command.record.already-recording"),
             nextMetric.getDescription()

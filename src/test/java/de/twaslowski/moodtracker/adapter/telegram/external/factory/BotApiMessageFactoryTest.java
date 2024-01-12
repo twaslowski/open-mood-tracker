@@ -2,9 +2,8 @@ package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import de.twaslowski.moodtracker.adapter.telegram.domain.callback.Callback;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.Callback;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackContainer;
 import java.util.Comparator;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -19,20 +18,19 @@ class BotApiMessageFactoryTest {
     var callbackTwo = new Callback("Second", "second");
     var callbackThree = new Callback("Third", "third");
 
-    var comparator = Comparator.comparing(Callback::getText);
+    var comparator = Comparator.comparing(Callback::text);
 
-    var callbacks = CallbackContainer.builder().callbacks(List.of(
-            callbackOne,
-            callbackTwo,
-            callbackThree
-        ))
-        .comparator(comparator).build();
+    var callbacks = List.of(
+        callbackOne,
+        callbackTwo,
+        callbackThree
+    );
 
     var response = TelegramInlineKeyboardResponse.builder()
         .chatId(1L)
         .text("Message")
         .answerCallbackQueryId("someCallbackQueryId")
-        .callbackContainer(callbacks)
+        .callbacks(callbacks)
         .build();
 
     var result = BotApiMessageFactory.createInlineKeyboardResponse(response);
