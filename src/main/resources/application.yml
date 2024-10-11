@@ -22,7 +22,6 @@ spring:
       maximum-pool-size: 10
       max-lifetime: 1260000
   flyway:
-    baseline-on-migrate: true
     schemas: mood-tracker
 
 telegram:

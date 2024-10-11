@@ -1,3 +1,3 @@
 #!/usr/bin/env zsh
 
-docker compose -f local/docker-compose.yaml down
+docker compose -p mood-tracker -f local/docker-compose.yaml down
