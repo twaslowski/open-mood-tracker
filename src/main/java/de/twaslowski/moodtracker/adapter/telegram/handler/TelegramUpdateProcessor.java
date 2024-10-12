@@ -8,13 +8,14 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class TelegramIncomingQueueProcessor {
+public class TelegramUpdateProcessor {
 
   private final InMemoryQueue<TelegramUpdate> incomingMessageQueue;
   private final InMemoryQueue<TelegramResponse> outgoingMessageQueue;
@@ -22,21 +23,18 @@ public class TelegramIncomingQueueProcessor {
 
   @PostConstruct
   public void init() {
-    log.info("Starting response processor ...");
-    scheduler.scheduleWithFixedDelay(this::sendResponses, 0, 10, TimeUnit.MILLISECONDS);
+    log.info("Starting incoming queue processor ...");
+    scheduler.scheduleWithFixedDelay(this::processUpdate, 0, 10, TimeUnit.MILLISECONDS);
   }
 
-  public void sendResponses() {
-    try {
-      var update = incomingMessageQueue.take();
-      var response = TelegramResponse.builder()
-          .chatId(update.chatId())
-          .message("Hello, I'm a bot!")
-          .build();
-      outgoingMessageQueue.add(response);
-    } catch (InterruptedException e) {
-      Thread.currentThread().interrupt();
-      log.error("Error while sending responses: {}", e.getMessage());
-    }
+  @SneakyThrows // Not explicitly handling the Queue's InterruptedException
+  public void processUpdate() {
+    // Processes incoming updates and writes responses to outgoing queue, see TelegramOutgoingQueueProcessor
+    var update = incomingMessageQueue.take();
+    var response = TelegramResponse.builder()
+        .chatId(update.chatId())
+        .message("Hello, I'm a bot!")
+        .build();
+    outgoingMessageQueue.add(response);
   }
 }

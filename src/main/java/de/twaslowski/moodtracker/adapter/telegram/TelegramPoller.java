@@ -7,6 +7,7 @@ import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.longpolling.BotSession;
 import org.telegram.telegrambots.longpolling.interfaces.LongPollingUpdateConsumer;
@@ -18,7 +19,8 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class TelegramUpdateProcessor implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
+@Profile("!test")
+public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
 
   private final InMemoryQueue<TelegramUpdate> incomingMessageQueue;
 
@@ -27,6 +29,7 @@ public class TelegramUpdateProcessor implements SpringLongPollingBot, LongPollin
 
   @Override
   public void consume(Update update) {
+    // Parse the incoming update and queue it for processing, see TelegramIncomingQueueProcessor
     log.info("Received update: {}", update.getUpdateId());
     var telegramUpdate = extractUpdate(update);
 

@@ -116,7 +116,7 @@
 
     <profiles>
         <profile>
-            <id>integration-tests</id>
+            <id>integration</id>
             <build>
                 <plugins>
                     <plugin>
