@@ -29,7 +29,6 @@ public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleTh
 
   @Override
   public void consume(Update update) {
-    // Parse the incoming update and queue it for processing, see TelegramIncomingQueueProcessor
     log.info("Received update: {}", update.getUpdateId());
     var telegramUpdate = extractUpdate(update);
 
