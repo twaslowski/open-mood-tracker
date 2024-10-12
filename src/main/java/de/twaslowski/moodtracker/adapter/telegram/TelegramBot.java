@@ -2,6 +2,7 @@ package de.twaslowski.moodtracker.adapter.telegram;
 
 import static de.twaslowski.moodtracker.adapter.telegram.TelegramUtils.extractUpdate;
 
+import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.StartHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.UnknownUpdateHandler;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,10 @@ public class TelegramBot implements SpringLongPollingBot, LongPollingSingleThrea
     log.info("Received update: {}", update.getUpdateId());
     var telegramUpdate = extractUpdate(update);
 
+    process(telegramUpdate);
+  }
+
+  public void process(TelegramUpdate telegramUpdate) {
     switch (telegramUpdate.text()) {
       case StartHandler.COMMAND -> startHandler.handleUpdate(telegramUpdate);
       default -> unknownUpdateHandler.handleUpdate(telegramUpdate);
