@@ -9,7 +9,9 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.StartHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.UnknownUpdateHandler;
 import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
+import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.concurrent.TimeUnit;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +26,14 @@ public class TelegramBotIntegrationTest {
   @Autowired
   private InMemoryQueue<TelegramResponse> outgoingMessageQueue;
 
+  @Autowired
+  private UserRepository userRepository;
+
+  @BeforeEach
+  void setUp() {
+    userRepository.deleteAll();
+  }
+
   @Test
   void shouldRespondToKnownCommand() {
     var update = TelegramUpdate.builder()
@@ -31,15 +41,13 @@ public class TelegramBotIntegrationTest {
         .text(StartHandler.COMMAND)
         .build();
 
-    // When update is received
     incomingMessageQueue.add(update);
 
-    // Then response should be sent
     await().atMost(3, TimeUnit.SECONDS)
         .untilAsserted(() -> {
           var message = outgoingMessageQueue.take();
           assertThat(message.chatId()).isEqualTo(1L);
-          assertThat(message.message()).isEqualTo(StartHandler.RESPONSE);
+          assertThat(message.message()).isEqualTo(StartHandler.CREATED_RESPONSE);
         });
   }
 
@@ -50,10 +58,8 @@ public class TelegramBotIntegrationTest {
         .text("someUnknownCommand")
         .build();
 
-    // When update is received
     incomingMessageQueue.add(update);
 
-    // Then response should be sent
     await().atMost(3, TimeUnit.SECONDS)
         .untilAsserted(() -> {
           var message = outgoingMessageQueue.take();
@@ -61,5 +67,4 @@ public class TelegramBotIntegrationTest {
           assertThat(message.message()).isEqualTo(UnknownUpdateHandler.RESPONSE);
         });
   }
-
 }

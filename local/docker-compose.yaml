@@ -7,3 +7,8 @@ services:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mood-tracker
+    healthcheck:
+      test: [ "CMD", "psql", "postgresql://user:password@localhost:5432/mood-tracker", "-c", "select 1;" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3

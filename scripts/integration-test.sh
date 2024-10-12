@@ -4,3 +4,4 @@
 source .env
 
 ./mvnw test -P integration
+./mvnw jacoco:report
