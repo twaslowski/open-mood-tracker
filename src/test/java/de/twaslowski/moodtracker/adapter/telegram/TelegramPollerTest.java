@@ -1,8 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
@@ -10,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -24,27 +24,24 @@ class TelegramPollerTest {
 
   @Test
   void shouldAddUpdateToIncomingQueue() {
-    // todo fix
-    when(TelegramUtils.extractUpdate(any())).thenReturn(TelegramUpdate.builder()
+    var telegramUpdate = TelegramUpdate.builder()
         .updateId(1)
         .text("some text")
         .chatId(1)
-        .build());
-
+        .build();
     var update = new Update();
 
-    // When update is processed
-    telegramPoller.consume(update);
+    try (MockedStatic<TelegramUtils> utils = Mockito.mockStatic(TelegramUtils.class)) {
+      utils.when(() -> TelegramUtils.extractUpdate(update)).thenReturn(telegramUpdate);
+      // When update is processed
+      telegramPoller.consume(update);
 
-    // Then telegramUpdate object is added to Queue
-    verify(incomingQueue).add(TelegramUpdate.builder()
-        .updateId(1)
-        .text("some text")
-        .chatId(1)
-        .build());
-  }
-
-  @Test
-  void shouldProcessUnknownCommand() {
+      // Then telegramUpdate object is added to Queue
+      verify(incomingQueue).add(TelegramUpdate.builder()
+          .updateId(1)
+          .text("some text")
+          .chatId(1)
+          .build());
+    }
   }
 }
