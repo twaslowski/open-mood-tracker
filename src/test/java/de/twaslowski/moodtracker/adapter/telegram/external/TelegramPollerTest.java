@@ -1,9 +1,9 @@
-package de.twaslowski.moodtracker.adapter.telegram;
+package de.twaslowski.moodtracker.adapter.telegram.external;
 
 import static org.mockito.Mockito.verify;
 
+import de.twaslowski.moodtracker.adapter.telegram.TelegramUtils;
 import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

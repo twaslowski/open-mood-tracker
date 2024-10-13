@@ -1,7 +1,6 @@
-package de.twaslowski.moodtracker.adapter.telegram;
+package de.twaslowski.moodtracker.adapter.telegram.external;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import jakarta.annotation.PostConstruct;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

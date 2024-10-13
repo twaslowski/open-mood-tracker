@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram;
+package de.twaslowski.moodtracker.adapter.telegram.integration;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -8,7 +8,7 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.StartHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.UnknownUpdateHandler;
-import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
+import de.twaslowski.moodtracker.adapter.telegram.external.InMemoryQueue;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.BeforeEach;

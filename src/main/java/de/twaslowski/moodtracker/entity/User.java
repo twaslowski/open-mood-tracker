@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.math.BigInteger;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,8 +22,8 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
-  private long id;
+  private BigInteger id;
 
   @NotNull
-  private long telegramId;
+  private BigInteger telegramId;
 }
