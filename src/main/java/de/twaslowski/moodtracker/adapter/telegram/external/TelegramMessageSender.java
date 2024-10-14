@@ -40,7 +40,7 @@ public class TelegramMessageSender {
           .build();
       telegramClient.execute(sendMessage);
       log.info("Sent message: {}", response.message());
-    } catch (TelegramApiException e) {
+    } catch (TelegramApiException | RuntimeException e) {
       log.error("Error while sending message: {}", e.getMessage());
     }
   }

@@ -34,7 +34,7 @@ public class TelegramUpdateProcessor {
       var update = incomingMessageQueue.take();
       var response = telegramUpdateHandler.handleUpdate(update);
       outgoingMessageQueue.add(response);
-    } catch (InterruptedException e) {
+    } catch (Exception e) {
       log.error("Error while processing update: {}", e.getMessage());
     }
   }

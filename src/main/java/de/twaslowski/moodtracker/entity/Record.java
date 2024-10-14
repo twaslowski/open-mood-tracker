@@ -6,18 +6,20 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.time.ZonedDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "user")
-public class User {
+@AllArgsConstructor
+@Table(name = "record")
+public class Record {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
@@ -25,4 +27,11 @@ public class User {
 
   @NotNull
   private long telegramId;
+
+  @CreationTimestamp
+  private ZonedDateTime creationTimestamp;
+
+  private int mood;
+
+  private int sleep;
 }
