@@ -2,6 +2,7 @@ package de.twaslowski.moodtracker.adapter.telegram.handler;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -11,13 +12,26 @@ import org.springframework.stereotype.Component;
 @Component
 public class TelegramUpdateHandler {
 
-  private final StartHandler startHandler;
-  private final UnknownUpdateHandler unknownUpdateHandler;
+  private final Collection<UpdateHandler> handlers;
+  public static final String UNKNOWN_COMMAND_RESPONSE = "Unfortunately, I cannot process that message.";
 
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    return switch (update.text()) {
-      case StartHandler.COMMAND -> startHandler.handleUpdate(update);
-      default -> unknownUpdateHandler.handleUpdate(update);
-    };
+    var relevantHandler = handlers.stream()
+        .filter(handler -> handler.canHandle(update))
+        .findFirst();
+
+    return relevantHandler
+        .map(handler -> handler.handleUpdate(update))
+        .orElseGet(() -> {
+          log.warn("No handler found for update {}", update);
+          return respondToUnknownCommand(update.chatId());
+        });
+  }
+
+  private TelegramResponse respondToUnknownCommand(long chatId) {
+    return TelegramResponse.builder()
+        .chatId(chatId)
+        .message(UNKNOWN_COMMAND_RESPONSE)
+        .build();
   }
 }

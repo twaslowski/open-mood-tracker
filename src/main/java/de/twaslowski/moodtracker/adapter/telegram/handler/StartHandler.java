@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class StartHandler {
+public class StartHandler implements UpdateHandler {
 
   public static final String COMMAND = "/start";
   public static final String CREATED_RESPONSE = "Hi! Nice to have you. You can record your mood now – just type /record. For help, type /help.";
@@ -18,6 +18,7 @@ public class StartHandler {
 
   private final UserService userService;
 
+  @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     log.info("Handling start command for chat {}", update.chatId());
 
@@ -27,5 +28,10 @@ public class StartHandler {
         .chatId(update.chatId())
         .message(userCreated ? CREATED_RESPONSE : EXISTS_RESPONSE)
         .build();
+  }
+
+  @Override
+  public boolean canHandle(TelegramUpdate update) {
+    return COMMAND.equals(update.text());
   }
 }

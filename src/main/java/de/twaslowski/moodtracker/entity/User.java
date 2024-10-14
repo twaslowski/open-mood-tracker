@@ -22,8 +22,8 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
-  private BigInteger id;
+  private long id;
 
   @NotNull
-  private BigInteger telegramId;
+  private long telegramId;
 }
