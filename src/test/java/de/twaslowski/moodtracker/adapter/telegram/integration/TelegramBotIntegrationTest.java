@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.integration;
 
-import static de.twaslowski.moodtracker.adapter.telegram.handler.TelegramUpdateHandler.UNKNOWN_COMMAND_RESPONSE;
+import static de.twaslowski.moodtracker.adapter.telegram.handler.TelegramUpdateDelegator.UNKNOWN_COMMAND_RESPONSE;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 

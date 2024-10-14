@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 @Component
-public class TelegramUpdateHandler {
+public class TelegramUpdateDelegator {
 
   private final Collection<UpdateHandler> handlers;
   public static final String UNKNOWN_COMMAND_RESPONSE = "Unfortunately, I cannot process that message.";
 
-  public TelegramResponse handleUpdate(TelegramUpdate update) {
+  public TelegramResponse delegateUpdate(TelegramUpdate update) {
     var relevantHandler = handlers.stream()
         .filter(handler -> handler.canHandle(update))
         .findFirst();
