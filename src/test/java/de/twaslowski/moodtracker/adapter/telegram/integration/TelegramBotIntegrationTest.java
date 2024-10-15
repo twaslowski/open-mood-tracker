@@ -18,21 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @IntegrationTest
-public class TelegramBotIntegrationTest {
-
-  @Autowired
-  private InMemoryQueue<TelegramUpdate> incomingMessageQueue;
-
-  @Autowired
-  private InMemoryQueue<TelegramResponse> outgoingMessageQueue;
-
-  @Autowired
-  private UserRepository userRepository;
-
-  @BeforeEach
-  void setUp() {
-    userRepository.deleteAll();
-  }
+public class TelegramBotIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldRespondToKnownCommand() {
