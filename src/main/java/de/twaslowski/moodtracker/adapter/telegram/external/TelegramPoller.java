@@ -2,7 +2,7 @@ package de.twaslowski.moodtracker.adapter.telegram.external;
 
 import static de.twaslowski.moodtracker.adapter.telegram.TelegramUtils.extractUpdate;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

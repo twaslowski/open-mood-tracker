@@ -1,8 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram.integration;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.external.InMemoryQueue;
 import de.twaslowski.moodtracker.adapter.telegram.temprecord.TemporaryRecordRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;

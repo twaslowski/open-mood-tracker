@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.dto;
+package de.twaslowski.moodtracker.adapter.telegram.dto.update;
 
 import lombok.Builder;
 

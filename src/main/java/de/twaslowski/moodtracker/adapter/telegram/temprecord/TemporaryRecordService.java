@@ -11,12 +11,11 @@ public class TemporaryRecordService {
 
   private final TemporaryRecordRepository temporaryRecordRepository;
 
-  public TemporaryRecord getTemporaryRecord(long chatId) {
-    var temporaryRecord = temporaryRecordRepository.findById(chatId);
-    if (temporaryRecord.isEmpty()) {
-      log.info("No temporary record found for chatId: {}. Creating one.", chatId);
-      return temporaryRecordRepository.save(new TemporaryRecord(chatId));
-    }
-    return temporaryRecord.get();
+  public TemporaryRecord createTemporaryRecordForUser(long chatId) {
+    return temporaryRecordRepository.save(new TemporaryRecord(chatId));
+  }
+
+  public boolean userHasTemporaryRecord(long chatId) {
+    return temporaryRecordRepository.existsById(chatId);
   }
 }

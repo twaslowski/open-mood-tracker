@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.service;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import lombok.RequiredArgsConstructor;

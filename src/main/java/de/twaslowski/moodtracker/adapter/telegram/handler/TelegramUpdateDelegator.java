@@ -1,7 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +30,7 @@ public class TelegramUpdateDelegator {
   }
 
   private TelegramResponse respondToUnknownCommand(long chatId) {
-    return TelegramResponse.builder()
+    return TelegramTextResponse.builder()
         .chatId(chatId)
         .message(UNKNOWN_COMMAND_RESPONSE)
         .build();

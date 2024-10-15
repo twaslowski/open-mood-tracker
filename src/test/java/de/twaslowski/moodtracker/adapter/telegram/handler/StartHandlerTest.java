@@ -3,7 +3,7 @@ package de.twaslowski.moodtracker.adapter.telegram.handler;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.mockito.Mockito.when;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,8 +34,8 @@ public class StartHandlerTest {
     var response = startHandler.handleUpdate(update);
 
     // then
-    assertThat(response.chatId()).isEqualTo(1L);
-    assertThat(response.message()).isEqualTo(StartHandler.CREATED_RESPONSE);
+    assertThat(response.getChatId()).isEqualTo(1L);
+    assertThat(response.getMessage()).isEqualTo(StartHandler.CREATED_RESPONSE);
   }
 
   @Test
@@ -52,7 +52,7 @@ public class StartHandlerTest {
     var response = startHandler.handleUpdate(update);
 
     // then
-    assertThat(response.chatId()).isEqualTo(1L);
-    assertThat(response.message()).isEqualTo(StartHandler.EXISTS_RESPONSE);
+    assertThat(response.getChatId()).isEqualTo(1L);
+    assertThat(response.getMessage()).isEqualTo(StartHandler.EXISTS_RESPONSE);
   }
 }

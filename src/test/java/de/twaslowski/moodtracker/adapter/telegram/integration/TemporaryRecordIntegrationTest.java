@@ -4,7 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -24,14 +25,16 @@ public class TemporaryRecordIntegrationTest extends IntegrationBase {
 
     // then
     await().untilAsserted(() -> {
-          var temporaryRecord = temporaryRecordRepository.findAll().getFirst();
+          var maybeTemporaryRecord = temporaryRecordRepository.findById(1L);
+          assertThat(maybeTemporaryRecord).isPresent();
+
+          var temporaryRecord = maybeTemporaryRecord.get();
           assertThat(temporaryRecord.getTelegramId()).isEqualTo(1);
           assertThat(temporaryRecord.getMood()).isEqualTo(null);
           assertThat(temporaryRecord.getSleep()).isEqualTo(null);
 
           var response = outgoingMessageQueue.take();
-          assertThat(response.chatId()).isEqualTo(1);
-          assertThat(response.message()).isEqualTo("Temporary record 1 successfully created!");
+          assertThat(response).isInstanceOf(TelegramInlineKeyboardResponse.class);
         }
     );
   }

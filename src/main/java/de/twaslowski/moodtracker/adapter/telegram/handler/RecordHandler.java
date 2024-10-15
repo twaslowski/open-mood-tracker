@@ -1,9 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler;
 
-import static java.lang.String.format;
-
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.temprecord.TemporaryRecordService;
 import de.twaslowski.moodtracker.service.RecordService;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +19,16 @@ public class RecordHandler implements UpdateHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    var temporaryRecord = temporaryRecordService.getTemporaryRecord(update.chatId());
-    return TelegramResponse.builder()
+    if (temporaryRecordService.userHasTemporaryRecord(update.chatId())) {
+      return TelegramInlineKeyboardResponse.builder()
+          .chatId(update.chatId())
+          .message("Temporary record exists. Let's populate it # todo")
+          .build();
+    }
+    var temporaryRecord = temporaryRecordService.createTemporaryRecordForUser(update.chatId());
+    return TelegramInlineKeyboardResponse.builder()
         .chatId(update.chatId())
-        .message(format("Temporary record %d successfully created!", temporaryRecord.getTelegramId()))
+        .message("Temporary record created. First metric ...")
         .build();
   }
 

@@ -3,7 +3,8 @@ package de.twaslowski.moodtracker.adapter.telegram.external;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,7 +16,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @ExtendWith(MockitoExtension.class)
 public class TelegramMessageSenderTest {
 
-  private TelegramClient telegramClient = mock(TelegramClient.class);
+  private final TelegramClient telegramClient = mock(TelegramClient.class);
 
   private final InMemoryQueue<TelegramResponse> outgoingQueue = new InMemoryQueue<>();
 
@@ -26,7 +27,7 @@ public class TelegramMessageSenderTest {
   @SneakyThrows
   void shouldSendMessageFromQueue() {
     // Given
-    var response = TelegramResponse.builder()
+    var response = TelegramTextResponse.builder()
         .chatId(1)
         .message("Hello")
         .build();

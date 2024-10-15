@@ -1,7 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +25,7 @@ public class StartHandler implements UpdateHandler {
 
     var userCreated = userService.createUserFromTelegramId(update.chatId());
 
-    return TelegramResponse.builder()
+    return TelegramTextResponse.builder()
         .chatId(update.chatId())
         .message(userCreated ? CREATED_RESPONSE : EXISTS_RESPONSE)
         .build();

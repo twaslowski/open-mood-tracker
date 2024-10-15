@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import jakarta.annotation.PostConstruct;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -10,7 +10,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -34,12 +33,9 @@ public class TelegramMessageSender {
   public void sendResponses() {
     try {
       TelegramResponse response = outgoingMessageQueue.take();
-      var sendMessage = SendMessage.builder()
-          .chatId(response.chatId())
-          .text(response.message())
-          .build();
-      telegramClient.execute(sendMessage);
-      log.info("Sent message: {}", response.message());
+      var telegramResponseObject = BotApiMessageFactory.createBotApiMessage(response);
+      telegramClient.execute(telegramResponseObject);
+      log.info("Sent response to chat: {}", response.getChatId());
     } catch (TelegramApiException | RuntimeException e) {
       log.error("Error while sending message: {}", e.getMessage());
     }

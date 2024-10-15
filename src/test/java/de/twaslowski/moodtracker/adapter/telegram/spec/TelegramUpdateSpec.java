@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.spec;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 
 public class TelegramUpdateSpec {
 
