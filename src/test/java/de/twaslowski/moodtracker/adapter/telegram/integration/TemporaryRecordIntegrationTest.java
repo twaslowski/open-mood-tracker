@@ -5,7 +5,7 @@ import static org.awaitility.Awaitility.await;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -18,7 +18,7 @@ public class TemporaryRecordIntegrationTest extends IntegrationBase {
     assertThat(temporaryRecordRepository.findAll()).isEmpty();
 
     // when
-    incomingMessageQueue.add(TelegramUpdate.builder()
+    incomingMessageQueue.add(TelegramTextUpdate.builder()
         .chatId(1)
         .text("/record")
         .build());

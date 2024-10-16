@@ -17,7 +17,7 @@ public class RecordService {
         Record.builder()
             .mood(0)
             .sleep(8)
-            .telegramId(update.chatId())
+            .telegramId(update.getChatId())
             .build());
   }
 }

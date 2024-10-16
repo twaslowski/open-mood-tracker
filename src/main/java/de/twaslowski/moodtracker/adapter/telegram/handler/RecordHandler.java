@@ -19,21 +19,21 @@ public class RecordHandler implements UpdateHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    if (temporaryRecordService.userHasTemporaryRecord(update.chatId())) {
+    if (temporaryRecordService.userHasTemporaryRecord(update.getChatId())) {
       return TelegramInlineKeyboardResponse.builder()
-          .chatId(update.chatId())
+          .chatId(update.getChatId())
           .message("Temporary record exists. Let's populate it # todo")
           .build();
     }
-    var temporaryRecord = temporaryRecordService.createTemporaryRecordForUser(update.chatId());
+    var temporaryRecord = temporaryRecordService.createTemporaryRecordForUser(update.getChatId());
     return TelegramInlineKeyboardResponse.builder()
-        .chatId(update.chatId())
+        .chatId(update.getChatId())
         .message("Temporary record created. First metric ...")
         .build();
   }
 
   @Override
   public boolean canHandle(TelegramUpdate update) {
-    return COMMAND.equals(update.text());
+    return COMMAND.equals(update.getText());
   }
 }

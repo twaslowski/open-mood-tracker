@@ -21,18 +21,18 @@ public class StartHandler implements UpdateHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    log.info("Handling start command for chat {}", update.chatId());
+    log.info("Handling start command for chat {}", update.getChatId());
 
-    var userCreated = userService.createUserFromTelegramId(update.chatId());
+    var userCreated = userService.createUserFromTelegramId(update.getChatId());
 
     return TelegramTextResponse.builder()
-        .chatId(update.chatId())
+        .chatId(update.getChatId())
         .message(userCreated ? CREATED_RESPONSE : EXISTS_RESPONSE)
         .build();
   }
 
   @Override
   public boolean canHandle(TelegramUpdate update) {
-    return COMMAND.equals(update.text());
+    return COMMAND.equals(update.getText());
   }
 }

@@ -26,7 +26,7 @@ public class TelegramUtilsTest {
     var telegramUpdate = TelegramUtils.extractUpdate(update);
 
     // Then the text should be extracted
-    assertThat(telegramUpdate.text()).isEqualTo("some text");
+    assertThat(telegramUpdate.getText()).isEqualTo("some text");
   }
 
   @Test
@@ -43,7 +43,7 @@ public class TelegramUtilsTest {
     var telegramUpdate = TelegramUtils.extractUpdate(update);
 
     // Then the text should be extracted
-    assertThat(telegramUpdate.text()).isEqualTo("");
+    assertThat(telegramUpdate.getText()).isEqualTo("");
   }
 
   @Test

@@ -23,7 +23,7 @@ public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleTh
 
   private final InMemoryQueue<TelegramUpdate> incomingMessageQueue;
 
-  @Value("${telegram.bot.token}")
+  @Value("${mood-tracker.telegram.bot.token}")
   private String botToken;
 
   @Override

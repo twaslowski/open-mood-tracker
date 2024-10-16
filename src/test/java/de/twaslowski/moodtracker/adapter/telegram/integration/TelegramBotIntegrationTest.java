@@ -5,7 +5,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.StartHandler;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
@@ -17,7 +17,7 @@ public class TelegramBotIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldRespondToKnownCommand() {
-    var update = TelegramUpdate.builder()
+    var update = TelegramTextUpdate.builder()
         .chatId(1L)
         .text(StartHandler.COMMAND)
         .build();
@@ -34,7 +34,7 @@ public class TelegramBotIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldRespondWithUnknownMessage() {
-    var update = TelegramUpdate.builder()
+    var update = TelegramTextUpdate.builder()
         .chatId(1L)
         .text("someUnknownCommand")
         .build();

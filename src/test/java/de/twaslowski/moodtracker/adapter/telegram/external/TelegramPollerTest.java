@@ -3,6 +3,7 @@ package de.twaslowski.moodtracker.adapter.telegram.external;
 import static org.mockito.Mockito.verify;
 
 import de.twaslowski.moodtracker.adapter.telegram.TelegramUtils;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +25,7 @@ class TelegramPollerTest {
 
   @Test
   void shouldAddUpdateToIncomingQueue() {
-    var telegramUpdate = TelegramUpdate.builder()
+    var telegramUpdate = TelegramTextUpdate.builder()
         .updateId(1)
         .text("some text")
         .chatId(1)
@@ -37,7 +38,7 @@ class TelegramPollerTest {
       telegramPoller.consume(update);
 
       // Then telegramUpdate object is added to Queue
-      verify(incomingQueue).add(TelegramUpdate.builder()
+      verify(incomingQueue).add(TelegramTextUpdate.builder()
           .updateId(1)
           .text("some text")
           .chatId(1)

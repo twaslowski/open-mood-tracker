@@ -24,9 +24,10 @@ spring:
   flyway:
     schemas: mood-tracker
 
-telegram:
-  bot:
-    token: ${TELEGRAM_TOKEN}
+mood_tracker:
+  telegram:
+    bot:
+      token: ${TELEGRAM_TOKEN}
 
 management:
   endpoints:

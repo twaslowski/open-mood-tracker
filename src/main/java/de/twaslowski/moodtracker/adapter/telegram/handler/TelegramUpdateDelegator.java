@@ -25,7 +25,7 @@ public class TelegramUpdateDelegator {
         .map(handler -> handler.handleUpdate(update))
         .orElseGet(() -> {
           log.warn("No handler found for update {}", update);
-          return respondToUnknownCommand(update.chatId());
+          return respondToUnknownCommand(update.getChatId());
         });
   }
 
