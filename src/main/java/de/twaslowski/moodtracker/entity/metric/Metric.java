@@ -20,8 +20,13 @@ public abstract class Metric {
 
   protected final Integer value;
 
-  public Map<String, String> getTagsAsStrings() {
+  public Map<String, String> createCallback() {
     return tags.entrySet().stream()
-        .collect(toMap(Entry::getKey, e -> e.getValue().toString()));
+        .collect(toMap(
+            Entry::getKey, this::createCallbackData));
+  }
+
+  private String createCallbackData(Entry<String, Integer> entry) {
+    return entry.getKey() + ":" + entry.getValue();
   }
 }

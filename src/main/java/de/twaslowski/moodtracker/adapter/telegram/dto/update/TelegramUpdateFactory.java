@@ -8,7 +8,11 @@ public class TelegramUpdateFactory {
 
   public static TelegramUpdate createTelegramUpdate(Update update) {
     if (update.hasCallbackQuery()) {
-      return TelegramInlineKeyboardUpdate.builder().build();
+      return TelegramInlineKeyboardUpdate.builder()
+          .chatId(update.getCallbackQuery().getMessage().getChatId())
+          .callbackData(update.getCallbackQuery().getData())
+          .updateId(update.getUpdateId())
+          .build();
     } else {
       return TelegramTextUpdate.builder()
           .updateId(update.getUpdateId())

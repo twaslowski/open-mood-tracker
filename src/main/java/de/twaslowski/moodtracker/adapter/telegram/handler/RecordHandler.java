@@ -26,7 +26,7 @@ public class RecordHandler implements UpdateHandler {
     );
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
-        .content(metric.getTagsAsStrings())
+        .content(metric.createCallback())
         .message("Temporary record created. First metric ...")
         .build();
   }

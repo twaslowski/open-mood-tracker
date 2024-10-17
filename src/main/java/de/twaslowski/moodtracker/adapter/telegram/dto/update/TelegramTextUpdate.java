@@ -9,4 +9,8 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class TelegramTextUpdate extends TelegramUpdate {
 
+  @Override
+  public boolean hasCallback() {
+    return false;
+  }
 }

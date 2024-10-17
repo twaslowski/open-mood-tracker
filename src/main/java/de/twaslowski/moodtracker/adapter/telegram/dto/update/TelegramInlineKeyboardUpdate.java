@@ -9,4 +9,10 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public class TelegramInlineKeyboardUpdate extends TelegramUpdate {
 
+  String callbackData;
+
+  @Override
+  public boolean hasCallback() {
+    return true;
+  }
 }

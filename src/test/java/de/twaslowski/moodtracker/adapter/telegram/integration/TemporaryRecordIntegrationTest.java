@@ -36,7 +36,7 @@ public class TemporaryRecordIntegrationTest extends IntegrationBase {
           assertThat(temporaryRecord.getValues()).isEqualTo(List.of(Mood.empty()));
 
           var response = (TelegramInlineKeyboardResponse) outgoingMessageQueue.take();
-          assertThat(response.getContent()).isEqualTo(Mood.empty().getTagsAsStrings());
+          assertThat(response.getContent()).isEqualTo(Mood.empty().createCallback());
           assertThat(response.getChatId()).isEqualTo(1);
         }
     );

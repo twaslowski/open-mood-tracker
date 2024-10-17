@@ -12,12 +12,14 @@ public class HandlerConfiguration {
 
   private final StartHandler startHandler;
   private final RecordHandler recordHandler;
+  private final InlineKeyboardUpdateHandler inlineKeyboardUpdateHandler;
 
   @Bean
   public Collection<UpdateHandler> handlers() {
     return List.of(
         startHandler,
-        recordHandler
+        recordHandler,
+        inlineKeyboardUpdateHandler
     );
   }
 }
