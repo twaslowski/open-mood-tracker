@@ -1,9 +1,9 @@
 package de.twaslowski.moodtracker.entity.metric;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import de.twaslowski.moodtracker.config.MetricSerializer;
+import static java.util.stream.Collectors.toMap;
+
 import java.util.Map;
+import java.util.Map.Entry;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -19,4 +19,9 @@ public abstract class Metric {
   protected Map<String, Integer> tags;
 
   protected final Integer value;
+
+  public Map<String, String> getTagsAsStrings() {
+    return tags.entrySet().stream()
+        .collect(toMap(Entry::getKey, e -> e.getValue().toString()));
+  }
 }

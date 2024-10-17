@@ -27,17 +27,17 @@ public class BotApiMessageFactory {
 
   private static SendMessage createInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
     var inlineKeyboardButtons = response.getContent().entrySet().stream()
-        .map(entry -> InlineKeyboardButton.builder()
+        .map(entry -> new InlineKeyboardRow(InlineKeyboardButton.builder()
             .text(entry.getKey())
             .callbackData(entry.getValue())
-            .build())
+            .build()))
         .toList();
 
     return SendMessage.builder()
         .chatId(response.getChatId())
         .text(response.getMessage())
         .replyMarkup(InlineKeyboardMarkup.builder()
-            .keyboardRow(new InlineKeyboardRow(inlineKeyboardButtons))
+            .keyboard(inlineKeyboardButtons)
             .build())
         .build();
   }

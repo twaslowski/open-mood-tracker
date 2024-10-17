@@ -8,6 +8,7 @@ import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.entity.metric.Mood;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -32,10 +33,10 @@ public class TemporaryRecordIntegrationTest extends IntegrationBase {
           var temporaryRecord = maybeTemporaryRecord.getFirst();
 
           assertThat(temporaryRecord.getTelegramId()).isEqualTo(1);
-          assertThat(temporaryRecord.getValues()).isEqualTo(Mood.empty());
+          assertThat(temporaryRecord.getValues()).isEqualTo(List.of(Mood.empty()));
 
-          var response = outgoingMessageQueue.take();
-          assertThat(response).isInstanceOf(TelegramInlineKeyboardResponse.class);
+          var response = (TelegramInlineKeyboardResponse) outgoingMessageQueue.take();
+          assertThat(response.getContent()).isEqualTo(Mood.empty().getTagsAsStrings());
           assertThat(response.getChatId()).isEqualTo(1);
         }
     );

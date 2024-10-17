@@ -4,7 +4,6 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKey
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.service.RecordService;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -22,9 +21,12 @@ public class RecordHandler implements UpdateHandler {
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     log.info("{}: Handling record command.", update.getChatId());
     var temporaryRecord = recordService.initializeFrom(update);
+    var metric = temporaryRecord.getFirstIncompleteMetric().orElseThrow(
+        () -> new IllegalStateException("No incomplete metric found in freshly created record.")
+    );
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
-        .content(Map.of("Test", "Test"))
+        .content(metric.getTagsAsStrings())
         .message("Temporary record created. First metric ...")
         .build();
   }
