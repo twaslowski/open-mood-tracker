@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.entity;
 
+import de.twaslowski.moodtracker.entity.metric.Metric;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,6 +13,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Data
@@ -31,7 +34,7 @@ public class Record {
   @CreationTimestamp
   private ZonedDateTime creationTimestamp;
 
-  private int mood;
-
-  private int sleep;
+  @JdbcTypeCode(SqlTypes.JSON)
+  @NotNull
+  private Metric values;
 }

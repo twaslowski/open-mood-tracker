@@ -12,3 +12,4 @@ services:
       interval: 5s
       timeout: 5s
       retries: 3
+    command: [ "postgres", "-c", "log_statement=all" ]

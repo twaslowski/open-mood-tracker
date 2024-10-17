@@ -4,7 +4,7 @@ import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.external.InMemoryQueue;
-import de.twaslowski.moodtracker.adapter.telegram.temprecord.TemporaryRecordRepository;
+import de.twaslowski.moodtracker.repository.RecordRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,7 @@ public class IntegrationBase {
   @BeforeEach
   void setUp() {
     userRepository.deleteAll();
-    temporaryRecordRepository.deleteAll();
+    recordRepository.deleteAll();
   }
 
   @Autowired
@@ -30,5 +30,5 @@ public class IntegrationBase {
   protected UserRepository userRepository;
 
   @Autowired
-  protected TemporaryRecordRepository temporaryRecordRepository;
+  protected RecordRepository recordRepository;
 }

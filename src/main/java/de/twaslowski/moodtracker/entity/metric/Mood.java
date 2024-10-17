@@ -1,30 +1,36 @@
 package de.twaslowski.moodtracker.entity.metric;
 
-import lombok.AllArgsConstructor;
+import java.util.Map;
 
 public class Mood extends Metric {
 
-  public static final MetricType TYPE = MetricType.MOOD;
+  public static final String TYPE = "MOOD";
+  private static final int LOWER_BOUND = -3;
+  private static final int UPPER_BOUND = 3;
 
-  @AllArgsConstructor
-  public enum MoodValues implements MetricValue {
-    SEVERELY_MANIC(3),
-    MANIC(2),
-    SLIGHTLY_MANIC(1),
-    NEUTRAL(0),
-    SLIGHTLY_DEPRESSED(-1),
-    DEPRESSED(-2),
-    SEVERELY_DEPRESSED(-3);
-
-    private final int value;
-
-    @Override
-    public int getValue() {
-      return value;
-    }
-  }
+  private static final Map<String, Integer> TAGS = Map.of(
+      "SEVERELY_MANIC", 3,
+      "MANIC", 2,
+      "HYPOMANIC", 1,
+      "NEUTRAL", 0,
+      "LIGHTLY DEPRESSED", -1,
+      "DEPRESSED", -2,
+      "SEVERELY_DEPRESSED", -3
+  );
 
   public Mood() {
-    super(TYPE);
+    super(TYPE, LOWER_BOUND, UPPER_BOUND, TAGS, null);
+  }
+
+  public Mood(int value) {
+    super(TYPE, LOWER_BOUND, UPPER_BOUND, TAGS, value);
+  }
+
+  public static Mood empty() {
+    return new Mood();
+  }
+
+  public static Mood of(int value) {
+    return new Mood(value);
   }
 }
