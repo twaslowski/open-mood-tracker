@@ -34,6 +34,8 @@ public class BotApiMessageFactory {
         .toList();
 
     return SendMessage.builder()
+        .chatId(response.getChatId())
+        .text(response.getMessage())
         .replyMarkup(InlineKeyboardMarkup.builder()
             .keyboardRow(new InlineKeyboardRow(inlineKeyboardButtons))
             .build())

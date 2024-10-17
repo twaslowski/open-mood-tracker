@@ -32,7 +32,9 @@ public class TelegramUpdateProcessor {
   public void processUpdate() {
     try {
       var update = incomingMessageQueue.take();
+      log.info("Processing update {}", update.getUpdateId());
       var response = telegramUpdateDelegator.delegateUpdate(update);
+      log.info("Received response for update {}. Queueing for sending.", update.getUpdateId());
       outgoingMessageQueue.add(response);
     } catch (Exception e) {
       log.error("Error while processing update: {}", e.getMessage());

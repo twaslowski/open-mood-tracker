@@ -1,6 +1,7 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import jakarta.annotation.PostConstruct;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -10,6 +11,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -31,9 +33,9 @@ public class TelegramMessageSender {
 
   @SneakyThrows // Not explicitly handling the Queue's InterruptedException
   public void sendResponses() {
+    TelegramResponse response = outgoingMessageQueue.take();
+    var telegramResponseObject = BotApiMessageFactory.createBotApiMessage(response);
     try {
-      TelegramResponse response = outgoingMessageQueue.take();
-      var telegramResponseObject = BotApiMessageFactory.createBotApiMessage(response);
       telegramClient.execute(telegramResponseObject);
       log.info("Sent response to chat: {}", response.getChatId());
     } catch (TelegramApiException | RuntimeException e) {

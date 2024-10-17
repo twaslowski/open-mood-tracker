@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.temprecord;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -18,6 +19,7 @@ public class TemporaryRecord {
 
   public TemporaryRecord(long telegramId) {
     this.telegramId = telegramId;
+    this.record = "";
   }
 
   @NotNull
@@ -25,12 +27,11 @@ public class TemporaryRecord {
   private long telegramId;
 
   @CreationTimestamp
+  @Column(updatable = false, columnDefinition = "timestamp with time zone")
   private ZonedDateTime creationTimestamp;
 
   @UpdateTimestamp
   private ZonedDateTime updateTimestamp;
 
-  private Integer mood;
-
-  private Integer sleep;
+  private String record; //json structure
 }

@@ -177,10 +177,11 @@
                 <version>${jacoco.version}</version>
                 <configuration>
                     <excludes>
+                        <exclude>**/config/**</exclude>
                         <exclude>**/dto/**</exclude>
+                        <exclude>**/entity/**</exclude>
                         <exclude>**/exception/**</exclude>
                         <exclude>**/repository/**</exclude>
-                        <exclude>**/config/**</exclude>
                         <exclude>**/MoodTracker*</exclude>
                     </excludes>
                 </configuration>
@@ -229,7 +230,6 @@
                     <consoleOutput>true</consoleOutput>
                     <failOnViolation>true</failOnViolation>
                     <violationSeverity>warning</violationSeverity>
-                    <configLocation>google_checks.xml</configLocation>
                 </configuration>
             </plugin>
 

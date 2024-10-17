@@ -5,11 +5,14 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.temprecord.TemporaryRecordService;
 import de.twaslowski.moodtracker.service.RecordService;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class RecordHandler implements UpdateHandler {
 
   public static final String COMMAND = "/record";
@@ -19,15 +22,11 @@ public class RecordHandler implements UpdateHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    if (temporaryRecordService.userHasTemporaryRecord(update.getChatId())) {
-      return TelegramInlineKeyboardResponse.builder()
-          .chatId(update.getChatId())
-          .message("Temporary record exists. Let's populate it # todo")
-          .build();
-    }
+    log.info("{}: Handling record command.", update.getChatId());
     var temporaryRecord = temporaryRecordService.createTemporaryRecordForUser(update.getChatId());
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
+        .content(Map.of("Test", "Test"))
         .message("Temporary record created. First metric ...")
         .build();
   }

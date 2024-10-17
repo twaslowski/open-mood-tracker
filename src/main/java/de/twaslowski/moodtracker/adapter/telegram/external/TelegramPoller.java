@@ -31,7 +31,6 @@ public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleTh
     log.info("Received update: {}", update.getUpdateId());
     var telegramUpdate = extractUpdate(update);
 
-    log.info("Queueing update: {}", telegramUpdate);
     incomingMessageQueue.add(telegramUpdate);
   }
 
