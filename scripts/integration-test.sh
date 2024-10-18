@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-./scripts/start-local-dependencies.sh
+./scripts/start-environment.sh
 source .env
 
 ./mvnw test -P integration

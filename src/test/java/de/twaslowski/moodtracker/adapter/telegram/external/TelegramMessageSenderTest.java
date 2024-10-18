@@ -17,7 +17,6 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 public class TelegramMessageSenderTest {
 
   private final TelegramClient telegramClient = mock(TelegramClient.class);
-
   private final InMemoryQueue<TelegramResponse> outgoingQueue = new InMemoryQueue<>();
 
   private final TelegramMessageSender telegramMessageSender =

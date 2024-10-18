@@ -2,8 +2,8 @@
 
 ./mvnw clean test
 
-./scripts/start-local-dependencies.sh
+./scripts/start-environment.sh
 ./mvnw test -P integration
-./scripts/stop-local-dependencies.sh
+./scripts/stop-environment.sh
 
 ./mvnw jacoco:report
