@@ -11,9 +11,6 @@ public class TelegramConfig {
 
   @Bean
   public TelegramClient telegramClient(@Value("${mood-tracker.telegram.bot.token}") String token) {
-    // This appears to be redundant with the getBotToken() method in TelegramBot
-    // However, both have to be provided, otherwise either the initial bot registration
-    // or the actual message sending will fail.
     return new OkHttpTelegramClient(token);
   }
 }

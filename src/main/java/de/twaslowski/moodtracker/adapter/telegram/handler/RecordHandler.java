@@ -6,8 +6,8 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.service.RecordService;
+import de.twaslowski.moodtracker.util.MapTransformer;
 import java.util.Map;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -38,9 +38,7 @@ public class RecordHandler implements UpdateHandler {
   }
 
   private Map<String, String> createCallbacks(Metric metric) {
-    return metric.getTags().entrySet().stream()
-        .map(entry -> Map.entry(entry.getKey(), safeWriteValueAsString(entry.getValue())))
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    return MapTransformer.transformValues(metric.getTags(), this::safeWriteValueAsString);
   }
 
   @SneakyThrows

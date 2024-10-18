@@ -6,6 +6,7 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.external.InMemoryQueue;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
+import de.twaslowski.moodtracker.service.RecordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,4 +32,7 @@ public class IntegrationBase {
 
   @Autowired
   protected RecordRepository recordRepository;
+
+  @Autowired
+  protected RecordService recordService;
 }

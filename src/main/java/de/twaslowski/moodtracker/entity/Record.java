@@ -8,8 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,11 +38,20 @@ public class Record {
 
   @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
-  private List<Metric> values;
+  private Set<Metric> values;
 
   public Optional<Metric> getFirstIncompleteMetric() {
     return values.stream()
         .filter(metric -> metric.getValue() == null)
         .findFirst();
+  }
+
+  public boolean hasIncompleteMetric() {
+    return getFirstIncompleteMetric().isPresent();
+  }
+
+  public void updateMetric(Metric metric) {
+    values.removeIf(existingMetric -> existingMetric.getType().equals(metric.getType()));
+    values.add(metric);
   }
 }

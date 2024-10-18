@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 public abstract class Metric {
 
   protected final String type;
+
   protected final Integer value;
 
   public abstract Map<String, Metric> getTags();

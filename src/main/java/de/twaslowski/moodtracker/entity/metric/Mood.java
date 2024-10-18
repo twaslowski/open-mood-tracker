@@ -1,7 +1,7 @@
 package de.twaslowski.moodtracker.entity.metric;
 
+import de.twaslowski.moodtracker.util.MapTransformer;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class Mood extends Metric {
 
@@ -37,8 +37,6 @@ public class Mood extends Metric {
 
   @Override
   public Map<String, Metric> getTags() {
-    return MAPPING.entrySet().stream()
-        .map(entry -> Map.entry(entry.getKey(), Mood.of(entry.getValue())))
-        .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    return MapTransformer.transformValues(MAPPING, Mood::of);
   }
 }
