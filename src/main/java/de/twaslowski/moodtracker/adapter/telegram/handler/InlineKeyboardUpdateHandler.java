@@ -6,8 +6,8 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.metric.Metric;
-import de.twaslowski.moodtracker.repository.RecordRepository;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.util.MapTransformer;
 import java.util.Map;
@@ -23,41 +23,51 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
 
   private final ObjectMapper objectMapper;
   private final RecordService recordService;
-  private final RecordRepository recordRepository;
 
   @Override
   @SneakyThrows
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     var inlineKeyboardUpdate = (TelegramInlineKeyboardUpdate) update;
-    var callbackData = inlineKeyboardUpdate.getCallbackData();
-    log.info("Received callback data {}", callbackData);
-    var metric = objectMapper.readValue(callbackData, Metric.class);
+    log.info("Received inline keyboard update with callback: {}", inlineKeyboardUpdate.getCallbackData());
 
-    var temporaryRecord = recordService.findIncompleteRecordForTelegramChat(update.getChatId());
-    if (temporaryRecord.isPresent()) {
-      var record = temporaryRecord.get();
-      record.updateMetric(metric);
-      recordService.store(record);
-      var nextMetric = record.getFirstIncompleteMetric();
-      if (nextMetric.isPresent()) {
-        return TelegramInlineKeyboardResponse.builder()
-            .chatId(update.getChatId())
-            .content(createCallbacks(nextMetric.get()))
-            .message("Next metric ...")
-            .build();
-      } else {
-        recordService.store(record);
-        return TelegramTextResponse.builder()
-            .chatId(update.getChatId())
-            .message("Record saved.")
-            .build();
-      }
-    } else {
-      return TelegramTextResponse.builder()
-          .chatId(update.getChatId())
-          .message("You are not recording right now.")
-          .build();
-    }
+    var existingRecord = recordService.findIncompleteRecordForTelegramChat(update.getChatId());
+    return existingRecord
+        .map(record -> enrichExistingRecord(record, inlineKeyboardUpdate))
+        .orElseGet(() -> noRecordInProgressResponse(update));
+  }
+
+  @SneakyThrows
+  private TelegramResponse enrichExistingRecord(Record existingRecord, TelegramInlineKeyboardUpdate update) {
+    var receivedMetric = objectMapper.readValue(update.getCallbackData(), Metric.class);
+    existingRecord.updateMetric(receivedMetric);
+    recordService.store(existingRecord);
+
+    var nextMetric = existingRecord.getFirstIncompleteMetric();
+    return nextMetric
+        .map(metric -> sendNextMetric(update, metric))
+        .orElseGet(() -> completeRecord(update));
+  }
+
+  private TelegramResponse completeRecord(TelegramUpdate update) {
+    return TelegramTextResponse.builder()
+        .chatId(update.getChatId())
+        .message("Record saved.")
+        .build();
+  }
+
+  private TelegramResponse sendNextMetric(TelegramUpdate update, Metric nextMetric) {
+    return TelegramInlineKeyboardResponse.builder()
+        .chatId(update.getChatId())
+        .content(createCallbacks(nextMetric))
+        .message("Next metric ...")
+        .build();
+  }
+
+  private TelegramResponse noRecordInProgressResponse(TelegramUpdate update) {
+    return TelegramTextResponse.builder()
+        .chatId(update.getChatId())
+        .message("You are not recording right now.")
+        .build();
   }
 
   @Override
@@ -65,7 +75,6 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     return update.hasCallback();
   }
 
-  // todo fix duplication
   private Map<String, String> createCallbacks(Metric metric) {
     return MapTransformer.transformValues(metric.getTags(), this::safeWriteValueAsString);
   }
