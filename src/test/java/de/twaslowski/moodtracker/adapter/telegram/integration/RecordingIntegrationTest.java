@@ -10,7 +10,6 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeybo
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;
-import java.util.Map;
 import java.util.Set;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -40,15 +39,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
           assertThat(temporaryRecord.getValues()).isEqualTo(Set.of(Mood.empty(), Sleep.empty()));
 
           var response = (TelegramInlineKeyboardResponse) outgoingMessageQueue.take();
-          assertThat(response.getContent()).isEqualTo(Map.of(
-              "SEVERELY_MANIC", "{\"type\":\"MOOD\",\"value\":3}",
-              "MANIC", "{\"type\":\"MOOD\",\"value\":2}",
-              "HYPOMANIC", "{\"type\":\"MOOD\",\"value\":1}",
-              "NEUTRAL", "{\"type\":\"MOOD\",\"value\":0}",
-              "LIGHTLY DEPRESSED", "{\"type\":\"MOOD\",\"value\":-1}",
-              "DEPRESSED", "{\"type\":\"MOOD\",\"value\":-2}",
-              "SEVERELY_DEPRESSED", "{\"type\":\"MOOD\",\"value\":-3}"
-          ));
+          assertThat(response.getContent()).isEqualTo(callbackGenerator.createCallbacks(Mood.empty()));
           assertThat(response.getChatId()).isEqualTo(1);
         }
     );

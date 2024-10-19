@@ -21,12 +21,12 @@ public class RecordService {
   // Probably we can just define an order somewhere in the configuration and adhere to it.
   // Dealing with duplicate metric values will work as intended, but the following records can always
   // be sent out based on the first unanswered record from the pre-defined order.
-  public Record initializeFrom(TelegramUpdate update) {
+  public void initializeFrom(TelegramUpdate update) {
     var record = Record.builder()
         .telegramId(update.getChatId())
         .values(Set.of(Mood.empty(), Sleep.empty()))
         .build();
-    return recordRepository.save(record);
+    recordRepository.save(record);
   }
 
   public Optional<Record> findIncompleteRecordForTelegramChat(long chatId) {
@@ -35,7 +35,7 @@ public class RecordService {
         .findFirst();
   }
 
-  public Record store(Record record) {
-    return recordRepository.save(record);
+  public void store(Record record) {
+    recordRepository.save(record);
   }
 }

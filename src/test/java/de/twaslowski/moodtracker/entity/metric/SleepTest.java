@@ -9,17 +9,17 @@ class SleepTest {
 
   @Test
   void testTagsGeneration() {
-    assertThat(new Sleep().getTags()).isEqualTo(
+    assertThat(Sleep.CALLBACK_MAPPING).isEqualTo(
         Map.of(
-            "4", Sleep.of(4),
-            "5", Sleep.of(5),
-            "6", Sleep.of(6),
-            "7", Sleep.of(7),
-            "8", Sleep.of(8),
-            "9", Sleep.of(9),
-            "10", Sleep.of(10),
-            "11", Sleep.of(11),
-            "12", Sleep.of(12)
+            Sleep.of(4), "4",
+            Sleep.of(5), "5",
+            Sleep.of(6), "6",
+            Sleep.of(7), "7",
+            Sleep.of(8), "8",
+            Sleep.of(9), "9",
+            Sleep.of(10), "10",
+            Sleep.of(11), "11",
+            Sleep.of(12), "12"
         )
     );
   }

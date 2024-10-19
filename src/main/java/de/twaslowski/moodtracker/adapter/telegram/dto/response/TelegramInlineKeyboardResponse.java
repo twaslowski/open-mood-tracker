@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.dto.response;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 import lombok.Builder;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -10,10 +10,10 @@ import lombok.Value;
 public class TelegramInlineKeyboardResponse extends TelegramResponse {
 
   static ResponseType responseType = ResponseType.INLINE_KEYBOARD;
-  Map<String, String> content;
+  LinkedHashMap<String, String> content;
 
   @Builder
-  public TelegramInlineKeyboardResponse(long chatId, String message, Map<String, String> content) {
+  public TelegramInlineKeyboardResponse(long chatId, String message, LinkedHashMap<String, String> content) {
     super(chatId);
     this.message = message;
     this.content = content;

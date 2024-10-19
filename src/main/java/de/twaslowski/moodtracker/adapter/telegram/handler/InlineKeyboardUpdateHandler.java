@@ -9,8 +9,6 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.service.RecordService;
-import de.twaslowski.moodtracker.util.MapTransformer;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +21,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
 
   private final ObjectMapper objectMapper;
   private final RecordService recordService;
+  private final CallbackGenerator callbackGenerator;
 
   @Override
   @SneakyThrows
@@ -58,7 +57,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   private TelegramResponse sendNextMetric(TelegramUpdate update, Metric nextMetric) {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
-        .content(createCallbacks(nextMetric))
+        .content(callbackGenerator.createCallbacks(nextMetric))
         .message("Next metric ...")
         .build();
   }
@@ -73,14 +72,5 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   @Override
   public boolean canHandle(TelegramUpdate update) {
     return update.hasCallback();
-  }
-
-  private Map<String, String> createCallbacks(Metric metric) {
-    return MapTransformer.transformValues(metric.getTags(), this::safeWriteValueAsString);
-  }
-
-  @SneakyThrows
-  private String safeWriteValueAsString(Metric metric) {
-    return objectMapper.writeValueAsString(metric);
   }
 }

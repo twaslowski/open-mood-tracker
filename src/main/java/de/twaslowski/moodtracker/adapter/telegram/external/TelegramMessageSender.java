@@ -1,6 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import jakarta.annotation.PostConstruct;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -33,7 +35,11 @@ public class TelegramMessageSender {
   @SneakyThrows // Not explicitly handling the Queue's InterruptedException
   public void sendResponses() {
     TelegramResponse response = outgoingMessageQueue.take();
-    var telegramResponseObject = BotApiMessageFactory.createBotApiMessage(response);
+    var telegramResponseObject = switch (response.getResponseType()) {
+      case TEXT -> BotApiMessageFactory.createTextResponse((TelegramTextResponse) response);
+      case INLINE_KEYBOARD ->
+          BotApiMessageFactory.createInlineKeyboardResponse((TelegramInlineKeyboardResponse) response);
+    };
     try {
       telegramClient.execute(telegramResponseObject);
       log.info("Sent response to chat: {}", response.getChatId());

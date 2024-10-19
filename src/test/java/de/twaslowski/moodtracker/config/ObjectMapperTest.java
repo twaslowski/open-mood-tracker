@@ -34,16 +34,6 @@ public class ObjectMapperTest {
 
   @Test
   @SneakyThrows
-  void shouldDeserializeMetric() {
-    var json = "{\"type\":\"MOOD\",\"value\":3}";
-    var mood = objectMapper.readValue(json, Metric.class);
-
-    assertThat(mood).isInstanceOf(Mood.class);
-    assertThat(mood.getValue()).isEqualTo(3);
-  }
-
-  @Test
-  @SneakyThrows
   void shouldSerializeListOfMetrics() {
     var metrics = List.of(Mood.empty(), Sleep.empty());
 
@@ -51,5 +41,15 @@ public class ObjectMapperTest {
     assertThat(serialized).contains("\"type\":\"MOOD\"");
     assertThat(serialized).contains("\"type\":\"SLEEP\"");
     assertThat(serialized).contains("\"value\":null");
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldDeserializeMetric() {
+    var json = "{\"type\":\"MOOD\",\"value\":3}";
+    var mood = objectMapper.readValue(json, Metric.class);
+
+    assertThat(mood).isInstanceOf(Mood.class);
+    assertThat(mood.getValue()).isEqualTo(3);
   }
 }
