@@ -28,6 +28,8 @@ mood_tracker:
   telegram:
     bot:
       token: ${TELEGRAM_TOKEN}
+    notifications:
+      cron: 0 18 * * *
 
 management:
   endpoints:

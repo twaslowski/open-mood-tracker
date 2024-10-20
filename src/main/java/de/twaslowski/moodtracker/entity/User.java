@@ -25,4 +25,7 @@ public class User {
 
   @NotNull
   private long telegramId;
+
+  @NotNull
+  private boolean notificationsEnabled;
 }
