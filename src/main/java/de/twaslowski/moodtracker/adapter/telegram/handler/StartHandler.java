@@ -27,7 +27,7 @@ public class StartHandler implements UpdateHandler {
 
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
-        .message(userCreated ? CREATED_RESPONSE : EXISTS_RESPONSE)
+        .text(userCreated ? CREATED_RESPONSE : EXISTS_RESPONSE)
         .build();
   }
 

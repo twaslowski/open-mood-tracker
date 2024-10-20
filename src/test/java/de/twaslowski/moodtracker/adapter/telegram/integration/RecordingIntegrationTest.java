@@ -61,7 +61,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
 
           var message = outgoingMessageQueue.take();
           assertThat(message.getChatId()).isEqualTo(1);
-          assertThat(message.getMessage()).isEqualTo("You are not recording right now.");
+          assertThat(message.getText()).isEqualTo("You are not recording right now.");
         }
     );
   }
@@ -133,7 +133,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
           outgoingMessageQueue.take();
           var finalResponse = outgoingMessageQueue.take();
           assertThat(finalResponse.getChatId()).isEqualTo(1);
-          assertThat(finalResponse.getMessage()).isEqualTo("Record saved.");
+          assertThat(finalResponse.getText()).isEqualTo("Record saved.");
         }
     );
   }

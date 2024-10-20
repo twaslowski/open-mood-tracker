@@ -5,6 +5,7 @@ import java.util.Map;
 public class Mood extends Metric {
 
   public static final String TYPE = "MOOD";
+  private static final String PROMPT = "How do you feel today?";
 
   public Mood() {
     super(TYPE, null);
@@ -30,5 +31,10 @@ public class Mood extends Metric {
 
   public static Mood of(int value) {
     return new Mood(value);
+  }
+
+  @Override
+  public String getChatPrompt() {
+    return PROMPT;
   }
 }

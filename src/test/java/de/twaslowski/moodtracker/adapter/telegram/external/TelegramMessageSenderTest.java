@@ -29,7 +29,7 @@ public class TelegramMessageSenderTest {
     // Given
     var response = TelegramTextResponse.builder()
         .chatId(1)
-        .message("Hello")
+        .text("Hello")
         .build();
     outgoingQueue.add(response);
 

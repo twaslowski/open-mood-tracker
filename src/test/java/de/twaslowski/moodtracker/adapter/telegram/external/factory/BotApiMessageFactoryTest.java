@@ -22,7 +22,7 @@ class BotApiMessageFactoryTest {
 
     var response = TelegramInlineKeyboardResponse.builder()
         .chatId(1L)
-        .message("Message")
+        .text("Message")
         .content(callbacks)
         .build();
 

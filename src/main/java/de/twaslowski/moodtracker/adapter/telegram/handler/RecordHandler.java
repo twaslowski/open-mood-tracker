@@ -24,10 +24,11 @@ public class RecordHandler implements UpdateHandler {
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     log.info("{}: Handling record command.", update.getChatId());
     recordService.initializeFrom(update);
+    var firstMetric = Mood.empty();
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
-        .content(callbackGenerator.createCallbacks(Mood.empty()))
-        .message("Temporary record created. First metric ...")
+        .content(callbackGenerator.createCallbacks(firstMetric))
+        .text(firstMetric.getChatPrompt())
         .build();
   }
 

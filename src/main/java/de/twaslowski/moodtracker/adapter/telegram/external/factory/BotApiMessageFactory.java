@@ -14,7 +14,7 @@ public class BotApiMessageFactory {
   public static SendMessage createTextResponse(TelegramTextResponse response) {
     return SendMessage.builder()
         .chatId(response.getChatId())
-        .text(response.getMessage())
+        .text(response.getText())
         .build();
   }
 
@@ -23,7 +23,7 @@ public class BotApiMessageFactory {
 
     return SendMessage.builder()
         .chatId(response.getChatId())
-        .text(response.getMessage())
+        .text(response.getText())
         .replyMarkup(InlineKeyboardMarkup.builder()
             .keyboard(rows)
             .build())

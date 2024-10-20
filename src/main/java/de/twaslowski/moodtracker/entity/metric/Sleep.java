@@ -7,6 +7,7 @@ import java.util.stream.IntStream;
 public class Sleep extends Metric {
 
   public static final String TYPE = "SLEEP";
+  private static final String PROMPT = "How much did you sleep today?";
   private static final int LOWER_BOUND = 4;
   private static final int UPPER_BOUND = 12;
 
@@ -28,5 +29,10 @@ public class Sleep extends Metric {
 
   public static Sleep of(int value) {
     return new Sleep(value);
+  }
+
+  @Override
+  public String getChatPrompt() {
+    return PROMPT;
   }
 }

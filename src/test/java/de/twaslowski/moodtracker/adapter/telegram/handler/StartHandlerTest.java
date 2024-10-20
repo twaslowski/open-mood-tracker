@@ -35,7 +35,7 @@ public class StartHandlerTest {
 
     // then
     assertThat(response.getChatId()).isEqualTo(1L);
-    assertThat(response.getMessage()).isEqualTo(StartHandler.CREATED_RESPONSE);
+    assertThat(response.getText()).isEqualTo(StartHandler.CREATED_RESPONSE);
   }
 
   @Test
@@ -53,6 +53,6 @@ public class StartHandlerTest {
 
     // then
     assertThat(response.getChatId()).isEqualTo(1L);
-    assertThat(response.getMessage()).isEqualTo(StartHandler.EXISTS_RESPONSE);
+    assertThat(response.getText()).isEqualTo(StartHandler.EXISTS_RESPONSE);
   }
 }

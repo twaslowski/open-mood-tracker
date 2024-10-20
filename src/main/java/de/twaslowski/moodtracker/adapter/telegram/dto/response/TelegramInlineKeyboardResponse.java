@@ -13,9 +13,9 @@ public class TelegramInlineKeyboardResponse extends TelegramResponse {
   LinkedHashMap<String, String> content;
 
   @Builder
-  public TelegramInlineKeyboardResponse(long chatId, String message, LinkedHashMap<String, String> content) {
+  public TelegramInlineKeyboardResponse(long chatId, String text, LinkedHashMap<String, String> content) {
     super(chatId);
-    this.message = message;
+    this.text = text;
     this.content = content;
   }
 

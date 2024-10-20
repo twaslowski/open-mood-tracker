@@ -9,12 +9,12 @@ import lombok.Value;
 public class TelegramTextResponse extends TelegramResponse {
 
   static ResponseType responseType = ResponseType.TEXT;
-  String message;
+  String text;
 
   @Builder
-  public TelegramTextResponse(long chatId, String message) {
+  public TelegramTextResponse(long chatId, String text) {
     super(chatId);
-    this.message = message;
+    this.text = text;
   }
 
   @Override

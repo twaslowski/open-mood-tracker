@@ -27,7 +27,7 @@ public class UserIntegrationTest extends IntegrationBase {
         .untilAsserted(() -> {
           var message = outgoingMessageQueue.take();
           assertThat(message.getChatId()).isEqualTo(1L);
-          assertThat(message.getMessage()).isEqualTo(StartHandler.CREATED_RESPONSE);
+          assertThat(message.getText()).isEqualTo(StartHandler.CREATED_RESPONSE);
         });
   }
 }

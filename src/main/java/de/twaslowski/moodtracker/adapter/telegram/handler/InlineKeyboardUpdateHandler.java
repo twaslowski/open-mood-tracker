@@ -51,7 +51,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   private TelegramResponse completeRecord(TelegramUpdate update) {
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
-        .message("Record saved.")
+        .text("Record saved.")
         .build();
   }
 
@@ -59,14 +59,14 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .content(callbackGenerator.createCallbacks(nextMetric))
-        .message("Next metric ...")
+        .text(nextMetric.getChatPrompt())
         .build();
   }
 
   private TelegramResponse noRecordInProgressResponse(TelegramUpdate update) {
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
-        .message("You are not recording right now.")
+        .text("You are not recording right now.")
         .build();
   }
 

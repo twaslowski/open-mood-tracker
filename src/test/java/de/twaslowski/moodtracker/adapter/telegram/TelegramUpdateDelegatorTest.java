@@ -30,7 +30,7 @@ class TelegramUpdateDelegatorTest {
     // when
     var response = telegramUpdateDelegator.delegateUpdate(update);
 
-    assertThat(response.getMessage()).isEqualTo(TelegramResponse.UNKNOWN_COMMAND_RESPONSE);
+    assertThat(response.getText()).isEqualTo(TelegramResponse.UNKNOWN_COMMAND_RESPONSE);
   }
 
   @Test
@@ -49,6 +49,6 @@ class TelegramUpdateDelegatorTest {
     // when
     var response = telegramUpdateDelegator.delegateUpdate(update);
 
-    assertThat(response.getMessage()).isEqualTo(TelegramResponse.ERROR_RESPONSE);
+    assertThat(response.getText()).isEqualTo(TelegramResponse.ERROR_RESPONSE);
   }
 }
