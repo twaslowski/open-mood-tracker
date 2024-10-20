@@ -16,11 +16,6 @@ public class RecordService {
 
   private final RecordRepository recordRepository;
 
-  // todo using Set like this is problematic because there is no order.
-  // I have to either use List and deal with serialization issues, or find a way to order the metrics.
-  // Probably we can just define an order somewhere in the configuration and adhere to it.
-  // Dealing with duplicate metric values will work as intended, but the following records can always
-  // be sent out based on the first unanswered record from the pre-defined order.
   public void initializeFrom(TelegramUpdate update) {
     var record = Record.builder()
         .telegramId(update.getChatId())

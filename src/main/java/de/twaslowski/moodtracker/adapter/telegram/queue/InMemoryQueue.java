@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.external;
+package de.twaslowski.moodtracker.adapter.telegram.queue;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;

@@ -1,15 +1,13 @@
-package de.twaslowski.moodtracker.adapter.telegram;
+package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import de.twaslowski.moodtracker.adapter.telegram.exception.RequiredDataMissingException;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.chat.Chat;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 
-public class TelegramUtilsTest {
+public class TelegramUpdateFactoryTest {
 
   @Test
   void shouldExtractTextFromUpdate() {
@@ -23,7 +21,7 @@ public class TelegramUtilsTest {
     update.setMessage(message);
 
     // When extracting the text
-    var telegramUpdate = TelegramUtils.extractUpdate(update);
+    var telegramUpdate = TelegramUpdateFactory.createTelegramUpdate(update);
 
     // Then the text should be extracted
     assertThat(telegramUpdate.getText()).isEqualTo("some text");
@@ -40,22 +38,9 @@ public class TelegramUtilsTest {
     update.setMessage(message);
 
     // When extracting the text
-    var telegramUpdate = TelegramUtils.extractUpdate(update);
+    var telegramUpdate = TelegramUpdateFactory.createTelegramUpdate(update);
 
     // Then the text should be extracted
     assertThat(telegramUpdate.getText()).isEqualTo("");
-  }
-
-  @Test
-  void shouldThrowExceptionIfRequiredFieldMissing() {
-    // Given an update with text and a chatId
-    var update = new Update();
-    var message = new Message();
-
-    update.setUpdateId(1);
-
-    // When extracting the text
-    assertThatThrownBy(() -> TelegramUtils.extractUpdate(update))
-        .isInstanceOf(RequiredDataMissingException.class);
   }
 }

@@ -1,8 +1,8 @@
-package de.twaslowski.moodtracker.adapter.telegram.handler;
+package de.twaslowski.moodtracker.adapter.telegram;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.handler.UpdateHandler;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Component;
 public class TelegramUpdateDelegator {
 
   private final Collection<UpdateHandler> handlers;
-  public static final String UNKNOWN_COMMAND_RESPONSE = "Unfortunately, I cannot process that message.";
 
   public TelegramResponse delegateUpdate(TelegramUpdate update) {
     var relevantHandler = handlers.stream()
@@ -22,17 +21,27 @@ public class TelegramUpdateDelegator {
         .findFirst();
 
     return relevantHandler
-        .map(handler -> handler.handleUpdate(update))
+        .map(handler -> invokeHandler(handler, update))
         .orElseGet(() -> {
           log.warn("No handler found for update {}", update);
-          return respondToUnknownCommand(update.getChatId());
+          return respondToUnhandleableUpdate(update.getChatId());
         });
   }
 
-  private TelegramResponse respondToUnknownCommand(long chatId) {
-    return TelegramTextResponse.builder()
+  private TelegramResponse invokeHandler(UpdateHandler handler, TelegramUpdate update) {
+    try {
+      return handler.handleUpdate(update);
+    } catch (Exception e) {
+      log.error("Error while processing update: {}", e.getMessage());
+      return TelegramResponse.error()
+          .chatId(update.getChatId())
+          .build();
+    }
+  }
+
+  private TelegramResponse respondToUnhandleableUpdate(long chatId) {
+    return TelegramResponse.unhandleableUpdate()
         .chatId(chatId)
-        .message(UNKNOWN_COMMAND_RESPONSE)
         .build();
   }
 }

@@ -2,8 +2,7 @@ package de.twaslowski.moodtracker.adapter.telegram;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.external.InMemoryQueue;
-import de.twaslowski.moodtracker.adapter.telegram.handler.TelegramUpdateDelegator;
+import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import jakarta.annotation.PostConstruct;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -19,9 +18,9 @@ public class TelegramUpdateProcessor {
 
   private final InMemoryQueue<TelegramUpdate> incomingMessageQueue;
   private final InMemoryQueue<TelegramResponse> outgoingMessageQueue;
-  private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-
   private final TelegramUpdateDelegator telegramUpdateDelegator;
+
+  private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
   @PostConstruct
   public void init() {

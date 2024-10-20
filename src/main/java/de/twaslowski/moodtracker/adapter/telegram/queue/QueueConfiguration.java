@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.external;
+package de.twaslowski.moodtracker.adapter.telegram.queue;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;

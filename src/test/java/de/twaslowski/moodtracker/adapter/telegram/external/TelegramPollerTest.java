@@ -1,10 +1,13 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 
-import de.twaslowski.moodtracker.adapter.telegram.TelegramUtils;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.exception.RequiredDataMissingException;
+import de.twaslowski.moodtracker.adapter.telegram.external.factory.TelegramUpdateFactory;
+import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,8 +35,8 @@ class TelegramPollerTest {
         .build();
     var update = new Update();
 
-    try (MockedStatic<TelegramUtils> utils = Mockito.mockStatic(TelegramUtils.class)) {
-      utils.when(() -> TelegramUtils.extractUpdate(update)).thenReturn(telegramUpdate);
+    try (MockedStatic<TelegramUpdateFactory> telegramUpdateFactory = Mockito.mockStatic(TelegramUpdateFactory.class)) {
+      telegramUpdateFactory.when(() -> TelegramUpdateFactory.createTelegramUpdate(update)).thenReturn(telegramUpdate);
       // When update is processed
       telegramPoller.consume(update);
 
@@ -44,5 +47,17 @@ class TelegramPollerTest {
           .chatId(1)
           .build());
     }
+  }
+
+  @Test
+  void shouldThrowExceptionIfRequiredFieldMissing() {
+    // Given an update with text and a chatId
+    var update = new Update();
+
+    update.setUpdateId(1);
+
+    // When extracting the text
+    assertThatThrownBy(() -> telegramPoller.consume(update))
+        .isInstanceOf(RequiredDataMissingException.class);
   }
 }

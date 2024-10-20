@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.handler;
+package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.entity.metric.Metric;

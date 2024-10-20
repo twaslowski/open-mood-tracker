@@ -3,6 +3,8 @@ package de.twaslowski.moodtracker.adapter.telegram.external;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.external.factory.BotApiMessageFactory;
+import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import jakarta.annotation.PostConstruct;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;

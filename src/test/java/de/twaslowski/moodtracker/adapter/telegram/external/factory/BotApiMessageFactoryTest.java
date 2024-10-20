@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.external;
+package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
