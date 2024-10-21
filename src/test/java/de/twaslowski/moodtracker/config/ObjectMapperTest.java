@@ -3,6 +3,7 @@ package de.twaslowski.moodtracker.config;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.twaslowski.moodtracker.config.serialization.ObjectMapperConfig;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;

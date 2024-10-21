@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.config;
+package de.twaslowski.moodtracker.config.serialization;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;

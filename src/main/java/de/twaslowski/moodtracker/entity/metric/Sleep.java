@@ -8,31 +8,14 @@ public class Sleep extends Metric {
 
   public static final String TYPE = "SLEEP";
   private static final String PROMPT = "How much did you sleep today?";
-  private static final int LOWER_BOUND = 4;
-  private static final int UPPER_BOUND = 12;
+  private static final int MIN_VALUE = 4;
+  private static final int MAX_VALUE = 12;
 
-  public static Map<Metric, String> CALLBACK_MAPPING = IntStream.range(LOWER_BOUND, UPPER_BOUND + 1)
+  public static Map<Integer, String> LABELS = IntStream.range(MIN_VALUE, MAX_VALUE + 1)
       .boxed()
-      .collect(Collectors.toMap(Sleep::of, Object::toString));
+      .collect(Collectors.toMap(i -> i, Object::toString));
 
   public Sleep() {
-    super(TYPE, null);
-  }
-
-  public Sleep(int value) {
-    super(TYPE, value);
-  }
-
-  public static Sleep empty() {
-    return new Sleep();
-  }
-
-  public static Sleep of(int value) {
-    return new Sleep(value);
-  }
-
-  @Override
-  public String getChatPrompt() {
-    return PROMPT;
+    super(TYPE, PROMPT, MIN_VALUE, MAX_VALUE, LABELS);
   }
 }

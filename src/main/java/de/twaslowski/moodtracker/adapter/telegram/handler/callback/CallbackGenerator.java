@@ -30,16 +30,16 @@ public class CallbackGenerator {
   private Map<Metric, String> getCallbackMappingForMetric(Metric metric) {
     TreeMap<Metric, String> sortedMap;
 
-    switch (metric.getType()) {
+    switch (metric.getName()) {
       case Mood.TYPE -> {
         sortedMap = new TreeMap<>(MetricComparator.descending());
-        sortedMap.putAll(Mood.CALLBACK_MAPPING);
+        sortedMap.putAll(Mood.LABELS);
       }
       case Sleep.TYPE -> {
         sortedMap = new TreeMap<>(MetricComparator.ascending());
-        sortedMap.putAll(Sleep.CALLBACK_MAPPING);
+        sortedMap.putAll(Sleep.LABELS);
       }
-      default -> throw new IllegalArgumentException("Unknown type: " + metric.getType());
+      default -> throw new IllegalArgumentException("Unknown type: " + metric.getName());
     }
     return sortedMap;
   }

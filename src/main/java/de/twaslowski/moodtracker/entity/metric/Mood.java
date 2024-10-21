@@ -6,35 +6,19 @@ public class Mood extends Metric {
 
   public static final String TYPE = "MOOD";
   private static final String PROMPT = "How do you feel today?";
-
-  public Mood() {
-    super(TYPE, null);
-  }
-
-  public Mood(int value) {
-    super(TYPE, value);
-  }
-
-  public static final Map<Metric, String> CALLBACK_MAPPING = Map.of(
-      new Mood(3), "SEVERELY_MANIC",
-      new Mood(2), "MANIC",
-      new Mood(1), "HYPOMANIC",
-      new Mood(0), "NEUTRAL",
-      new Mood(-1), "MILDLY_DEPRESSED",
-      new Mood(-2), "MODERATELY_DEPRESSED",
-      new Mood(-3), "SEVERELY_DEPRESSED"
+  private static final Integer MIN_VALUE = -3;
+  private static final Integer MAX_VALUE = 3;
+  public static final Map<Integer, String> LABELS = Map.of(
+      3, "SEVERELY_MANIC",
+      2, "MANIC",
+      1, "HYPOMANIC",
+      0, "NEUTRAL",
+      -1, "MILDLY_DEPRESSED",
+      -2, "MODERATELY_DEPRESSED",
+      -3, "SEVERELY_DEPRESSED"
   );
 
-  public static Mood empty() {
-    return new Mood();
-  }
-
-  public static Mood of(int value) {
-    return new Mood(value);
-  }
-
-  @Override
-  public String getChatPrompt() {
-    return PROMPT;
+  public Mood() {
+    super(TYPE, PROMPT, MIN_VALUE, MAX_VALUE, LABELS);
   }
 }

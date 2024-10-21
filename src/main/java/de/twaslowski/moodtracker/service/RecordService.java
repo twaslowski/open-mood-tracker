@@ -16,12 +16,16 @@ public class RecordService {
 
   private final RecordRepository recordRepository;
 
-  public void initializeFrom(TelegramUpdate update) {
+  public Record initializeFrom(TelegramUpdate update) {
     var record = Record.builder()
         .telegramId(update.getChatId())
-        .values(Set.of(Mood.empty(), Sleep.empty()))
+        .values(Set.of(
+            new Mood(),
+            new Sleep())
+        )
         .build();
-    recordRepository.save(record);
+
+    return recordRepository.save(record);
   }
 
   public Optional<Record> findIncompleteRecordForTelegramChat(long chatId) {

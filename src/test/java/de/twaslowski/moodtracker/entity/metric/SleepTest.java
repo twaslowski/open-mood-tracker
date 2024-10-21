@@ -9,7 +9,7 @@ class SleepTest {
 
   @Test
   void testTagsGeneration() {
-    assertThat(Sleep.CALLBACK_MAPPING).isEqualTo(
+    assertThat(Sleep.LABELS).isEqualTo(
         Map.of(
             Sleep.of(4), "4",
             Sleep.of(5), "5",

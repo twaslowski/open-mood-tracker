@@ -4,7 +4,6 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKey
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
-import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class RecordHandler implements UpdateHandler {
 
-  public static final String COMMAND = "/record";
+  private static final String COMMAND = "/record";
 
   private final RecordService recordService;
   private final CallbackGenerator callbackGenerator;
@@ -23,8 +22,9 @@ public class RecordHandler implements UpdateHandler {
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     log.info("{}: Handling record command.", update.getChatId());
-    recordService.initializeFrom(update);
-    var firstMetric = Mood.empty();
+    var record = recordService.initializeFrom(update);
+    var firstMetric = record.getFirstIncompleteMetric().orElseThrow();
+
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .content(callbackGenerator.createCallbacks(firstMetric))

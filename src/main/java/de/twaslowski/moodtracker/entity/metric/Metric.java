@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.entity.metric;
 
+import java.util.Map;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -7,8 +8,10 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class Metric {
 
-  protected final String type;
-  protected final Integer value;
+  protected final String name;
+  protected final String chatPrompt;
 
-  public abstract String getChatPrompt();
+  protected final Integer minValue;
+  protected final Integer maxValue;
+  protected final Map<Integer, String> labels;
 }

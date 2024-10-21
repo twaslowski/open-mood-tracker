@@ -9,6 +9,7 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -38,7 +39,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
 
   @SneakyThrows
   private TelegramResponse enrichExistingRecord(Record existingRecord, TelegramInlineKeyboardUpdate update) {
-    var receivedMetric = objectMapper.readValue(update.getCallbackData(), Metric.class);
+    var receivedMetric = objectMapper.readValue(update.getCallbackData(), MetricDatapoint.class);
     existingRecord.updateMetric(receivedMetric);
     recordService.store(existingRecord);
 

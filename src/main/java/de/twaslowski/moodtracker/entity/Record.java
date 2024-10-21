@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.entity;
 
-import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -38,11 +38,11 @@ public class Record {
 
   @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
-  private Set<Metric> values;
+  private Set<MetricDatapoint> values;
 
-  public Optional<Metric> getFirstIncompleteMetric() {
+  public Optional<MetricDatapoint> getFirstIncompleteMetric() {
     return values.stream()
-        .filter(metric -> metric.getValue() == null)
+        .filter(metric -> metric.value() == null)
         .findFirst();
   }
 
@@ -50,8 +50,8 @@ public class Record {
     return getFirstIncompleteMetric().isPresent();
   }
 
-  public void updateMetric(Metric metric) {
-    values.removeIf(existingMetric -> existingMetric.getType().equals(metric.getType()));
-    values.add(metric);
+  public void updateMetric(MetricDatapoint datapoint) {
+    values.removeIf(existingMetric -> existingMetric.metricName().equals(datapoint.metricName()));
+    values.add(datapoint);
   }
 }

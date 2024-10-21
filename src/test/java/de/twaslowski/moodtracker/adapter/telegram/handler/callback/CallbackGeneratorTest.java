@@ -24,7 +24,7 @@ public class CallbackGeneratorTest {
   @Test
   void shouldThrowIllegalArgumentExceptionOnUnknownMetricType() {
     var metric = mock(Mood.class);
-    when(metric.getType()).thenReturn("unknown");
+    when(metric.getName()).thenReturn("unknown");
 
     assertThrows(IllegalArgumentException.class, () -> callbackGenerator.createCallbacks(metric));
   }
