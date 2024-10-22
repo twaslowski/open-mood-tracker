@@ -2,6 +2,7 @@ package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;
 import java.util.LinkedHashMap;
@@ -27,25 +28,19 @@ public class CallbackGenerator {
     return callbacks;
   }
 
-  private Map<Metric, String> getCallbackMappingForMetric(Metric metric) {
-    TreeMap<Metric, String> sortedMap;
+  private Map<MetricDatapoint, String> getCallbackMappingForMetric(Metric metric) {
+    TreeMap<MetricDatapoint, String> sortedMap;
 
     switch (metric.getName()) {
-      case Mood.TYPE -> {
-        sortedMap = new TreeMap<>(MetricComparator.descending());
-        sortedMap.putAll(Mood.LABELS);
-      }
-      case Sleep.TYPE -> {
-        sortedMap = new TreeMap<>(MetricComparator.ascending());
-        sortedMap.putAll(Sleep.LABELS);
-      }
+      case Mood.TYPE, Sleep.TYPE -> sortedMap = new TreeMap<>(metric.getComparator());
       default -> throw new IllegalArgumentException("Unknown type: " + metric.getName());
     }
+    sortedMap.putAll(metric.getLabels());
     return sortedMap;
   }
 
   @SneakyThrows
-  private String safeWriteValueAsString(Metric metric) {
+  private String safeWriteValueAsString(MetricDatapoint metric) {
     return objectMapper.writeValueAsString(metric);
   }
 }

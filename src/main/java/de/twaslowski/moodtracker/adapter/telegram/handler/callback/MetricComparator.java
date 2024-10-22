@@ -1,15 +1,15 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 
-import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import java.util.Comparator;
 
 public class MetricComparator {
 
-  public static Comparator<Metric> ascending() {
-    return Comparator.comparing(Metric::getValue);
+  public static Comparator<MetricDatapoint> ascending() {
+    return Comparator.comparing(MetricDatapoint::value);
   }
 
-  public static Comparator<Metric> descending() {
-    return Comparator.comparing(Metric::getValue).reversed();
+  public static Comparator<MetricDatapoint> descending() {
+    return Comparator.comparing(MetricDatapoint::value).reversed();
   }
 }

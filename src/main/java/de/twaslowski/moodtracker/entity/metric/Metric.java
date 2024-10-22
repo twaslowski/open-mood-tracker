@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.entity.metric;
 
+import java.util.Comparator;
 import java.util.Map;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -13,5 +14,6 @@ public abstract class Metric {
 
   protected final Integer minValue;
   protected final Integer maxValue;
-  protected final Map<Integer, String> labels;
+  protected final Map<MetricDatapoint, String> labels;
+  protected final Comparator<MetricDatapoint> comparator;
 }

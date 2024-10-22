@@ -8,8 +8,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
-import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -40,14 +40,14 @@ public class Record {
   @NotNull
   private Set<MetricDatapoint> values;
 
-  public Optional<MetricDatapoint> getFirstIncompleteMetric() {
+  public Set<MetricDatapoint> getIncompleteMetrics() {
     return values.stream()
         .filter(metric -> metric.value() == null)
-        .findFirst();
+        .collect(Collectors.toSet());
   }
 
   public boolean hasIncompleteMetric() {
-    return getFirstIncompleteMetric().isPresent();
+    return values.stream().anyMatch(metric -> metric.value() == null);
   }
 
   public void updateMetric(MetricDatapoint datapoint) {

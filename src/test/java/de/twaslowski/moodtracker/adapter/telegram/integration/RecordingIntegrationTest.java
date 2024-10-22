@@ -8,6 +8,7 @@ import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
+import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;
 import java.util.Set;
@@ -36,10 +37,15 @@ public class RecordingIntegrationTest extends IntegrationBase {
           var temporaryRecord = maybeTemporaryRecord.getFirst();
 
           assertThat(temporaryRecord.getTelegramId()).isEqualTo(1);
-          assertThat(temporaryRecord.getValues()).isEqualTo(Set.of(Mood.empty(), Sleep.empty()));
+          assertThat(temporaryRecord.getValues()).isEqualTo(Set.of(
+              new MetricDatapoint(Mood.TYPE, null),
+              new MetricDatapoint(Sleep.TYPE, null)
+          ));
 
           var response = (TelegramInlineKeyboardResponse) outgoingMessageQueue.take();
-          assertThat(response.getContent()).isEqualTo(callbackGenerator.createCallbacks(Mood.empty()));
+          assertThat(response.getContent()).isEqualTo(callbackGenerator.createCallbacks(
+              new Mood()
+          ));
           assertThat(response.getChatId()).isEqualTo(1);
         }
     );
@@ -77,13 +83,13 @@ public class RecordingIntegrationTest extends IntegrationBase {
     // and
     incomingMessageQueue.add(TelegramInlineKeyboardUpdate.builder()
         .chatId(1)
-        .callbackData("{\"type\":\"MOOD\",\"value\":3}")
+        .callbackData("{\"metricName\":\"MOOD\",\"value\":3}")
         .build());
 
     // and
     incomingMessageQueue.add(TelegramInlineKeyboardUpdate.builder()
         .chatId(1)
-        .callbackData("{\"type\":\"MOOD\",\"value\":-3}")
+        .callbackData("{\"metricName\":\"MOOD\",\"value\":-3}")
         .build());
 
     // then
@@ -93,7 +99,10 @@ public class RecordingIntegrationTest extends IntegrationBase {
           var temporaryRecord = maybeTemporaryRecord.getFirst();
 
           assertThat(temporaryRecord.getTelegramId()).isEqualTo(1);
-          assertThat(temporaryRecord.getValues()).isEqualTo(Set.of(Mood.of(-3), Sleep.empty()));
+          assertThat(temporaryRecord.getValues()).containsAll(Set.of(
+              new MetricDatapoint(Mood.TYPE, -3),
+              new MetricDatapoint(Sleep.TYPE, null)
+          ));
         }
     );
   }
@@ -110,13 +119,13 @@ public class RecordingIntegrationTest extends IntegrationBase {
     // and
     incomingMessageQueue.add(TelegramInlineKeyboardUpdate.builder()
         .chatId(1)
-        .callbackData("{\"type\":\"MOOD\",\"value\":0}")
+        .callbackData("{\"metricName\":\"MOOD\",\"value\":0}")
         .build());
 
     // and
     incomingMessageQueue.add(TelegramInlineKeyboardUpdate.builder()
         .chatId(1)
-        .callbackData("{\"type\":\"SLEEP\",\"value\":8}")
+        .callbackData("{\"metricName\":\"SLEEP\",\"value\":8}")
         .build());
 
     // then
@@ -126,7 +135,8 @@ public class RecordingIntegrationTest extends IntegrationBase {
           var record = maybeRecord.getFirst();
 
           assertThat(record.getTelegramId()).isEqualTo(1);
-          assertThat(record.getValues()).isEqualTo(Set.of(Mood.of(0), Sleep.of(8)));
+          assertThat(record.getValues()).isEqualTo(Set.of(new MetricDatapoint(Mood.TYPE, 0), new MetricDatapoint(Sleep.TYPE, 8))
+          );
           assertThat(recordService.findIncompleteRecordForTelegramChat(1)).isEmpty();
 
           outgoingMessageQueue.take();
