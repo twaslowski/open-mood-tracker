@@ -43,11 +43,9 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     existingRecord.updateMetric(receivedMetric);
     var record = recordService.store(existingRecord);
 
-    if (record.hasIncompleteMetric()) {
-      return sendNextMetric(update, recordService.getNextIncompleteMetric(record));
-    } else {
-      return completeRecord(update);
-    }
+    return recordService.getNextIncompleteMetric(record)
+        .map(nextMetric -> sendNextMetric(update, nextMetric))
+        .orElse(completeRecord(update));
   }
 
   private TelegramResponse completeRecord(TelegramUpdate update) {

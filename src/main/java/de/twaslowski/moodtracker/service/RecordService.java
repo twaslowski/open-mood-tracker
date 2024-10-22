@@ -7,14 +7,18 @@ import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;
 import de.twaslowski.moodtracker.repository.RecordRepository;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RecordService {
 
   private final RecordRepository recordRepository;
@@ -34,22 +38,29 @@ public class RecordService {
   }
 
   public Optional<Record> findIncompleteRecordForTelegramChat(long chatId) {
-    return recordRepository.findByTelegramId(chatId).stream()
+    var incompleteRecords = recordRepository.findByTelegramId(chatId).stream()
         .filter(Record::hasIncompleteMetric)
-        .findFirst();
+        .collect(Collectors.toSet());
+
+    if (incompleteRecords.size() > 1) {
+      log.warn("Found multiple incomplete records for chatId: {}", chatId);
+    }
+
+    return incompleteRecords.stream()
+        .max(Comparator.comparing(Record::getCreationTimestamp));
   }
 
-  public Metric getNextIncompleteMetric(Record record) {
+  public Optional<Metric> getNextIncompleteMetric(Record record) {
     // Returns the next incomplete metric IN ORDER according to the Order of the Metrics bean
     var incompleteMetricNames = record.getIncompleteMetrics().stream()
         .map(MetricDatapoint::metricName)
         .toList();
     for (Metric metric : metrics.sequencedValues()) {
       if (incompleteMetricNames.contains(metric.getName())) {
-        return metric;
+        return Optional.of(metric);
       }
     }
-    throw new IllegalStateException("No incomplete metric found.");
+    return Optional.empty();
   }
 
   public Record store(Record record) {
