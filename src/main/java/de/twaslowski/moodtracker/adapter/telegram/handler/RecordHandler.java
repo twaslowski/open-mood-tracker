@@ -22,10 +22,13 @@ public class RecordHandler implements UpdateHandler {
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     log.info("{}: Handling record command.", update.getChatId());
+    // todo there is currently nothing stopping a user from creating multiple records
+    // simply add a check for existing records when /record is sent
     var record = recordService.initializeFrom(update);
     var firstMetric = recordService.getNextIncompleteMetric(record)
         .orElseThrow(() -> new IllegalStateException("No empty metrics found for record after initialization."));
 
+    log.info("Created new record {}", record.getId());
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .content(callbackGenerator.createCallbacks(firstMetric))

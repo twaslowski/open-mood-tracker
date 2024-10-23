@@ -43,6 +43,8 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     existingRecord.updateMetric(receivedMetric);
     var record = recordService.store(existingRecord);
 
+    log.info("Updated record {} with metric {}, value {}",
+        record.getId(), receivedMetric.metricName(), receivedMetric.value());
     return recordService.getNextIncompleteMetric(record)
         .map(nextMetric -> sendNextMetric(update, nextMetric))
         .orElse(completeRecord(update));

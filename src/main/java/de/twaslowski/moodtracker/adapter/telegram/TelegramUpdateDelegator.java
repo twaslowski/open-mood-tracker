@@ -23,7 +23,7 @@ public class TelegramUpdateDelegator {
     return relevantHandler
         .map(handler -> invokeHandler(handler, update))
         .orElseGet(() -> {
-          log.warn("[{}] No handler found", update.getUpdateId());
+          log.warn("No handler found");
           return respondToUnhandleableUpdate(update.getChatId());
         });
   }
@@ -32,7 +32,7 @@ public class TelegramUpdateDelegator {
     try {
       return handler.handleUpdate(update);
     } catch (Exception e) {
-      log.error("[{}] Error while processing update: {}", update.getUpdateId(), e.getMessage());
+      log.error("Error while processing update: {}", e.getMessage());
       return TelegramResponse.error()
           .chatId(update.getChatId())
           .build();
