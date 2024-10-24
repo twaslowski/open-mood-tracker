@@ -5,6 +5,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.entity.Record;
@@ -25,6 +26,9 @@ class RecordHandlerTest {
 
   @Mock
   private RecordService recordService;
+
+  @Mock
+  private MessageUtil messageUtil;
 
   @Mock
   private CallbackGenerator callbackGenerator;
@@ -61,5 +65,6 @@ class RecordHandlerTest {
     recordHandler.handleUpdate(update);
 
     verify(recordService, never()).initializeFrom(any());
+    verify(messageUtil).getMessage("command.record.already-recording");
   }
 }

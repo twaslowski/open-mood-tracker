@@ -1,6 +1,7 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
@@ -24,6 +25,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   private final ObjectMapper objectMapper;
   private final RecordService recordService;
   private final CallbackGenerator callbackGenerator;
+  private final MessageUtil messageUtil;
 
   @Override
   @SneakyThrows
@@ -53,7 +55,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   private TelegramResponse completeRecord(TelegramUpdate update) {
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
-        .text("Record saved.")
+        .text(messageUtil.getMessage("command.record.saved"))
         .build();
   }
 
@@ -68,7 +70,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   private TelegramResponse noRecordInProgressResponse(TelegramUpdate update) {
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
-        .text("You are not recording right now.")
+        .text(messageUtil.getMessage("command.record.not-recording"))
         .build();
   }
 

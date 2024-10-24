@@ -5,6 +5,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.service.UserService;
@@ -26,6 +27,9 @@ public class NotificationTest {
 
   @Mock
   private UserService userService;
+
+  @Mock
+  private MessageUtil messageUtil;
 
   @Mock
   private Queue<TelegramResponse> outgoingMessageQueue;
@@ -61,6 +65,6 @@ public class NotificationTest {
 
     var response = responseCaptor.getValue();
     assert response.getChatId() == 1L;
-    assert response.getText().equals("It's time to record your mood!");
+    verify(messageUtil).getMessage("notification.reminder");
   }
 }

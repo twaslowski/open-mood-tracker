@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler;
 
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
@@ -18,6 +19,7 @@ public class BaselineHandler implements UpdateHandler {
 
   private final UserService userService;
   private final RecordService recordService;
+  private final MessageUtil messageUtil;
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
@@ -33,17 +35,17 @@ public class BaselineHandler implements UpdateHandler {
     }
   }
 
-  private static TelegramResponse noBaselineConfigurationFound(long chatId) {
+  private TelegramResponse noBaselineConfigurationFound(long chatId) {
     return TelegramTextResponse.builder()
         .chatId(chatId)
-        .text("No baseline configuration found.")
+        .text(messageUtil.getMessage("command.baseline.no-configuration-found"))
         .build();
   }
 
-  private static TelegramResponse baselineRecordCreated(long chatId) {
+  private TelegramResponse baselineRecordCreated(long chatId) {
     return TelegramTextResponse.builder()
         .chatId(chatId)
-        .text("Baseline record created.")
+        .text(messageUtil.getMessage("command.baseline.created"))
         .build();
   }
 

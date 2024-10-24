@@ -5,6 +5,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
@@ -27,6 +28,9 @@ class BaselineHandlerTest {
   @Mock
   private RecordService recordService;
 
+  @Mock
+  private MessageUtil messageUtil;
+
   @InjectMocks
   private BaselineHandler baselineHandler;
 
@@ -41,6 +45,7 @@ class BaselineHandlerTest {
     baselineHandler.handleUpdate(update);
 
     verify(recordService, never()).fromBaselineConfiguration(any());
+    verify(messageUtil).getMessage("command.baseline.no-configuration-found");
   }
 
   @Test
@@ -56,5 +61,6 @@ class BaselineHandlerTest {
     baselineHandler.handleUpdate(update);
 
     verify(recordService).fromBaselineConfiguration(userWithBaselineConfig);
+    verify(messageUtil).getMessage("command.baseline.created");
   }
 }

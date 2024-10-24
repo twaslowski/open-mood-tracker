@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.scheduled;
 
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.service.RecordService;
@@ -18,13 +19,14 @@ public class AutoBaselineService {
   private final UserService userService;
   private final RecordService recordService;
   private final Queue<TelegramResponse> outgoingMessageQueue;
+  private final MessageUtil messageUtil;
 
   @Scheduled(cron = "${telegram.auto-baseline.cron}")
   public void createAutoBaselines() {
     userService.findAutoBaselineEligibleUsers().forEach(user -> {
       recordService.fromBaselineConfiguration(user);
       outgoingMessageQueue.add(TelegramTextResponse.builder()
-          .text("Baseline record automatically created")
+          .text(messageUtil.getMessage("notification.baseline.created"))
           .chatId(user.getTelegramId())
           .build()
       );

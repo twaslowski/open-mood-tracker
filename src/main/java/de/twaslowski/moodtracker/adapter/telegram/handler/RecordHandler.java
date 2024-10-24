@@ -1,5 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler;
 
+import static java.lang.String.format;
+
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
@@ -19,6 +22,7 @@ public class RecordHandler implements UpdateHandler {
 
   private final RecordService recordService;
   private final CallbackGenerator callbackGenerator;
+  private final MessageUtil messageUtil;
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
@@ -52,7 +56,10 @@ public class RecordHandler implements UpdateHandler {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .content(callbackGenerator.createCallbacks(nextMetric))
-        .text("You're already recording. Please complete the current metric.\n\n" + nextMetric.getChatPrompt())
+        .text(format("%s%n%n%s",
+            messageUtil.getMessage("command.record.already-recording"),
+            nextMetric.getChatPrompt()
+        ))
         .build();
   }
 

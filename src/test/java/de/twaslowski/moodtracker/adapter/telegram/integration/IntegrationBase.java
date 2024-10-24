@@ -67,7 +67,7 @@ public class IntegrationBase {
     );
   }
 
-  protected void assertOutgoingQueueContains(String message) {
+  protected void assertMessageWithTextSent(String message) {
     assertThat(outgoingMessageQueue.stream().anyMatch(
         response -> message.equals(response.getText())
     )).isTrue();

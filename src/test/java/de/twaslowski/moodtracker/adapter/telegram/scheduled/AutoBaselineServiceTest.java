@@ -4,6 +4,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
@@ -29,6 +30,9 @@ class AutoBaselineServiceTest {
   private RecordService recordService;
 
   @Mock
+  private MessageUtil messageUtil;
+
+  @Mock
   private Queue<TelegramResponse> outgoingMessageQueue;
 
   @InjectMocks
@@ -47,5 +51,6 @@ class AutoBaselineServiceTest {
 
     verify(recordService).fromBaselineConfiguration(user);
     verify(outgoingMessageQueue).add(any());
+    verify(messageUtil).getMessage("notification.baseline.created");
   }
 }

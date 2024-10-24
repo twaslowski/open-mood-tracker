@@ -41,5 +41,7 @@ public class BaselineIntegrationTest extends IntegrationBase {
 
     assertThat(record.getValues()).isEqualTo(Set.of(MetricDatapoint.fromMetricDefault(new Mood())));
     assertThat(record.getTelegramId()).isEqualTo(eligibleUser.getId());
+
+    assertMessageWithTextSent(messageUtil.getMessage("notification.baseline.created"));
   }
 }
