@@ -26,7 +26,7 @@ public class RecordHandler implements UpdateHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    log.info("{}: Handling record command.", update.getChatId());
+    log.info("Handling command");
     var existingRecord = recordService.findIncompleteRecordForTelegramChat(update.getChatId());
 
     return existingRecord.map(record -> handleExistingIncompleteRecord(update, record))

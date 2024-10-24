@@ -26,11 +26,11 @@ public class TelegramUpdateProcessor {
   @PostConstruct
   public void init() {
     log.info("Starting incoming queue processor ...");
-    scheduler.scheduleWithFixedDelay(this::processUpdate, 0, 10, TimeUnit.MILLISECONDS);
+    scheduler.scheduleWithFixedDelay(this::processUpdate, 0, 50, TimeUnit.MILLISECONDS);
   }
 
   public void processUpdate() {
-    try {
+    if (!incomingMessageQueue.isEmpty()) {
       var update = incomingMessageQueue.remove();
       LogContext.enrichWithUpdate(update);
 
@@ -39,8 +39,6 @@ public class TelegramUpdateProcessor {
 
       LogContext.clear();
       outgoingMessageQueue.add(response);
-    } catch (Exception e) {
-      log.error("Error while processing update: {}", e.getMessage());
     }
   }
 }

@@ -30,21 +30,23 @@ public class TelegramMessageSender {
   @PostConstruct
   public void init() {
     log.info("Starting outgoing queue processor ...");
-    scheduler.scheduleWithFixedDelay(this::sendResponses, 0, 10, TimeUnit.MILLISECONDS);
+    scheduler.scheduleWithFixedDelay(this::sendResponses, 0, 50, TimeUnit.MILLISECONDS);
   }
 
   public void sendResponses() {
-    TelegramResponse response = outgoingMessageQueue.remove();
-    var telegramResponseObject = switch (response.getResponseType()) {
-      case TEXT -> BotApiMessageFactory.createTextResponse((TelegramTextResponse) response);
-      case INLINE_KEYBOARD ->
-          BotApiMessageFactory.createInlineKeyboardResponse((TelegramInlineKeyboardResponse) response);
-    };
-    try {
-      telegramClient.execute(telegramResponseObject);
-      log.info("Sent response to chat: {}", response.getChatId());
-    } catch (TelegramApiException | RuntimeException e) {
-      log.error("Error while sending message: {}", e.getMessage());
+    if (!outgoingMessageQueue.isEmpty()) {
+      var response = outgoingMessageQueue.remove();
+      var telegramResponseObject = switch (response.getResponseType()) {
+        case TEXT -> BotApiMessageFactory.createTextResponse((TelegramTextResponse) response);
+        case INLINE_KEYBOARD ->
+            BotApiMessageFactory.createInlineKeyboardResponse((TelegramInlineKeyboardResponse) response);
+      };
+      try {
+        telegramClient.execute(telegramResponseObject);
+        log.info("Sent response to chat: {}", response.getChatId());
+      } catch (TelegramApiException | RuntimeException e) {
+        log.error("Error while sending message: {}", e.getMessage());
+      }
     }
   }
 }
