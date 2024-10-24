@@ -1,5 +1,18 @@
-ALTER TABLE "user"
-  ADD COLUMN IF NOT EXISTS baseline_configuration JSONB;
+DROP TABLE "user";
 
-ALTER TABLE "user"
-  ADD COLUMN IF NOT EXISTS auto_baseline_enabled BOOLEAN DEFAULT FALSE;
+CREATE TABLE IF NOT EXISTS configuration
+(
+  id                     BIGINT PRIMARY KEY,
+  baseline_configuration JSONB,
+  auto_baseline_enabled  BOOLEAN          DEFAULT FALSE,
+  notifications_enabled  BOOLEAN NOT NULL DEFAULT TRUE
+);
+
+CREATE SEQUENCE IF NOT EXISTS configuration_id_seq INCREMENT 50 START 1;
+
+CREATE TABLE IF NOT EXISTS "user"
+(
+  id               BIGINT PRIMARY KEY,
+  telegram_id      BIGINT UNIQUE NOT NULL,
+  configuration_id BIGINT        NOT NULL REFERENCES configuration (id)
+)

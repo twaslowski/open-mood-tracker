@@ -1,10 +1,13 @@
 package de.twaslowski.moodtracker.entity;
 
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.util.Set;
@@ -12,8 +15,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 @Entity
 @Data
@@ -30,11 +31,11 @@ public class User {
   @NotNull
   private long telegramId;
 
-  @NotNull
-  private boolean notificationsEnabled;
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "configuration_id", referencedColumnName = "id")
+  private Configuration configuration;
 
-  @JdbcTypeCode(SqlTypes.JSON)
-  private Set<MetricDatapoint> baselineConfiguration;
-
-  private boolean autoBaselineEnabled;
+  public Set<MetricDatapoint> getBaselineConfiguration() {
+    return configuration.getBaselineConfiguration();
+  }
 }

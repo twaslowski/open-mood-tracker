@@ -8,8 +8,16 @@ public class UserSpec {
     return User.builder()
         .id(1)
         .telegramId(1)
-        .baselineConfiguration(Set.of())
-        .autoBaselineEnabled(true)
-        .notificationsEnabled(true);
+        .configuration(ConfigurationSpec.valid().build());
+  }
+
+  public static User.UserBuilder noBaselineConfiguration() {
+    return User.builder()
+        .id(1)
+        .telegramId(1)
+        .configuration(ConfigurationSpec.valid()
+            .baselineConfiguration(Set.of())
+            .build()
+        );
   }
 }

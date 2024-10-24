@@ -19,6 +19,7 @@ public class Mood extends Metric {
       datapoint(-3), "SEVERELY_DEPRESSED"
   );
   private static final Comparator<MetricDatapoint> COMPARATOR = Comparator.comparingInt(MetricDatapoint::value).reversed();
+  private static final Integer DEFAULT = 0;
 
   public Mood() {
     super(
@@ -28,11 +29,15 @@ public class Mood extends Metric {
         MAX_VALUE,
         LABELS,
         COMPARATOR,
-        0
+        DEFAULT
     );
   }
 
   private static MetricDatapoint datapoint(Integer value) {
     return new MetricDatapoint(TYPE, value);
+  }
+
+  public static MetricDatapoint defaultDatapoint() {
+    return new MetricDatapoint(TYPE, DEFAULT);
   }
 }

@@ -7,12 +7,9 @@ import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
-import de.twaslowski.moodtracker.entity.User;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
-import de.twaslowski.moodtracker.entity.metric.Mood;
+import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -36,8 +33,7 @@ class BaselineHandlerTest {
 
   @Test
   void shouldNotCreateBaselineRecordIfConfigNotPresent() {
-    var userWithoutBaselineConfig = User.builder()
-        .id(1).telegramId(1).build();
+    var userWithoutBaselineConfig = UserSpec.noBaselineConfiguration().build();
     when(userService.findByTelegramId(1)).thenReturn(userWithoutBaselineConfig);
 
     var update = TelegramTextUpdate.builder().text("/baseline").chatId(1).build();
@@ -50,10 +46,7 @@ class BaselineHandlerTest {
 
   @Test
   void shouldCreateBaselineRecord() {
-    var userWithBaselineConfig = User.builder()
-        .id(1).telegramId(1)
-        .baselineConfiguration(Set.of(MetricDatapoint.forMetric(Mood.TYPE)))
-        .build();
+    var userWithBaselineConfig = UserSpec.valid().build();
     when(userService.findByTelegramId(1)).thenReturn(userWithBaselineConfig);
 
     var update = TelegramTextUpdate.builder().text("/baseline").chatId(1).build();

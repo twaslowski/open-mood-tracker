@@ -9,7 +9,7 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
 import de.twaslowski.moodtracker.entity.User;
-import de.twaslowski.moodtracker.entity.UserSpec;
+import de.twaslowski.moodtracker.repository.ConfigurationRepository;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import de.twaslowski.moodtracker.service.RecordService;
@@ -27,12 +27,14 @@ public class IntegrationBase {
   void setUp() {
     userRepository.deleteAll();
     recordRepository.deleteAll();
+    configurationRepository.deleteAll();
   }
 
   @AfterEach
   void tearDown() {
     userRepository.deleteAll();
     recordRepository.deleteAll();
+    configurationRepository.deleteAll();
   }
 
   @Autowired
@@ -48,6 +50,9 @@ public class IntegrationBase {
   protected RecordRepository recordRepository;
 
   @Autowired
+  protected ConfigurationRepository configurationRepository;
+
+  @Autowired
   protected RecordService recordService;
 
   @Autowired
@@ -59,12 +64,8 @@ public class IntegrationBase {
   @Autowired
   protected MessageUtil messageUtil;
 
-  protected User givenUser(long chatId) {
-    return userRepository.save(
-        UserSpec.valid()
-            .telegramId(chatId)
-            .build()
-    );
+  protected void givenUser(User user) {
+    userRepository.save(user);
   }
 
   protected void assertMessageWithTextSent(String message) {

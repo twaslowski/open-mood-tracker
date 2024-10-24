@@ -6,6 +6,7 @@ import static org.awaitility.Awaitility.await;
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.StartHandler;
+import de.twaslowski.moodtracker.entity.UserSpec;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -36,7 +37,7 @@ public class UserIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldGreetUserIfAlreadyExists() {
-    givenUser(1);
+    givenUser(UserSpec.valid().build());
     var update = TelegramTextUpdate.builder()
         .chatId(1L)
         .text(StartHandler.COMMAND)

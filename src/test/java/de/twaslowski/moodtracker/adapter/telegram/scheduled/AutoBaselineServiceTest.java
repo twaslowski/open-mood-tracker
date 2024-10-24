@@ -6,8 +6,8 @@ import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.entity.ConfigurationSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
@@ -41,8 +41,10 @@ class AutoBaselineServiceTest {
   @Test
   void shouldCreateBaselineRecordAndSendMessage() {
     var user = UserSpec.valid()
-        .baselineConfiguration(Set.of(MetricDatapoint.forMetric(Mood.TYPE)))
-        .autoBaselineEnabled(true)
+        .configuration(ConfigurationSpec.valid()
+            .baselineConfiguration(Set.of(Mood.defaultDatapoint()))
+            .autoBaselineEnabled(true)
+            .build())
         .build();
 
     when(userService.findAutoBaselineEligibleUsers()).thenReturn(List.of(user));

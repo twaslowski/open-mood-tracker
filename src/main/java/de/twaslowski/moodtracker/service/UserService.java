@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.service;
 
+import de.twaslowski.moodtracker.entity.Configuration;
 import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.UserRepository;
@@ -16,13 +17,16 @@ public class UserService {
   private final Set<MetricDatapoint> defaultBaselineConfiguration;
 
   public boolean createUserFromTelegramId(long telegramId) {
+    var defaultConfiguration = Configuration.defaults()
+        .baselineConfiguration(defaultBaselineConfiguration)
+        .build();
+
     return userRepository.findByTelegramId(telegramId)
         .map(user -> false)
         .orElseGet(() -> {
           userRepository.save(User.builder()
               .telegramId(telegramId)
-              .baselineConfiguration(defaultBaselineConfiguration)
-              .autoBaselineEnabled(false)
+              .configuration(defaultConfiguration)
               .build());
           return true;
         });
@@ -38,6 +42,9 @@ public class UserService {
   }
 
   public List<User> findAutoBaselineEligibleUsers() {
-    return userRepository.findAllByAutoBaselineEnabledIsTrueAndBaselineConfigurationIsNotNull();
+    return userRepository.findAll().stream()
+        .filter(user -> user.getConfiguration().isAutoBaselineEnabled())
+        .filter(user -> !user.getConfiguration().getBaselineConfiguration().isEmpty())
+        .toList();
   }
 }

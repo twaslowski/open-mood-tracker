@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.entity.User;
+import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.Collections;
 import java.util.List;
@@ -49,11 +49,7 @@ public class NotificationTest {
   @Test
   void shouldSendNotificationsWhenUsersAreSubscribed() {
     // given
-    var user = User.builder()
-        .id(1L)
-        .telegramId(1L)
-        .notificationsEnabled(true)
-        .build();
+    var user = UserSpec.valid().build();
     when(userService.findAllUsersWithNotifications()).thenReturn(List.of(user));
 
     // when
