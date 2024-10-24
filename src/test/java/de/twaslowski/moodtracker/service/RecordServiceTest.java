@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 public class RecordServiceTest {
 
-  private final LinkedHashMap<String, Metric> metrics = new MetricsConfiguration().metrics();
+  private final LinkedHashMap<String, Metric> metrics = new MetricsConfiguration().defaultMetrics();
   private final RecordRepository recordRepository = mock(RecordRepository.class);
 
   private final RecordService recordService = new RecordService(recordRepository, metrics);

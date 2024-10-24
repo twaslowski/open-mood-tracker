@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.notification;
+package de.twaslowski.moodtracker.adapter.telegram.scheduled;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class NotificationSender {
+public class NotificationService {
 
   private final UserService userService;
   private final InMemoryQueue<TelegramResponse> outgoingMessageQueue;

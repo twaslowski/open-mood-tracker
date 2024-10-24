@@ -3,6 +3,7 @@ package de.twaslowski.moodtracker.adapter.telegram.handler;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +34,6 @@ public class StartHandler implements UpdateHandler {
 
   @Override
   public boolean canHandle(TelegramUpdate update) {
-    return COMMAND.equals(update.getText());
+    return update.getText() != null && COMMAND.equals(update.getText());
   }
 }

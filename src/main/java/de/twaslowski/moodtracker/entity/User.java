@@ -1,15 +1,19 @@
 package de.twaslowski.moodtracker.entity;
 
+import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Data
@@ -28,4 +32,9 @@ public class User {
 
   @NotNull
   private boolean notificationsEnabled;
+
+  @JdbcTypeCode(SqlTypes.JSON)
+  private Set<MetricDatapoint> baselineConfiguration;
+
+  private boolean autoBaselineEnabled;
 }

@@ -74,6 +74,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
 
   @Override
   public boolean canHandle(TelegramUpdate update) {
+    // todo this should be a more specific check in the future
     return update.hasCallback();
   }
 }

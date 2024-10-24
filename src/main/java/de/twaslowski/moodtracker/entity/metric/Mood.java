@@ -21,7 +21,15 @@ public class Mood extends Metric {
   private static final Comparator<MetricDatapoint> COMPARATOR = Comparator.comparingInt(MetricDatapoint::value).reversed();
 
   public Mood() {
-    super(TYPE, PROMPT, MIN_VALUE, MAX_VALUE, LABELS, COMPARATOR);
+    super(
+        TYPE,
+        PROMPT,
+        MIN_VALUE,
+        MAX_VALUE,
+        LABELS,
+        COMPARATOR,
+        0
+    );
   }
 
   private static MetricDatapoint datapoint(Integer value) {

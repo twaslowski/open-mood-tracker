@@ -58,6 +58,6 @@ public class RecordHandler implements UpdateHandler {
 
   @Override
   public boolean canHandle(TelegramUpdate update) {
-    return COMMAND.equals(update.getText());
+    return update.getText() != null && COMMAND.equals(update.getText());
   }
 }

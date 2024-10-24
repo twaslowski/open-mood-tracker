@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
   Optional<User> findByTelegramId(Long telegramId);
 
   List<User> findAllByNotificationsEnabledIsTrue();
+
+  List<User> findAllByAutoBaselineEnabledIsTrueAndBaselineConfigurationIsNotNull();
 }

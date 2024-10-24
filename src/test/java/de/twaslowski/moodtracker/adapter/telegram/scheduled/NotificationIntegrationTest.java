@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.notification;
+package de.twaslowski.moodtracker.adapter.telegram.scheduled;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
@@ -22,7 +22,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class NotificationIntegrationTest {
 
   @InjectMocks
-  private NotificationSender notificationSender;
+  private NotificationService notificationService;
 
   @Mock
   private UserService userService;
@@ -36,7 +36,7 @@ public class NotificationIntegrationTest {
     when(userService.findAllUsersWithNotifications()).thenReturn(Collections.emptyList());
 
     // when
-    notificationSender.sendRecordingReminder();
+    notificationService.sendRecordingReminder();
 
     // then
     verify(outgoingMessageQueue, never()).add(any());
@@ -53,7 +53,7 @@ public class NotificationIntegrationTest {
     when(userService.findAllUsersWithNotifications()).thenReturn(List.of(user));
 
     // when
-    notificationSender.sendRecordingReminder();
+    notificationService.sendRecordingReminder();
 
     // then
     ArgumentCaptor<TelegramResponse> responseCaptor = ArgumentCaptor.forClass(TelegramResponse.class);

@@ -8,4 +8,11 @@ public record MetricDatapoint(
   public static MetricDatapoint forMetric(String metric) {
     return new MetricDatapoint(metric, null);
   }
+
+  public static MetricDatapoint fromMetricDefault(Metric metric) {
+    if (metric.getDefaultValue() == null) {
+      throw new IllegalArgumentException("Metric " + metric.getName() + " has no default value.");
+    }
+    return new MetricDatapoint(metric.getName(), metric.getDefaultValue());
+  }
 }

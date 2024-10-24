@@ -2,6 +2,7 @@ package de.twaslowski.moodtracker.service;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.entity.Record;
+import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
@@ -35,6 +36,15 @@ public class RecordService {
         .build();
 
     return recordRepository.save(record);
+  }
+
+  public void fromBaselineConfiguration(User user) {
+    recordRepository.save(
+        Record.builder()
+            .telegramId(user.getTelegramId())
+            .values(user.getBaselineConfiguration())
+            .build()
+    );
   }
 
   public Optional<Record> findIncompleteRecordForTelegramChat(long chatId) {

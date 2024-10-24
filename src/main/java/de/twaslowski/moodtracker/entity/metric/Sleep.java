@@ -18,7 +18,15 @@ public class Sleep extends Metric {
       .collect(Collectors.toMap(Sleep::datapoint, Object::toString));
 
   public Sleep() {
-    super(TYPE, PROMPT, MIN_VALUE, MAX_VALUE, LABELS, COMPARATOR);
+    super(
+        TYPE,
+        PROMPT,
+        MIN_VALUE,
+        MAX_VALUE,
+        LABELS,
+        COMPARATOR,
+        8
+    );
   }
 
   private static MetricDatapoint datapoint(Integer value) {

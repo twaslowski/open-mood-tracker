@@ -1,0 +1,5 @@
+ALTER TABLE "user"
+  ADD COLUMN IF NOT EXISTS baseline_configuration JSONB;
+
+ALTER TABLE "user"
+  ADD COLUMN IF NOT EXISTS auto_baseline_enabled BOOLEAN DEFAULT FALSE;

@@ -30,6 +30,8 @@ mood_tracker:
       token: ${TELEGRAM_TOKEN}
     notifications:
       cron: 0 18 * * *
+    auto-baseline:
+      cron: 0 22 * * *
 
 management:
   endpoints:
