@@ -6,11 +6,11 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.Collections;
 import java.util.List;
+import java.util.Queue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -19,7 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
-public class NotificationIntegrationTest {
+public class NotificationTest {
 
   @InjectMocks
   private NotificationService notificationService;
@@ -28,7 +28,7 @@ public class NotificationIntegrationTest {
   private UserService userService;
 
   @Mock
-  private InMemoryQueue<TelegramResponse> outgoingMessageQueue;
+  private Queue<TelegramResponse> outgoingMessageQueue;
 
   @Test
   void shouldNotSendNotificationsWhenNoUsersAreSubscribed() {

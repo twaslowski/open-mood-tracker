@@ -2,9 +2,9 @@ package de.twaslowski.moodtracker.adapter.telegram;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import de.twaslowski.moodtracker.config.LogContext;
 import jakarta.annotation.PostConstruct;
+import java.util.Queue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -17,8 +17,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class TelegramUpdateProcessor {
 
-  private final InMemoryQueue<TelegramUpdate> incomingMessageQueue;
-  private final InMemoryQueue<TelegramResponse> outgoingMessageQueue;
+  private final Queue<TelegramUpdate> incomingMessageQueue;
+  private final Queue<TelegramResponse> outgoingMessageQueue;
   private final TelegramUpdateDelegator telegramUpdateDelegator;
 
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -31,7 +31,7 @@ public class TelegramUpdateProcessor {
 
   public void processUpdate() {
     try {
-      var update = incomingMessageQueue.take();
+      var update = incomingMessageQueue.remove();
       LogContext.enrichWithUpdate(update);
 
       var response = telegramUpdateDelegator.delegateUpdate(update);

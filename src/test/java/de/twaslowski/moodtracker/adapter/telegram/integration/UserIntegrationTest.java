@@ -25,9 +25,33 @@ public class UserIntegrationTest extends IntegrationBase {
 
     await().atMost(3, TimeUnit.SECONDS)
         .untilAsserted(() -> {
-          var message = outgoingMessageQueue.take();
+          var user = userRepository.findByTelegramId(1L);
+          assertThat(user).isPresent();
+
+          var message = outgoingMessageQueue.remove();
           assertThat(message.getChatId()).isEqualTo(1L);
-          assertThat(message.getText()).isEqualTo(StartHandler.CREATED_RESPONSE);
+          assertThat(message.getText()).isEqualTo(messageUtil.getMessage("command.start.created"));
+        });
+  }
+
+  @Test
+  void shouldGreetUserIfAlreadyExists() {
+    givenUser(1);
+    var update = TelegramTextUpdate.builder()
+        .chatId(1L)
+        .text(StartHandler.COMMAND)
+        .build();
+
+    incomingMessageQueue.add(update);
+
+    await().atMost(3, TimeUnit.SECONDS)
+        .untilAsserted(() -> {
+          var user = userRepository.findByTelegramId(1L);
+          assertThat(user).isPresent();
+
+          var message = outgoingMessageQueue.remove();
+          assertThat(message.getChatId()).isEqualTo(1L);
+          assertThat(message.getText()).isEqualTo(messageUtil.getMessage("command.start.exists"));
         });
   }
 }

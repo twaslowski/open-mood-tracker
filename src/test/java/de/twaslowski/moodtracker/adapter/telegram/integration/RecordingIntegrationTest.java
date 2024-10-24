@@ -56,8 +56,8 @@ public class RecordingIntegrationTest extends IntegrationBase {
         .build());
 
     // then
-    await().atMost(3, SECONDS).untilAsserted(() -> assertThat(recordRepository.findAll()).isEmpty()
-    );
+    await().atMost(3, SECONDS).untilAsserted(() ->
+        assertThat(recordRepository.findAll()).isEmpty());
   }
 
   @Test

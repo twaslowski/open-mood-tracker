@@ -1,7 +1,9 @@
-package de.twaslowski.moodtracker.adapter.telegram.queue;
+package de.twaslowski.moodtracker.config.telegram;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import java.util.LinkedList;
+import java.util.Queue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,12 +11,12 @@ import org.springframework.context.annotation.Configuration;
 public class QueueConfiguration {
 
   @Bean
-  public InMemoryQueue<TelegramUpdate> incomingMessageQueue() {
-    return new InMemoryQueue<>();
+  public Queue<TelegramUpdate> incomingMessageQueue() {
+    return new LinkedList<>();
   }
 
   @Bean
-  public InMemoryQueue<TelegramResponse> outgoingMessageQueue() {
-    return new InMemoryQueue<>();
+  public Queue<TelegramResponse> outgoingMessageQueue() {
+    return new LinkedList<>();
   }
 }

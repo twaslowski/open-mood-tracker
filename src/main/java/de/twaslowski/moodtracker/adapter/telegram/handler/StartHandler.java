@@ -1,9 +1,9 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler;
 
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
-import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,10 +15,9 @@ import org.springframework.stereotype.Component;
 public class StartHandler implements UpdateHandler {
 
   public static final String COMMAND = "/start";
-  public static final String CREATED_RESPONSE = "Hi! Nice to have you. You can record your mood now – just type /record. For help, type /help.";
-  public static final String EXISTS_RESPONSE = "Hey! I think I already know you :)";
 
   private final UserService userService;
+  private final MessageUtil messageUtil;
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
@@ -28,7 +27,9 @@ public class StartHandler implements UpdateHandler {
 
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
-        .text(userCreated ? CREATED_RESPONSE : EXISTS_RESPONSE)
+        .text(userCreated
+            ? messageUtil.getMessage("command.start.created")
+            : messageUtil.getMessage("command.start.exists"))
         .build();
   }
 

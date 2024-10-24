@@ -3,7 +3,7 @@ package de.twaslowski.moodtracker.adapter.telegram.external;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.exception.RequiredDataMissingException;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.TelegramUpdateFactory;
-import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
+import java.util.Queue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Profile("!test")
 public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
 
-  private final InMemoryQueue<TelegramUpdate> incomingMessageQueue;
+  private final Queue<TelegramUpdate> incomingMessageQueue;
 
   @Value("${mood-tracker.telegram.bot.token}")
   private String botToken;

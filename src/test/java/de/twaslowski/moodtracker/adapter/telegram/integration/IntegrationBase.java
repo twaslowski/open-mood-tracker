@@ -1,15 +1,19 @@
 package de.twaslowski.moodtracker.adapter.telegram.integration;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
-import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
 import de.twaslowski.moodtracker.entity.User;
+import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import de.twaslowski.moodtracker.service.RecordService;
+import java.util.Queue;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +36,10 @@ public class IntegrationBase {
   }
 
   @Autowired
-  protected InMemoryQueue<TelegramUpdate> incomingMessageQueue;
+  protected Queue<TelegramUpdate> incomingMessageQueue;
 
   @Autowired
-  protected InMemoryQueue<TelegramResponse> outgoingMessageQueue;
+  protected Queue<TelegramResponse> outgoingMessageQueue;
 
   @Autowired
   protected UserRepository userRepository;
@@ -52,9 +56,20 @@ public class IntegrationBase {
   @Autowired
   protected AutoBaselineService autoBaselineService;
 
-  protected void givenUser(long chatId) {
-    userRepository.save(User.builder()
-        .telegramId(chatId)
-        .build());
+  @Autowired
+  protected MessageUtil messageUtil;
+
+  protected User givenUser(long chatId) {
+    return userRepository.save(
+        UserSpec.valid()
+            .telegramId(chatId)
+            .build()
+    );
+  }
+
+  protected void assertOutgoingQueueContains(String message) {
+    assertThat(outgoingMessageQueue.stream().anyMatch(
+        response -> message.equals(response.getText())
+    )).isTrue();
   }
 }

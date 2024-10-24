@@ -5,13 +5,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.queue.InMemoryQueue;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.List;
+import java.util.Queue;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,7 +29,7 @@ class AutoBaselineServiceTest {
   private RecordService recordService;
 
   @Mock
-  private InMemoryQueue<TelegramResponse> outgoingMessageQueue;
+  private Queue<TelegramResponse> outgoingMessageQueue;
 
   @InjectMocks
   private AutoBaselineService autoBaselineService;
