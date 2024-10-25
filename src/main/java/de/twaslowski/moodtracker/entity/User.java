@@ -38,4 +38,8 @@ public class User {
   public Set<MetricDatapoint> getBaselineConfiguration() {
     return configuration.getBaselineConfiguration();
   }
+
+  public boolean toggleAutoBaseline() {
+    return configuration.toggleAutoBaseline();
+  }
 }

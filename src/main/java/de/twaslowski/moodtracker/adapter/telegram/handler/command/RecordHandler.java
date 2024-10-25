@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.handler;
+package de.twaslowski.moodtracker.adapter.telegram.handler.command;
 
 import static java.lang.String.format;
 
@@ -12,17 +12,24 @@ import de.twaslowski.moodtracker.service.RecordService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
-@RequiredArgsConstructor
 @Slf4j
-public class RecordHandler implements UpdateHandler {
+public class RecordHandler extends AbstractCommandHandler {
 
-  private static final String COMMAND = "/record";
+  public static final String COMMAND = "/record";
 
   private final RecordService recordService;
   private final CallbackGenerator callbackGenerator;
-  private final MessageUtil messageUtil;
+
+  public RecordHandler(MessageUtil messageUtil,
+                       RecordService recordService,
+                       CallbackGenerator callbackGenerator) {
+    super(COMMAND, messageUtil);
+    this.recordService = recordService;
+    this.callbackGenerator = callbackGenerator;
+  }
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
@@ -61,10 +68,5 @@ public class RecordHandler implements UpdateHandler {
             nextMetric.getChatPrompt()
         ))
         .build();
-  }
-
-  @Override
-  public boolean canHandle(TelegramUpdate update) {
-    return update.getText() != null && COMMAND.equals(update.getText());
   }
 }

@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.handler;
+package de.twaslowski.moodtracker.adapter.telegram.handler.command;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
@@ -6,23 +6,29 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextRespo
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
 @Service
 @Slf4j
-public class BaselineHandler implements UpdateHandler {
+public class BaselineHandler extends AbstractCommandHandler {
 
-  private static final String COMMAND = "/baseline";
+  public static final String COMMAND = "/baseline";
 
   private final UserService userService;
   private final RecordService recordService;
-  private final MessageUtil messageUtil;
+
+  public BaselineHandler(MessageUtil messageUtil,
+                         UserService userService,
+                         RecordService recordService) {
+    super(COMMAND, messageUtil);
+    this.userService = userService;
+    this.recordService = recordService;
+  }
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
+    log.info("Handling command");
     var user = userService.findByTelegramId(update.getChatId());
     var baselineConfiguration = user.getBaselineConfiguration();
 

@@ -8,6 +8,7 @@ import static org.mockito.Mockito.when;
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
+import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.service.RecordService;

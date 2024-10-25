@@ -39,4 +39,9 @@ public class Configuration {
         .notificationsEnabled(true)
         .autoBaselineEnabled(false);
   }
+
+  public boolean toggleAutoBaseline() {
+    autoBaselineEnabled = !autoBaselineEnabled;
+    return autoBaselineEnabled;
+  }
 }

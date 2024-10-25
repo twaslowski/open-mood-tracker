@@ -7,7 +7,7 @@ import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.handler.StartHandler;
+import de.twaslowski.moodtracker.adapter.telegram.handler.command.StartHandler;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

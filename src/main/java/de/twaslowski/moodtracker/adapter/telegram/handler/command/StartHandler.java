@@ -1,23 +1,25 @@
-package de.twaslowski.moodtracker.adapter.telegram.handler;
+package de.twaslowski.moodtracker.adapter.telegram.handler.command;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.service.UserService;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-@RequiredArgsConstructor
-public class StartHandler implements UpdateHandler {
+public class StartHandler extends AbstractCommandHandler {
 
   public static final String COMMAND = "/start";
 
   private final UserService userService;
-  private final MessageUtil messageUtil;
+
+  public StartHandler(UserService userService, MessageUtil messageUtil) {
+    super(COMMAND, messageUtil);
+    this.userService = userService;
+  }
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
@@ -34,10 +36,5 @@ public class StartHandler implements UpdateHandler {
             ? messageUtil.getMessage("command.start.created")
             : messageUtil.getMessage("command.start.exists"))
         .build();
-  }
-
-  @Override
-  public boolean canHandle(TelegramUpdate update) {
-    return update.getText() != null && COMMAND.equals(update.getText());
   }
 }

@@ -3,17 +3,22 @@ package de.twaslowski.moodtracker.adapter.telegram.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
+import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.handler.command.AutoBaselineHandler;
 import de.twaslowski.moodtracker.entity.ConfigurationSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import java.util.Set;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @IntegrationTest
 public class BaselineIntegrationTest extends IntegrationBase {
+
+  @Autowired private AutoBaselineHandler autoBaselineHandler;
 
   @Test
   void shouldCreateAutoBaselineOnlyForEligibleUsers() {
@@ -51,5 +56,26 @@ public class BaselineIntegrationTest extends IntegrationBase {
     assertThat(record.getTelegramId()).isEqualTo(eligibleUser.getId());
 
     assertMessageWithTextSent(messageUtil.getMessage("notification.baseline.created"));
+  }
+
+  @Test
+  void shouldToggleAutoBaseline() {
+    givenUser(UserSpec.valid().build());
+
+    var update = TelegramTextUpdate.builder()
+        .text(AutoBaselineHandler.COMMAND)
+        .chatId(1).build();
+
+    autoBaselineHandler.handleUpdate(update);
+
+    var user = userRepository.findByTelegramId(1L);
+    assertThat(user).isPresent();
+    assertThat(user.get().getConfiguration().isAutoBaselineEnabled()).isFalse();
+
+    autoBaselineHandler.handleUpdate(update);
+
+    user = userRepository.findByTelegramId(1L);
+    assertThat(user).isPresent();
+    assertThat(user.get().getConfiguration().isAutoBaselineEnabled()).isTrue();
   }
 }
