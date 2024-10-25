@@ -72,8 +72,4 @@ public class RecordService {
     }
     return Optional.empty();
   }
-
-  public Record store(Record record) {
-    return recordRepository.save(record);
-  }
 }

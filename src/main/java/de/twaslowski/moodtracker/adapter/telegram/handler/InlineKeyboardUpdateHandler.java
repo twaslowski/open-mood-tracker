@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Component
@@ -29,6 +30,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
 
   @Override
   @SneakyThrows
+  @Transactional
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     var inlineKeyboardUpdate = (TelegramInlineKeyboardUpdate) update;
     log.info("Received inline keyboard update with callback: {}", inlineKeyboardUpdate.getCallbackData());
@@ -40,10 +42,9 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   }
 
   @SneakyThrows
-  private TelegramResponse enrichExistingRecord(Record existingRecord, TelegramInlineKeyboardUpdate update) {
+  private TelegramResponse enrichExistingRecord(Record record, TelegramInlineKeyboardUpdate update) {
     var receivedMetric = objectMapper.readValue(update.getCallbackData(), MetricDatapoint.class);
-    existingRecord.updateMetric(receivedMetric);
-    var record = recordService.store(existingRecord);
+    record.updateMetric(receivedMetric);
 
     log.info("Updated record {} with metric {}, value {}",
         record.getId(), receivedMetric.metricName(), receivedMetric.value());
