@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
@@ -31,14 +32,14 @@ public class Record {
   private long id;
 
   @NotNull
-  private long telegramId;
+  private long userId;
 
   @CreationTimestamp
   private ZonedDateTime creationTimestamp;
 
   @JdbcTypeCode(SqlTypes.JSON)
   @NotNull
-  private Set<MetricDatapoint> values;
+  private List<MetricDatapoint> values;
 
   public Set<MetricDatapoint> getIncompleteMetrics() {
     return values.stream()

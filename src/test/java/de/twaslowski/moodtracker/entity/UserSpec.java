@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.entity;
 
-import java.util.Set;
+import java.util.List;
 
 public class UserSpec {
 
@@ -16,7 +16,7 @@ public class UserSpec {
         .id(1)
         .telegramId(1)
         .configuration(ConfigurationSpec.valid()
-            .baselineConfiguration(Set.of())
+            .baselineConfiguration(List.of())
             .build()
         );
   }

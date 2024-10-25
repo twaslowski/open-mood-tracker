@@ -5,7 +5,6 @@ import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final Set<MetricDatapoint> defaultBaselineConfiguration;
+  private final List<MetricDatapoint> defaultBaselineConfiguration;
 
   public boolean createUserFromTelegramId(long telegramId) {
     var defaultConfiguration = Configuration.defaults()
@@ -30,6 +29,12 @@ public class UserService {
               .build());
           return true;
         });
+  }
+
+  public Configuration getUserConfiguration(long userId) {
+    return userRepository.findById(userId)
+        .map(User::getConfiguration)
+        .orElseThrow(() -> new IllegalStateException("User not found"));
   }
 
   public User findByTelegramId(long telegramId) {

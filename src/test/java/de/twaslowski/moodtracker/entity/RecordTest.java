@@ -5,8 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class RecordTest {
@@ -15,9 +14,9 @@ class RecordTest {
   void shouldOverwriteExistingMetric() {
     // given
     var record = Record.builder()
-        .values(new HashSet<>(Set.of(new MetricDatapoint(Mood.TYPE, 1))))
+        .values(List.of(new MetricDatapoint(Mood.NAME, 1)))
         .build();
-    var metric = new MetricDatapoint(Mood.TYPE, 2);
+    var metric = new MetricDatapoint(Mood.NAME, 2);
 
     // when
     record.updateMetric(metric);

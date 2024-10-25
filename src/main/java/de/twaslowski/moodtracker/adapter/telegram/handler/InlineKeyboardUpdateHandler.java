@@ -12,6 +12,7 @@ import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.service.RecordService;
+import de.twaslowski.moodtracker.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +36,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     var inlineKeyboardUpdate = (TelegramInlineKeyboardUpdate) update;
     log.info("Received inline keyboard update with callback: {}", inlineKeyboardUpdate.getCallbackData());
 
-    var existingRecord = recordService.findIncompleteRecordForTelegramChat(update.getChatId());
+    var existingRecord = recordService.findIncompleteRecordsForUser(update.getChatId());
     return existingRecord
         .map(record -> enrichExistingRecord(record, inlineKeyboardUpdate))
         .orElseGet(() -> noRecordInProgressResponse(update));
@@ -64,7 +65,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .content(callbackGenerator.createCallbacks(nextMetric))
-        .text(nextMetric.getChatPrompt())
+        .text(nextMetric.getDescription())
         .build();
   }
 

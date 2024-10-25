@@ -7,6 +7,7 @@ import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -32,10 +33,13 @@ public class CallbackGenerator {
     TreeMap<MetricDatapoint, String> sortedMap;
 
     switch (metric.getName()) {
-      case Mood.TYPE, Sleep.TYPE -> sortedMap = new TreeMap<>(metric.getComparator());
+      case Mood.NAME, Sleep.NAME -> sortedMap = new TreeMap<>(metric.getComparator());
       default -> throw new IllegalArgumentException("Unknown type: " + metric.getName());
     }
-    sortedMap.putAll(metric.getLabels());
+
+    for (Entry<Integer, String> entry : metric.getLabels().entrySet()) {
+      sortedMap.put(MetricDatapoint.forMetric(metric), entry.getValue());
+    }
     return sortedMap;
   }
 

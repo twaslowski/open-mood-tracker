@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +35,7 @@ public class User {
   @JoinColumn(name = "configuration_id", referencedColumnName = "id")
   private Configuration configuration;
 
-  public Set<MetricDatapoint> getBaselineConfiguration() {
+  public List<MetricDatapoint> getBaselineConfiguration() {
     return configuration.getBaselineConfiguration();
   }
 

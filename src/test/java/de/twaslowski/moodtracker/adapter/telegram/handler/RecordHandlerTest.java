@@ -40,7 +40,7 @@ class RecordHandlerTest {
         .text("/record")
         .chatId(1L).build();
 
-    when(recordService.findIncompleteRecordForTelegramChat(1L)).thenReturn(Optional.empty());
+    when(recordService.findIncompleteRecordsForUser(1L)).thenReturn(Optional.empty());
 
     // Without these, we run into a bunch of NullPointers
     when(recordService.getNextIncompleteMetric(any())).thenReturn(Optional.of(new Mood()));
@@ -58,14 +58,14 @@ class RecordHandlerTest {
         .chatId(1L).build();
 
     var record = Record.builder().id(1L).build();
-    when(recordService.findIncompleteRecordForTelegramChat(1L)).thenReturn(Optional.of(record));
+    when(recordService.findIncompleteRecordsForUser(1L)).thenReturn(Optional.of(record));
 
     // Without these, we run into a bunch of NullPointers
     when(recordService.getNextIncompleteMetric(record)).thenReturn(Optional.of(new Mood()));
 
     recordHandler.handleUpdate(update);
 
-    verify(recordService, never()).initializeFrom(any());
+    verify(recordService, never()).initializeFrom(update);
     verify(messageUtil).getMessage("command.record.already-recording");
   }
 }

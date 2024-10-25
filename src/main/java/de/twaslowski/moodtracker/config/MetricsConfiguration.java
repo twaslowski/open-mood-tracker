@@ -1,19 +1,17 @@
 package de.twaslowski.moodtracker.config;
 
 import de.twaslowski.moodtracker.entity.metric.Metric;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;
-import java.util.ArrayList;
+import de.twaslowski.moodtracker.repository.MetricRepository;
 import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@RequiredArgsConstructor
 public class MetricsConfiguration {
 
   /**
@@ -21,24 +19,32 @@ public class MetricsConfiguration {
    * to the RecordService.
    */
 
-  private static final List<Metric> METRICS = new ArrayList<>(List.of(
-      new Mood(),
-      new Sleep()
-  ));
+  private final MetricRepository metricRepository;
 
-  @Bean
-  public LinkedHashMap<String, Metric> defaultMetrics() {
-    LinkedHashMap<String, Metric> metrics = new LinkedHashMap<>();
-    for (var metric : METRICS) {
-      metrics.put(metric.getName(), metric);
-    }
-    return metrics;
+  @Getter
+  @RequiredArgsConstructor
+  public enum DefaultMetrics {
+    MOOD(Mood.INSTANCE),
+    SLEEP(Sleep.INSTANCE);
+
+    private final Metric metric;
   }
 
   @Bean
-  public Set<MetricDatapoint> defaultBaselineConfiguration(Map<String, Metric> defaultMetrics) {
-    return defaultMetrics.values().stream()
-        .map(MetricDatapoint::fromMetricDefault)
-        .collect(Collectors.toSet());
+  public void seedDatabase() {
+    for (var defaultMetric : DefaultMetrics.values()) {
+      var metric = defaultMetric.getMetric();
+      if (metricRepository.findByNameAndOwnerId(metric.getName(), metric.getOwnerId()).isEmpty()) {
+        metricRepository.save(metric);
+      }
+    }
+  }
+
+  public static LinkedHashMap<String, Metric> defaultMetrics() {
+    LinkedHashMap<String, Metric> metrics = new LinkedHashMap<>();
+    for (var metric : DefaultMetrics.values()) {
+      metrics.put(metric.name(), metric.getMetric());
+    }
+    return metrics;
   }
 }

@@ -9,7 +9,7 @@ import de.twaslowski.moodtracker.entity.ConfigurationSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
-import java.util.Set;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,7 +29,7 @@ public class BaselineIntegrationTest extends IntegrationBase {
         .telegramId(2)
         .configuration(
             ConfigurationSpec.valid()
-                .baselineConfiguration(Set.of())
+                .baselineConfiguration(List.of())
                 .autoBaselineEnabled(true)
                 .build())
         .build();
@@ -52,8 +52,8 @@ public class BaselineIntegrationTest extends IntegrationBase {
     assertThat(recordRepository.findAll()).hasSize(1);
     var record = recordRepository.findAll().getFirst();
 
-    assertThat(record.getValues()).isEqualTo(Set.of(MetricDatapoint.fromMetricDefault(new Mood())));
-    assertThat(record.getTelegramId()).isEqualTo(eligibleUser.getId());
+    assertThat(record.getValues()).isEqualTo(List.of(MetricDatapoint.fromMetricDefault(new Mood())));
+    assertThat(record.getUserId()).isEqualTo(eligibleUser.getId());
 
     assertMessageWithTextSent(messageUtil.getMessage("notification.baseline.created"));
   }

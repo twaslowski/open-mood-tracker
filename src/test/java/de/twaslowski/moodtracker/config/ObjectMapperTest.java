@@ -17,7 +17,7 @@ public class ObjectMapperTest {
   @Test
   @SneakyThrows
   void shouldSerializeEmptyMetric() {
-    var mood = new MetricDatapoint(Mood.TYPE, null);
+    var mood = new MetricDatapoint(Mood.NAME, null);
     var json = "{\"metricName\":\"MOOD\",\"value\":null}";
 
     assertThat(objectMapper.writeValueAsString(mood)).isEqualTo(json);
@@ -26,7 +26,7 @@ public class ObjectMapperTest {
   @Test
   @SneakyThrows
   void shouldSerializePopulatedMetric() {
-    var mood = new MetricDatapoint(Sleep.TYPE, 8);
+    var mood = new MetricDatapoint(Sleep.NAME, 8);
     var json = "{\"metricName\":\"SLEEP\",\"value\":8}";
 
     assertThat(objectMapper.writeValueAsString(mood)).isEqualTo(json);
@@ -36,8 +36,8 @@ public class ObjectMapperTest {
   @SneakyThrows
   void shouldSerializeListOfMetrics() {
     var metrics = List.of(
-        new MetricDatapoint(Mood.TYPE, 3),
-        new MetricDatapoint(Sleep.TYPE, 8)
+        new MetricDatapoint(Mood.NAME, 3),
+        new MetricDatapoint(Sleep.NAME, 8)
     );
 
     var serialized = objectMapper.writeValueAsString(metrics);
@@ -53,6 +53,6 @@ public class ObjectMapperTest {
 
     assertThat(datapoint).isInstanceOf(MetricDatapoint.class);
     assertThat(datapoint.value()).isEqualTo(3);
-    assertThat(datapoint.metricName()).isEqualTo(Mood.TYPE);
+    assertThat(datapoint.metricName()).isEqualTo(Mood.NAME);
   }
 }

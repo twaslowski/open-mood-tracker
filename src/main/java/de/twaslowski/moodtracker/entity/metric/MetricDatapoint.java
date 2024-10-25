@@ -5,8 +5,8 @@ public record MetricDatapoint(
     Integer value
 ) {
 
-  public static MetricDatapoint forMetric(String metric) {
-    return new MetricDatapoint(metric, null);
+  public static MetricDatapoint forMetric(Metric metric) {
+    return new MetricDatapoint(metric.getName(), null);
   }
 
   public static MetricDatapoint fromMetricDefault(Metric metric) {

@@ -13,7 +13,6 @@ import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.List;
 import java.util.Queue;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,7 +41,7 @@ class AutoBaselineServiceTest {
   void shouldCreateBaselineRecordAndSendMessage() {
     var user = UserSpec.valid()
         .configuration(ConfigurationSpec.valid()
-            .baselineConfiguration(Set.of(Mood.defaultDatapoint()))
+            .baselineConfiguration(List.of(Mood.defaultDatapoint()))
             .autoBaselineEnabled(true)
             .build())
         .build();

@@ -12,6 +12,7 @@ import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;
+import java.util.List;
 import java.util.Set;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -35,14 +36,14 @@ public class RecordingIntegrationTest extends IntegrationBase {
 
     // then
     await().atMost(3, SECONDS).untilAsserted(() -> {
-          var maybeTemporaryRecord = recordRepository.findByTelegramId(1L);
+          var maybeTemporaryRecord = recordRepository.findByUserId(1L);
           assertThat(maybeTemporaryRecord).isNotEmpty();
           var temporaryRecord = maybeTemporaryRecord.getFirst();
 
-          assertThat(temporaryRecord.getTelegramId()).isEqualTo(1);
-          assertThat(temporaryRecord.getValues()).isEqualTo(Set.of(
-              new MetricDatapoint(Mood.TYPE, null),
-              new MetricDatapoint(Sleep.TYPE, null)
+          assertThat(temporaryRecord.getUserId()).isEqualTo(1);
+          assertThat(temporaryRecord.getValues()).isEqualTo(List.of(
+              new MetricDatapoint(Mood.NAME, null),
+              new MetricDatapoint(Sleep.NAME, null)
           ));
         }
     );
@@ -89,14 +90,14 @@ public class RecordingIntegrationTest extends IntegrationBase {
 
     // then
     await().atMost(3, SECONDS).untilAsserted(() -> {
-          var maybeTemporaryRecord = recordRepository.findByTelegramId(1L);
+          var maybeTemporaryRecord = recordRepository.findByUserId(1L);
           assertThat(maybeTemporaryRecord).isNotEmpty();
           var temporaryRecord = maybeTemporaryRecord.getFirst();
 
-          assertThat(temporaryRecord.getTelegramId()).isEqualTo(1);
+          assertThat(temporaryRecord.getUserId()).isEqualTo(1);
           assertThat(temporaryRecord.getValues()).containsAll(Set.of(
-              new MetricDatapoint(Mood.TYPE, -3),
-              new MetricDatapoint(Sleep.TYPE, null)
+              new MetricDatapoint(Mood.NAME, -3),
+              new MetricDatapoint(Sleep.NAME, null)
           ));
         }
     );
@@ -126,16 +127,16 @@ public class RecordingIntegrationTest extends IntegrationBase {
 
     // then
     await().atMost(3, SECONDS).untilAsserted(() -> {
-          var maybeRecord = recordRepository.findByTelegramId(1L);
+          var maybeRecord = recordRepository.findByUserId(1L);
           assertThat(maybeRecord).isNotEmpty();
           var record = maybeRecord.getFirst();
 
-          assertThat(record.getTelegramId()).isEqualTo(1);
+          assertThat(record.getUserId()).isEqualTo(1);
           assertThat(record.getValues()).isEqualTo(
-              Set.of(new MetricDatapoint(Mood.TYPE, 0),
-                  new MetricDatapoint(Sleep.TYPE, 8))
+              List.of(new MetricDatapoint(Mood.NAME, 0),
+                  new MetricDatapoint(Sleep.NAME, 8))
           );
-          assertThat(recordService.findIncompleteRecordForTelegramChat(1)).isEmpty();
+          assertThat(recordService.findIncompleteRecordsForUser(1)).isEmpty();
           assertMessageWithTextSent(messageUtil.getMessage("command.record.saved"));
         }
     );
