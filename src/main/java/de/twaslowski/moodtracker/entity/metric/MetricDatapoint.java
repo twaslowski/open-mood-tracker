@@ -5,8 +5,15 @@ public record MetricDatapoint(
     Integer value
 ) {
 
-  public static MetricDatapoint forMetric(Metric metric) {
+  public static MetricDatapoint emptyForMetric(Metric metric) {
     return new MetricDatapoint(metric.getName(), null);
+  }
+
+  public static MetricDatapoint forMetricWithValue(Metric metric, Integer value) {
+    if (value < metric.getMinValue() || value > metric.getMaxValue()) {
+      throw new IllegalArgumentException("Value " + value + " is not within the allowed range for metric " + metric.getName());
+    }
+    return new MetricDatapoint(metric.getName(), value);
   }
 
   public static MetricDatapoint fromMetricDefault(Metric metric) {

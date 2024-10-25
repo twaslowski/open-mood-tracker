@@ -1,6 +1,5 @@
 package de.twaslowski.moodtracker.service;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.entity.metric.Metric;
@@ -23,22 +22,7 @@ public class RecordService {
 
   public Record initializeFrom(User user) {
     var initialDatapoints = user.getConfiguration().getMetrics().stream()
-        .map(MetricDatapoint::forMetric)
-        .toList();
-
-    var record = Record.builder()
-        .userId(user.getId())
-        .values(initialDatapoints)
-        .build();
-
-    return recordRepository.save(record);
-  }
-
-  // todo kept for backwards compatibility, remove
-  public Record initializeFrom(TelegramUpdate update) {
-    var user = userService.findByTelegramId(update.getChatId());
-    var initialDatapoints = user.getConfiguration().getMetrics().stream()
-        .map(MetricDatapoint::forMetric)
+        .map(MetricDatapoint::emptyForMetric)
         .toList();
 
     var record = Record.builder()
@@ -58,13 +42,13 @@ public class RecordService {
     );
   }
 
-  public Optional<Record> findIncompleteRecordsForUser(long chatId) {
-    var incompleteRecords = recordRepository.findByUserId(chatId).stream()
+  public Optional<Record> findIncompleteRecordsForUser(long userId) {
+    var incompleteRecords = recordRepository.findByUserId(userId).stream()
         .filter(Record::hasIncompleteMetric)
         .collect(Collectors.toSet());
 
     if (incompleteRecords.size() > 1) {
-      log.warn("Found multiple incomplete records for chatId: {}", chatId);
+      log.warn("Found multiple incomplete records for chatId: {}", userId);
     }
 
     return incompleteRecords.stream()
@@ -73,11 +57,11 @@ public class RecordService {
 
   public Optional<Metric> getNextIncompleteMetric(Record record) {
     // Returns the next incomplete metric IN ORDER according to the Order of the Metrics bean
-    var user = userService.findByTelegramId(record.getUserId());
     var incompleteMetricNames = record.getIncompleteMetrics().stream()
         .map(MetricDatapoint::metricName)
         .toList();
-    for (Metric metric : user.getConfiguration().getMetrics()) {
+
+    for (Metric metric : userService.getUserConfiguration(record.getUserId()).getMetrics()) {
       if (incompleteMetricNames.contains(metric.getName())) {
         return Optional.of(metric);
       }

@@ -3,6 +3,7 @@ package de.twaslowski.moodtracker.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
+import de.twaslowski.moodtracker.entity.Configuration;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
@@ -32,9 +33,13 @@ public class RecordServiceTest {
   void shouldReturnFirstIncompleteMetric() {
     // given
     var record = Record.builder()
-        .values(List.of(MetricDatapoint.forMetric(Mood.INSTANCE)))
+        .values(List.of(MetricDatapoint.emptyForMetric(Mood.INSTANCE)))
         .userId(1)
         .build();
+
+    when(userService.getUserConfiguration(1L)).thenReturn(Configuration.builder()
+        .metrics(List.of(Mood.INSTANCE))
+        .build());
 
     // when
     var nextIncompleteMetric = recordService.getNextIncompleteMetric(record);
@@ -48,10 +53,15 @@ public class RecordServiceTest {
   void shouldReturnEmptyOptionalIfAllMetricsComplete() {
     // given
     var record = Record.builder()
-        .values(List.of())
+        .userId(1L)
+        .values(List.of(MetricDatapoint.forMetricWithValue(Mood.INSTANCE, 2)))
         .build();
 
     // when
+    when(userService.getUserConfiguration(1L)).thenReturn(Configuration.builder()
+        .metrics(List.of(Mood.INSTANCE))
+        .build());
+
     var nextIncompleteMetric = recordService.getNextIncompleteMetric(record);
 
     // then
@@ -64,13 +74,13 @@ public class RecordServiceTest {
     var record1 = Record.builder()
         .userId(1)
         .creationTimestamp(ZonedDateTime.now().minusHours(1))
-        .values(List.of(MetricDatapoint.forMetric(Mood.INSTANCE)))
+        .values(List.of(MetricDatapoint.emptyForMetric(Mood.INSTANCE)))
         .build();
 
     var record2 = Record.builder()
         .userId(1)
         .creationTimestamp(ZonedDateTime.now())
-        .values(List.of(MetricDatapoint.forMetric(Sleep.INSTANCE)))
+        .values(List.of(MetricDatapoint.emptyForMetric(Sleep.INSTANCE)))
         .build();
 
     when(recordRepository.findByUserId(1)).thenReturn(List.of(record1, record2));

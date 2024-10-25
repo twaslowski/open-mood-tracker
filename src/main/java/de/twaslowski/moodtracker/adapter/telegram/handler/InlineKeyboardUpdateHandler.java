@@ -28,6 +28,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   private final RecordService recordService;
   private final CallbackGenerator callbackGenerator;
   private final MessageUtil messageUtil;
+  private final UserService userService;
 
   @Override
   @SneakyThrows
@@ -36,6 +37,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     var inlineKeyboardUpdate = (TelegramInlineKeyboardUpdate) update;
     log.info("Received inline keyboard update with callback: {}", inlineKeyboardUpdate.getCallbackData());
 
+    var user = userService.findByTelegramId(update.getChatId());
     var existingRecord = recordService.findIncompleteRecordsForUser(update.getChatId());
     return existingRecord
         .map(record -> enrichExistingRecord(record, inlineKeyboardUpdate))

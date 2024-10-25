@@ -25,7 +25,7 @@ public class RecordHandler extends AbstractCommandHandler {
 
   public RecordHandler(MessageUtil messageUtil,
                        RecordService recordService,
-                        UserService userService,
+                       UserService userService,
                        CallbackGenerator callbackGenerator) {
     super(COMMAND, messageUtil);
     this.userService = userService;
@@ -36,7 +36,8 @@ public class RecordHandler extends AbstractCommandHandler {
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     log.info("Handling command");
-    var existingRecord = recordService.findIncompleteRecordsForUser(update.getChatId());
+    var user = userService.findByTelegramId(update.getChatId());
+    var existingRecord = recordService.findIncompleteRecordsForUser(user.getId());
 
     return existingRecord.map(record -> handleExistingIncompleteRecord(update, record))
         .orElseGet(() -> createNewRecord(update));
@@ -45,6 +46,7 @@ public class RecordHandler extends AbstractCommandHandler {
   private TelegramInlineKeyboardResponse createNewRecord(TelegramUpdate update) {
     var user = userService.findByTelegramId(update.getChatId());
     var record = recordService.initializeFrom(user);
+
     var firstMetric = recordService.getNextIncompleteMetric(record)
         .orElseThrow(() -> new IllegalStateException("No empty metrics found for record after initialization."));
 

@@ -16,13 +16,14 @@ class RecordTest {
     var record = Record.builder()
         .values(List.of(new MetricDatapoint(Mood.NAME, 1)))
         .build();
-    var metric = new MetricDatapoint(Mood.NAME, 2);
+
+    var newDatapoint = new MetricDatapoint(Mood.NAME, 2);
 
     // when
-    record.updateMetric(metric);
+    record.updateMetric(newDatapoint);
 
     // then
     assertEquals(1, record.getValues().size());
-    assertTrue(record.getValues().contains(metric));
+    assertTrue(record.getValues().contains(newDatapoint));
   }
 }

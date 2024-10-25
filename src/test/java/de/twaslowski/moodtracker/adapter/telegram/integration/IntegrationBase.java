@@ -64,8 +64,8 @@ public class IntegrationBase {
   @Autowired
   protected MessageUtil messageUtil;
 
-  protected void givenUser(User user) {
-    userRepository.save(user);
+  protected User givenUser(User user) {
+    return userRepository.save(user);
   }
 
   protected void assertMessageWithTextSent(String message) {

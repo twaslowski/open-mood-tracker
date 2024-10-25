@@ -52,7 +52,10 @@ public class Record {
   }
 
   public void updateMetric(MetricDatapoint datapoint) {
-    values.removeIf(existingMetric -> existingMetric.metricName().equals(datapoint.metricName()));
-    values.add(datapoint);
+    this.values = values.stream()
+        .map(existingMetric -> existingMetric.metricName().equals(datapoint.metricName())
+            ? datapoint
+            : existingMetric)
+        .collect(Collectors.toList());
   }
 }
