@@ -13,7 +13,7 @@ public class UserSpec {
         .telegramId(1)
         .configuration(ConfigurationSpec.valid()
             .baselineMetrics(List.of(
-                    MetricDatapoint.fromMetricDefault(Mood.INSTANCE)
+                    MetricDatapoint.defaultForMetric(Mood.INSTANCE)
                 ))
             .metrics(List.of(Mood.NAME, Sleep.NAME))
             .build());

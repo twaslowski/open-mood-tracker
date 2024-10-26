@@ -16,6 +16,7 @@ public class MetricService {
   private final MetricRepository metricRepository;
 
   public List<String> getDefaultMetricNames() {
+    // todo this should be autowired from the MetricsConfiguration
     return List.of(Mood.NAME, Sleep.NAME);
   }
 
@@ -25,10 +26,11 @@ public class MetricService {
         .orElseThrow(() -> new IllegalArgumentException("Unknown metric: " + name));
   }
 
+  // todo this should be coupled to the autowired MetricsConfiguration as well
   public List<MetricDatapoint> getDefaultBaselineConfiguration() {
     return List.of(
-        MetricDatapoint.fromMetricDefault(Mood.INSTANCE),
-        MetricDatapoint.fromMetricDefault(Sleep.INSTANCE)
+        MetricDatapoint.defaultForMetric(Mood.INSTANCE),
+        MetricDatapoint.defaultForMetric(Sleep.INSTANCE)
     );
   }
 }

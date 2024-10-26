@@ -16,7 +16,7 @@ public record MetricDatapoint(
     return new MetricDatapoint(metric.getName(), value);
   }
 
-  public static MetricDatapoint fromMetricDefault(Metric metric) {
+  public static MetricDatapoint defaultForMetric(Metric metric) {
     if (metric.getDefaultValue() == null) {
       throw new IllegalArgumentException("Metric " + metric.getName() + " has no default value.");
     }
