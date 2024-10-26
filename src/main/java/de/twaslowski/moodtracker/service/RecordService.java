@@ -19,6 +19,7 @@ public class RecordService {
 
   private final RecordRepository recordRepository;
   private final UserService userService;
+  private final MetricService metricService;
 
   public Record initializeFrom(User user) {
     var initialDatapoints = user.getConfiguration().getMetrics().stream()
@@ -33,7 +34,7 @@ public class RecordService {
     return recordRepository.save(record);
   }
 
-  public void fromBaselineConfiguration(User user) {
+  public void recordFromBaseline(User user) {
     recordRepository.save(
         Record.builder()
             .userId(user.getId())
@@ -61,9 +62,9 @@ public class RecordService {
         .map(MetricDatapoint::metricName)
         .toList();
 
-    for (Metric metric : userService.getUserConfiguration(record.getUserId()).getMetrics()) {
-      if (incompleteMetricNames.contains(metric.getName())) {
-        return Optional.of(metric);
+    for (var metric : userService.getUserConfiguration(record.getUserId()).getMetrics()) {
+      if (incompleteMetricNames.contains(metric)) {
+        return Optional.of(metricService.getMetricByName(metric));
       }
     }
     return Optional.empty();

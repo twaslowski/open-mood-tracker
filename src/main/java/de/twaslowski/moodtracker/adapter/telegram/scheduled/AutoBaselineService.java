@@ -24,7 +24,7 @@ public class AutoBaselineService {
   @Scheduled(cron = "${telegram.auto-baseline.cron}")
   public void createAutoBaselines() {
     userService.findAutoBaselineEligibleUsers().forEach(user -> {
-      recordService.fromBaselineConfiguration(user);
+      recordService.recordFromBaseline(user);
       outgoingMessageQueue.add(TelegramTextResponse.builder()
           .text(messageUtil.getMessage("notification.baseline.created"))
           .chatId(user.getTelegramId())

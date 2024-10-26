@@ -35,7 +35,7 @@ public class Configuration {
   private List<MetricDatapoint> baselineConfiguration;
 
   @JdbcTypeCode(SqlTypes.ARRAY)
-  private List<Metric> metrics;
+  private List<String> metrics;
 
   public static Configuration.ConfigurationBuilder defaults() {
     return Configuration.builder()

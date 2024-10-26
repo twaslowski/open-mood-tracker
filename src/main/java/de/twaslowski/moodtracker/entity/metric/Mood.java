@@ -26,7 +26,6 @@ public class Mood extends Metric {
 
   public static final Metric INSTANCE = Metric.builder()
       .name(NAME)
-      .ownerId(0)
       .description(PROMPT)
       .maxValue(MAX_VALUE)
       .minValue(MIN_VALUE)

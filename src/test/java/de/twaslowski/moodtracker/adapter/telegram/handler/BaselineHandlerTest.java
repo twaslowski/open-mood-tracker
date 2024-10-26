@@ -41,7 +41,7 @@ class BaselineHandlerTest {
 
     baselineHandler.handleUpdate(update);
 
-    verify(recordService, never()).fromBaselineConfiguration(any());
+    verify(recordService, never()).recordFromBaseline(any());
     verify(messageUtil).getMessage("command.baseline.no-configuration-found");
   }
 
@@ -54,7 +54,7 @@ class BaselineHandlerTest {
 
     baselineHandler.handleUpdate(update);
 
-    verify(recordService).fromBaselineConfiguration(userWithBaselineConfig);
+    verify(recordService).recordFromBaseline(userWithBaselineConfig);
     verify(messageUtil).getMessage("command.baseline.created");
   }
 }

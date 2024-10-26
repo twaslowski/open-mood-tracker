@@ -38,7 +38,7 @@ public class CallbackGenerator {
     }
 
     for (Entry<Integer, String> entry : metric.getLabels().entrySet()) {
-      sortedMap.put(MetricDatapoint.emptyForMetric(metric), entry.getValue());
+      sortedMap.put(MetricDatapoint.emptyForMetric(metric.getName()), entry.getValue());
     }
     return sortedMap;
   }

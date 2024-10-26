@@ -51,7 +51,7 @@ class RecordHandlerTest {
 
     var record = Record.builder()
         .id(1L)
-        .values(List.of(MetricDatapoint.emptyForMetric(Mood.INSTANCE)))
+        .values(List.of(MetricDatapoint.emptyForMetric(Mood.NAME)))
         .build();
 
     when(userService.findByTelegramId(1L)).thenReturn(user);

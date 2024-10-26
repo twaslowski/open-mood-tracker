@@ -50,7 +50,7 @@ class AutoBaselineServiceTest {
 
     autoBaselineService.createAutoBaselines();
 
-    verify(recordService).fromBaselineConfiguration(user);
+    verify(recordService).recordFromBaseline(user);
     verify(outgoingMessageQueue).add(any());
     verify(messageUtil).getMessage("notification.baseline.created");
   }

@@ -23,7 +23,6 @@ public class Sleep extends Metric {
 
   public static final Metric INSTANCE = Metric.builder()
       .name(NAME)
-      .ownerId(0)
       .description(PROMPT)
       .maxValue(MIN_VALUE)
       .minValue(MAX_VALUE)

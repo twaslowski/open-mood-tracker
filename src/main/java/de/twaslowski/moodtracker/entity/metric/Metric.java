@@ -25,9 +25,6 @@ public class Metric {
   protected long id;
 
   @NotNull
-  protected long ownerId;
-
-  @NotNull
   protected String name;
 
   @NotNull
@@ -43,17 +40,6 @@ public class Metric {
   protected Map<Integer, String> labels;
 
   protected Integer defaultValue;
-
-  public MetricDatapoint generateEmptyDatapoint() {
-    return new MetricDatapoint(name, null);
-  }
-
-  public MetricDatapoint generateDatapoint(Integer value) {
-    if (minValue > value || value > maxValue) {
-      throw new IllegalArgumentException("Value " + value + " is out of range for metric " + name);
-    }
-    return new MetricDatapoint(name, value);
-  }
 
   public Comparator<MetricDatapoint> getComparator() {
     return Comparator.comparing(MetricDatapoint::value);

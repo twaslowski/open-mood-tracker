@@ -5,8 +5,8 @@ public record MetricDatapoint(
     Integer value
 ) {
 
-  public static MetricDatapoint emptyForMetric(Metric metric) {
-    return new MetricDatapoint(metric.getName(), null);
+  public static MetricDatapoint emptyForMetric(String metricName) {
+    return new MetricDatapoint(metricName, null);
   }
 
   public static MetricDatapoint forMetricWithValue(Metric metric, Integer value) {

@@ -1,14 +1,12 @@
 CREATE TABLE IF NOT EXISTS metric
 (
-  id            BIGINT,
-  owner_id      INTEGER      NOT NULL,
+  id            BIGINT PRIMARY KEY,
   name          VARCHAR(255) NOT NULL,
   description   TEXT         NOT NULL,
   min_value     INTEGER      NOT NULL,
   max_value     INTEGER      NOT NULL,
   labels        JSONB,
-  default_value INTEGER,
-  PRIMARY KEY (owner_id, name)
+  default_value INTEGER
 );
 
-CREATE SEQUENCE IF NOT EXISTS metric_id_seq INCREMENT 50 START 1;
+CREATE SEQUENCE IF NOT EXISTS metric_id_seq INCREMENT 50 START 10;

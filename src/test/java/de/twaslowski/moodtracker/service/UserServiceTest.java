@@ -19,6 +19,9 @@ class UserServiceTest {
   @Mock
   UserRepository userRepository;
 
+  @Mock
+  MetricService metricService;
+
   @InjectMocks
   private UserService userService;
 

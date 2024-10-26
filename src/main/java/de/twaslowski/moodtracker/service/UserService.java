@@ -13,10 +13,14 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final List<MetricDatapoint> defaultBaselineConfiguration;
+  private final MetricService metricService;
 
   public boolean createUserFromTelegramId(long telegramId) {
+    var defaultMetricNames = metricService.getDefaultMetricNames();
+    var defaultBaselineConfiguration = metricService.getDefaultBaselineConfiguration();
+
     var defaultConfiguration = Configuration.defaults()
+        .metrics(defaultMetricNames)
         .baselineConfiguration(defaultBaselineConfiguration)
         .build();
 

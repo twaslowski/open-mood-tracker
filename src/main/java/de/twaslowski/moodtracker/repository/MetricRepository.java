@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MetricRepository extends JpaRepository<Metric, Long> {
 
-  Optional<Metric> findByNameAndOwnerId(String name, long ownerId);
+  Optional<Metric> findByName(String name);
 }

@@ -26,6 +26,7 @@ public class BaselineIntegrationTest extends IntegrationBase {
 
     // Auto-baseline active, but no baseline configuration
     var ineligibleUser = UserSpec.valid()
+        .id(2)
         .telegramId(2)
         .configuration(
             ConfigurationSpec.valid()
@@ -36,6 +37,7 @@ public class BaselineIntegrationTest extends IntegrationBase {
 
     // Auto-baseline inactive
     var ineligibleUser2 = UserSpec.valid()
+        .id(3)
         .telegramId(3)
         .configuration(
             ConfigurationSpec.valid()
@@ -43,17 +45,17 @@ public class BaselineIntegrationTest extends IntegrationBase {
                 .build())
         .build();
 
-    givenUser(eligibleUser);
-    givenUser(ineligibleUser);
-    givenUser(ineligibleUser2);
+    userRepository.save(eligibleUser);
+    userRepository.save(ineligibleUser);
+    userRepository.save(ineligibleUser2);
 
     autoBaselineService.createAutoBaselines();
 
     assertThat(recordRepository.findAll()).hasSize(1);
     var record = recordRepository.findAll().getFirst();
 
-    assertThat(record.getValues()).isEqualTo(List.of(MetricDatapoint.fromMetricDefault(new Mood())));
-    assertThat(record.getUserId()).isEqualTo(eligibleUser.getId());
+    assertThat(record.getValues()).isEqualTo(List.of(MetricDatapoint.fromMetricDefault(Mood.INSTANCE)));
+    assertThat(record.getUserId()).isEqualTo(userRepository.findByTelegramId(1L).get().getId());
 
     assertMessageWithTextSent(messageUtil.getMessage("notification.baseline.created"));
   }

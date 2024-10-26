@@ -26,6 +26,9 @@ public class RecordServiceTest {
   @Mock
   private UserService userService;
 
+  @Mock
+  private MetricService metricService;
+
   @InjectMocks
   private RecordService recordService;
 
@@ -33,13 +36,15 @@ public class RecordServiceTest {
   void shouldReturnFirstIncompleteMetric() {
     // given
     var record = Record.builder()
-        .values(List.of(MetricDatapoint.emptyForMetric(Mood.INSTANCE)))
+        .values(List.of(MetricDatapoint.emptyForMetric(Mood.NAME)))
         .userId(1)
         .build();
 
     when(userService.getUserConfiguration(1L)).thenReturn(Configuration.builder()
-        .metrics(List.of(Mood.INSTANCE))
+        .metrics(List.of(Mood.NAME))
         .build());
+
+    when(metricService.getMetricByName(Mood.NAME)).thenReturn(Mood.INSTANCE);
 
     // when
     var nextIncompleteMetric = recordService.getNextIncompleteMetric(record);
@@ -59,7 +64,7 @@ public class RecordServiceTest {
 
     // when
     when(userService.getUserConfiguration(1L)).thenReturn(Configuration.builder()
-        .metrics(List.of(Mood.INSTANCE))
+        .metrics(List.of(Mood.NAME))
         .build());
 
     var nextIncompleteMetric = recordService.getNextIncompleteMetric(record);
@@ -74,13 +79,13 @@ public class RecordServiceTest {
     var record1 = Record.builder()
         .userId(1)
         .creationTimestamp(ZonedDateTime.now().minusHours(1))
-        .values(List.of(MetricDatapoint.emptyForMetric(Mood.INSTANCE)))
+        .values(List.of(MetricDatapoint.emptyForMetric(Mood.NAME)))
         .build();
 
     var record2 = Record.builder()
         .userId(1)
         .creationTimestamp(ZonedDateTime.now())
-        .values(List.of(MetricDatapoint.emptyForMetric(Sleep.INSTANCE)))
+        .values(List.of(MetricDatapoint.emptyForMetric(Sleep.NAME)))
         .build();
 
     when(recordRepository.findByUserId(1)).thenReturn(List.of(record1, record2));
