@@ -36,7 +36,7 @@ public class User {
   private Configuration configuration;
 
   public List<MetricDatapoint> getBaselineConfiguration() {
-    return configuration.getBaselineConfiguration();
+    return configuration.getBaselineMetrics();
   }
 
   public boolean toggleAutoBaseline() {

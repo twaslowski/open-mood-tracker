@@ -1,6 +1,5 @@
 package de.twaslowski.moodtracker.entity;
 
-import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import jakarta.persistence.Entity;
@@ -32,14 +31,14 @@ public class Configuration {
   private boolean autoBaselineEnabled;
 
   @JdbcTypeCode(SqlTypes.JSON)
-  private List<MetricDatapoint> baselineConfiguration;
+  private List<MetricDatapoint> baselineMetrics;
 
   @JdbcTypeCode(SqlTypes.ARRAY)
   private List<String> metrics;
 
   public static Configuration.ConfigurationBuilder defaults() {
     return Configuration.builder()
-        .baselineConfiguration(List.of(Mood.defaultDatapoint()))
+        .baselineMetrics(List.of(Mood.defaultDatapoint()))
         .notificationsEnabled(true)
         .autoBaselineEnabled(false);
   }

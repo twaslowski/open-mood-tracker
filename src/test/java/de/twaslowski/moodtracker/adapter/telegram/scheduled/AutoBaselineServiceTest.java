@@ -41,7 +41,7 @@ class AutoBaselineServiceTest {
   void shouldCreateBaselineRecordAndSendMessage() {
     var user = UserSpec.valid()
         .configuration(ConfigurationSpec.valid()
-            .baselineConfiguration(List.of(Mood.defaultDatapoint()))
+            .baselineMetrics(List.of(Mood.defaultDatapoint()))
             .autoBaselineEnabled(true)
             .build())
         .build();

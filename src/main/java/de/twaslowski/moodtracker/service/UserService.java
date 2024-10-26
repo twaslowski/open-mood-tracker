@@ -2,7 +2,6 @@ package de.twaslowski.moodtracker.service;
 
 import de.twaslowski.moodtracker.entity.Configuration;
 import de.twaslowski.moodtracker.entity.User;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,7 @@ public class UserService {
 
     var defaultConfiguration = Configuration.defaults()
         .metrics(defaultMetricNames)
-        .baselineConfiguration(defaultBaselineConfiguration)
+        .baselineMetrics(defaultBaselineConfiguration)
         .build();
 
     return userRepository.findByTelegramId(telegramId)
@@ -53,7 +52,7 @@ public class UserService {
   public List<User> findAutoBaselineEligibleUsers() {
     return userRepository.findAll().stream()
         .filter(user -> user.getConfiguration().isAutoBaselineEnabled())
-        .filter(user -> !user.getConfiguration().getBaselineConfiguration().isEmpty())
+        .filter(user -> !user.getConfiguration().getBaselineMetrics().isEmpty())
         .toList();
   }
 }

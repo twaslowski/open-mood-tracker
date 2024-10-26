@@ -8,7 +8,7 @@ public class ConfigurationSpec {
   public static Configuration.ConfigurationBuilder valid() {
     return Configuration.builder()
         .id(1)
-        .baselineConfiguration(List.of(Mood.defaultDatapoint()))
+        .baselineMetrics(List.of(Mood.defaultDatapoint()))
         .autoBaselineEnabled(true)
         .notificationsEnabled(true);
   }

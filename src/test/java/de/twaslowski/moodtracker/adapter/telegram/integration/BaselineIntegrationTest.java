@@ -30,7 +30,7 @@ public class BaselineIntegrationTest extends IntegrationBase {
         .telegramId(2)
         .configuration(
             ConfigurationSpec.valid()
-                .baselineConfiguration(List.of())
+                .baselineMetrics(List.of())
                 .autoBaselineEnabled(true)
                 .build())
         .build();

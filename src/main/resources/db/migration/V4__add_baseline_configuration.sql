@@ -2,10 +2,10 @@ DROP TABLE "user";
 
 CREATE TABLE IF NOT EXISTS configuration
 (
-  id                     BIGINT PRIMARY KEY,
-  baseline_configuration JSONB,
-  auto_baseline_enabled  BOOLEAN          DEFAULT FALSE,
-  notifications_enabled  BOOLEAN NOT NULL DEFAULT TRUE
+  id                    BIGINT PRIMARY KEY,
+  baseline_metrics      JSONB,
+  auto_baseline_enabled BOOLEAN          DEFAULT FALSE,
+  notifications_enabled BOOLEAN NOT NULL DEFAULT TRUE
 );
 
 CREATE SEQUENCE IF NOT EXISTS configuration_id_seq INCREMENT 50 START 1;
