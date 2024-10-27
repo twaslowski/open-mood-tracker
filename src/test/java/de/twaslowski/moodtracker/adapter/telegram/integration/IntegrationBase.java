@@ -2,6 +2,7 @@ package de.twaslowski.moodtracker.adapter.telegram.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
@@ -9,7 +10,9 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
 import de.twaslowski.moodtracker.entity.User;
+import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.repository.ConfigurationRepository;
+import de.twaslowski.moodtracker.repository.MetricRepository;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import de.twaslowski.moodtracker.service.RecordService;
@@ -28,6 +31,9 @@ public class IntegrationBase {
     userRepository.deleteAll();
     recordRepository.deleteAll();
     configurationRepository.deleteAll();
+
+    MOOD = metricRepository.findByName("MOOD").orElseThrow();
+    SLEEP = metricRepository.findByName("SLEEP").orElseThrow();
   }
 
   @AfterEach
@@ -63,6 +69,15 @@ public class IntegrationBase {
 
   @Autowired
   protected MessageUtil messageUtil;
+
+  @Autowired
+  protected ObjectMapper objectMapper;
+
+  @Autowired
+  protected MetricRepository metricRepository;
+
+  protected Metric MOOD;
+  protected Metric SLEEP;
 
   protected User givenUser(User user) {
     return userRepository.save(user);

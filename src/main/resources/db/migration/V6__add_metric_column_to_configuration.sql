@@ -1,5 +1,5 @@
 ALTER TABLE configuration
-  ADD COLUMN metrics VARCHAR[];
+  ADD COLUMN tracked_metric_ids VARCHAR[];
 
 ALTER TABLE record
   ADD COLUMN user_id BIGINT;

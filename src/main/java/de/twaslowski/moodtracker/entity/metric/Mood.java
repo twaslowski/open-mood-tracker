@@ -25,6 +25,7 @@ public class Mood extends Metric {
   );
 
   public static final Metric INSTANCE = Metric.builder()
+      .id(1)
       .name(NAME)
       .ownerId(DEFAULT_OWNER)
       .description(PROMPT)
@@ -34,8 +35,4 @@ public class Mood extends Metric {
       .labels(LABELS)
       .sortOrder(SORT_ORDER)
       .build();
-
-  public static MetricDatapoint defaultDatapoint() {
-    return new MetricDatapoint(NAME, DEFAULT);
-  }
 }

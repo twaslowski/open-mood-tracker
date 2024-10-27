@@ -9,8 +9,6 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeybo
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
-import de.twaslowski.moodtracker.entity.metric.Mood;
-import de.twaslowski.moodtracker.entity.metric.Sleep;
 import java.util.List;
 import java.util.Set;
 import lombok.SneakyThrows;
@@ -37,22 +35,24 @@ public class RecordingIntegrationTest extends IntegrationBase {
           var temporaryRecord = maybeTemporaryRecord.getFirst();
 
           assertThat(temporaryRecord.getValues()).isEqualTo(List.of(
-              new MetricDatapoint(Mood.NAME, null),
-              new MetricDatapoint(Sleep.NAME, null)
+              new MetricDatapoint(1, null),
+              new MetricDatapoint(2, null)
           ));
         }
     );
   }
 
   @Test
+  @SneakyThrows
   void shouldDoNothingWhenReceivingAMetricUpdateWhileNotRecording() {
     givenUser(UserSpec.valid().build());
     // when
     assertThat(recordRepository.findAll()).isEmpty();
 
+    var callback = objectMapper.writeValueAsString(MOOD.datapointWithValue(-3));
     incomingMessageQueue.add(TelegramInlineKeyboardUpdate.builder()
         .chatId(1)
-        .callbackData("{\"metricName\":\"MOOD\",\"value\":-3}")
+        .callbackData(callback)
         .build());
 
     // then
@@ -61,6 +61,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
   }
 
   @Test
+  @SneakyThrows
   void shouldOverwriteExistingRecordIfUserSubmitsTwice() {
     var user = userRepository.save(UserSpec.valid().build());
     // when
@@ -69,18 +70,21 @@ public class RecordingIntegrationTest extends IntegrationBase {
         .text("/record")
         .build());
 
+    var callbackData1 = objectMapper.writeValueAsString(MOOD.datapointWithValue(3));
+    var callbackData2 = objectMapper.writeValueAsString(MOOD.datapointWithValue(-3));
+
     // and
     incomingMessageQueue.add(TelegramInlineKeyboardUpdate.builder()
         .chatId(1)
         .text("sometext")
-        .callbackData("{\"metricName\":\"MOOD\",\"value\":3}")
+        .callbackData(callbackData1)
         .build());
 
     // and
     incomingMessageQueue.add(TelegramInlineKeyboardUpdate.builder()
         .chatId(1)
         .text("sometext")
-        .callbackData("{\"metricName\":\"MOOD\",\"value\":-3}")
+        .callbackData(callbackData2)
         .build());
 
     // then
@@ -90,8 +94,8 @@ public class RecordingIntegrationTest extends IntegrationBase {
           var temporaryRecord = maybeTemporaryRecord.getFirst();
 
           assertThat(temporaryRecord.getValues()).containsAll(Set.of(
-              new MetricDatapoint(Mood.NAME, -3),
-              new MetricDatapoint(Sleep.NAME, null)
+              MOOD.datapointWithValue(3),
+              SLEEP.emptyDatapoint()
           ));
         }
     );
@@ -108,15 +112,17 @@ public class RecordingIntegrationTest extends IntegrationBase {
         .build());
 
     // and
+    var moodCallback = objectMapper.writeValueAsString(MOOD.defaultDatapoint());
+    var sleepCallback = objectMapper.writeValueAsString(SLEEP.defaultDatapoint());
     incomingMessageQueue.add(TelegramInlineKeyboardUpdate.builder()
         .chatId(1)
-        .callbackData("{\"metricName\":\"MOOD\",\"value\":0}")
+        .callbackData(moodCallback)
         .build());
 
     // and
     incomingMessageQueue.add(TelegramInlineKeyboardUpdate.builder()
         .chatId(1)
-        .callbackData("{\"metricName\":\"SLEEP\",\"value\":8}")
+        .callbackData(sleepCallback)
         .build());
 
     // then
@@ -126,8 +132,10 @@ public class RecordingIntegrationTest extends IntegrationBase {
           var record = maybeRecord.getFirst();
 
           assertThat(record.getValues()).isEqualTo(
-              List.of(new MetricDatapoint(Mood.NAME, 0),
-                  new MetricDatapoint(Sleep.NAME, 8))
+              List.of(
+                  MOOD.defaultDatapoint(),
+                  SLEEP.defaultDatapoint()
+              )
           );
           assertThat(recordService.findIncompleteRecordsForUser(user.getId())).isEmpty();
           assertMessageWithTextSent(messageUtil.getMessage("command.record.saved"));

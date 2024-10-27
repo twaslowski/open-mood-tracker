@@ -32,7 +32,7 @@ public class CallbackGenerator {
 
     for (Entry<Integer, String> entry : metric.getLabels().entrySet()) {
       sortedMap.put(
-          MetricDatapoint.forMetricWithValue(metric, entry.getKey()),
+          metric.datapointWithValue(entry.getKey()),
           entry.getValue()
       );
     }

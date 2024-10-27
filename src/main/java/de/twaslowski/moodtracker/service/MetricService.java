@@ -16,13 +16,18 @@ public class MetricService {
   private final MetricRepository metricRepository;
   private final MetricConfiguration metricConfiguration;
 
-  public List<String> getDefaultMetricNames() {
+  public List<Metric> getDefaultMetrics() {
     return metricConfiguration.defaultMetrics();
   }
 
   public Metric getMetricByName(String name) {
     return metricRepository.findByName(name)
-        .orElseThrow(() -> new MetricNotFoundException("Could not find Metric: " + name));
+        .orElseThrow(() -> new MetricNotFoundException("Could not find Metric with name: " + name));
+  }
+
+  public Metric getMetricById(long id) {
+    return metricRepository.findById(id)
+        .orElseThrow(() -> new MetricNotFoundException("Could not find Metric with id: " + id));
   }
 
   public List<MetricDatapoint> getDefaultBaselineConfiguration() {

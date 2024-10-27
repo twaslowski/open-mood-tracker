@@ -11,7 +11,6 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGener
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.UserSpec;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
@@ -51,7 +50,7 @@ class RecordHandlerTest {
 
     var record = Record.builder()
         .id(1L)
-        .values(List.of(MetricDatapoint.emptyForMetric(Mood.NAME)))
+        .values(List.of(Mood.INSTANCE.emptyDatapoint()))
         .build();
 
     when(userService.findByTelegramId(1L)).thenReturn(user);

@@ -21,6 +21,7 @@ public class Sleep extends Metric {
       .collect(Collectors.toMap(Function.identity(), Object::toString));
 
   public static final Metric INSTANCE = Metric.builder()
+      .id(2)
       .name(NAME)
       .ownerId(DEFAULT_OWNER)
       .description(PROMPT)

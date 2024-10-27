@@ -9,7 +9,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,10 +40,11 @@ public class Record {
   @NotNull
   private List<MetricDatapoint> values;
 
-  public Set<MetricDatapoint> getIncompleteMetrics() {
+  public List<Long> getIncompleteMetricIds() {
     return values.stream()
         .filter(metric -> metric.value() == null)
-        .collect(Collectors.toSet());
+        .map(MetricDatapoint::metricId)
+        .toList();
   }
 
   public boolean hasIncompleteMetric() {
@@ -53,7 +53,7 @@ public class Record {
 
   public void updateMetric(MetricDatapoint datapoint) {
     this.values = values.stream()
-        .map(existingMetric -> existingMetric.metricName().equals(datapoint.metricName())
+        .map(existingMetric -> existingMetric.metricId() == datapoint.metricId()
             ? datapoint
             : existingMetric)
         .collect(Collectors.toList());

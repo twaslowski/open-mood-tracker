@@ -1,8 +1,6 @@
 package de.twaslowski.moodtracker.entity;
 
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
-import de.twaslowski.moodtracker.entity.metric.Sleep;
 import java.util.List;
 
 public class UserSpec {
@@ -13,9 +11,9 @@ public class UserSpec {
         .telegramId(1)
         .configuration(ConfigurationSpec.valid()
             .baselineMetrics(List.of(
-                    MetricDatapoint.defaultForMetric(Mood.INSTANCE)
-                ))
-            .metrics(List.of(Mood.NAME, Sleep.NAME))
+                Mood.INSTANCE.defaultDatapoint()
+            ))
+            .trackedMetricIds(List.of(1L, 2L))
             .build());
   }
 

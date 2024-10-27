@@ -70,4 +70,16 @@ public class Metric {
         ? Comparator.comparing(MetricDatapoint::value)
         : Comparator.comparing(MetricDatapoint::value).reversed();
   }
+
+  public MetricDatapoint emptyDatapoint() {
+    return new MetricDatapoint(id, null);
+  }
+
+  public MetricDatapoint defaultDatapoint() {
+    return new MetricDatapoint(id, defaultValue);
+  }
+
+  public MetricDatapoint datapointWithValue(Integer value) {
+    return new MetricDatapoint(id, value);
+  }
 }

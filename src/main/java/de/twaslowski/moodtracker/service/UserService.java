@@ -2,6 +2,8 @@ package de.twaslowski.moodtracker.service;
 
 import de.twaslowski.moodtracker.entity.Configuration;
 import de.twaslowski.moodtracker.entity.User;
+import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.exception.UserNotFoundException;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -15,11 +17,13 @@ public class UserService {
   private final MetricService metricService;
 
   public boolean createUserFromTelegramId(long telegramId) {
-    var defaultMetricNames = metricService.getDefaultMetricNames();
+    var defaultMetricIds = metricService.getDefaultMetrics().stream()
+        .map(Metric::getId)
+        .toList();
     var defaultBaselineConfiguration = metricService.getDefaultBaselineConfiguration();
 
     var defaultConfiguration = Configuration.defaults()
-        .metrics(defaultMetricNames)
+        .trackedMetricIds(defaultMetricIds)
         .baselineMetrics(defaultBaselineConfiguration)
         .build();
 
@@ -40,9 +44,15 @@ public class UserService {
         .orElseThrow(() -> new IllegalStateException("User not found"));
   }
 
+  public List<Long> getTrackedMetrics(long userId) {
+    return userRepository.findById(userId)
+        .map(user -> user.getConfiguration().getTrackedMetricIds())
+        .orElseThrow(() -> new UserNotFoundException(userId));
+  }
+
   public User findByTelegramId(long telegramId) {
     return userRepository.findByTelegramId(telegramId)
-        .orElseThrow(() -> new IllegalStateException("User not found"));
+        .orElseThrow(() -> new UserNotFoundException(telegramId));
   }
 
   public List<User> findAllUsersWithNotifications() {

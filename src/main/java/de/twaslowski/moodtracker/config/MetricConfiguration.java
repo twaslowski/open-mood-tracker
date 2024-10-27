@@ -5,7 +5,7 @@ import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;
 import de.twaslowski.moodtracker.repository.MetricRepository;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,24 +33,21 @@ public class MetricConfiguration {
   }
 
   @Bean
-  public List<String> defaultMetrics() {
-    List<String> metricNames = new ArrayList<>();
+  public List<Metric> defaultMetrics() {
+    return Arrays.stream(DefaultMetrics.values())
+        .map(DefaultMetrics::getMetric)
+        .map(this::getOrCreate)
+        .toList();
+  }
 
-    for (var defaultMetric : DefaultMetrics.values()) {
-      var metric = defaultMetric.getMetric();
-      if (metricRepository.findByName(metric.getName()).isEmpty()) {
-        metricRepository.save(metric);
-      }
-      metricNames.add(metric.getName());
-    }
-
-    return metricNames;
+  private Metric getOrCreate(Metric metric) {
+    return metricRepository.findByName(metric.getName())
+        .orElseGet(() -> metricRepository.save(metric));
   }
 
   public List<MetricDatapoint> defaultBaselineConfiguration() {
-    return List.of(
-        MetricDatapoint.defaultForMetric(Mood.INSTANCE),
-        MetricDatapoint.defaultForMetric(Sleep.INSTANCE)
-    );
+    return defaultMetrics().stream()
+        .map(Metric::defaultDatapoint)
+        .toList();
   }
 }

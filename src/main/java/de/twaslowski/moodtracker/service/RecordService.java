@@ -3,7 +3,6 @@ package de.twaslowski.moodtracker.service;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.entity.metric.Metric;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import java.util.Comparator;
 import java.util.Optional;
@@ -18,12 +17,12 @@ import org.springframework.stereotype.Service;
 public class RecordService {
 
   private final RecordRepository recordRepository;
-  private final UserService userService;
   private final MetricService metricService;
 
   public Record initializeFrom(User user) {
-    var initialDatapoints = user.getConfiguration().getMetrics().stream()
-        .map(MetricDatapoint::emptyForMetric)
+    var initialDatapoints = user.getConfiguration().getTrackedMetricIds().stream()
+        .map(metricService::getMetricById)
+        .map(Metric::emptyDatapoint)
         .toList();
 
     var record = Record.builder()
@@ -57,16 +56,8 @@ public class RecordService {
   }
 
   public Optional<Metric> getNextIncompleteMetric(Record record) {
-    // Returns the next incomplete metric IN ORDER according to the Order of the Metrics bean
-    var incompleteMetricNames = record.getIncompleteMetrics().stream()
-        .map(MetricDatapoint::metricName)
-        .toList();
-
-    for (var metric : userService.getUserConfiguration(record.getUserId()).getMetrics()) {
-      if (incompleteMetricNames.contains(metric)) {
-        return Optional.of(metricService.getMetricByName(metric));
-      }
-    }
-    return Optional.empty();
+    return record.getIncompleteMetricIds().stream()
+        .map(metricService::getMetricById)
+        .findFirst();
   }
 }
