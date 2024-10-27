@@ -9,3 +9,6 @@ ALTER TABLE metric
 
 ALTER TABLE metric
   ADD COLUMN sort_order VARCHAR NOT NULL DEFAULT 'ASC';
+
+ALTER TABLE metric
+  ADD UNIQUE (name, owner_id);
