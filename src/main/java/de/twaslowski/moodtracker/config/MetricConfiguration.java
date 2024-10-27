@@ -1,6 +1,7 @@
 package de.twaslowski.moodtracker.config;
 
 import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
 import de.twaslowski.moodtracker.entity.metric.Sleep;
 import de.twaslowski.moodtracker.repository.MetricRepository;
@@ -13,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class MetricsConfiguration {
+public class MetricConfiguration {
 
   /**
    * Defines a list of Metrics to be recorded IN ORDER via a LinkedHashMap that is autowired
@@ -34,6 +35,7 @@ public class MetricsConfiguration {
   @Bean
   public List<String> defaultMetrics() {
     List<String> metricNames = new ArrayList<>();
+
     for (var defaultMetric : DefaultMetrics.values()) {
       var metric = defaultMetric.getMetric();
       if (metricRepository.findByName(metric.getName()).isEmpty()) {
@@ -41,6 +43,14 @@ public class MetricsConfiguration {
       }
       metricNames.add(metric.getName());
     }
+
     return metricNames;
+  }
+
+  public List<MetricDatapoint> defaultBaselineConfiguration() {
+    return List.of(
+        MetricDatapoint.defaultForMetric(Mood.INSTANCE),
+        MetricDatapoint.defaultForMetric(Sleep.INSTANCE)
+    );
   }
 }
