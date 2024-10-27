@@ -9,24 +9,27 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.service.RecordService;
-import lombok.RequiredArgsConstructor;
+import de.twaslowski.moodtracker.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 @Slf4j
 public class RecordHandler extends AbstractCommandHandler {
 
   public static final String COMMAND = "/record";
 
   private final RecordService recordService;
+  private final UserService userService;
   private final CallbackGenerator callbackGenerator;
 
   public RecordHandler(MessageUtil messageUtil,
                        RecordService recordService,
+                       UserService userService,
                        CallbackGenerator callbackGenerator) {
     super(COMMAND, messageUtil);
+    this.userService = userService;
     this.recordService = recordService;
     this.callbackGenerator = callbackGenerator;
   }
@@ -34,14 +37,17 @@ public class RecordHandler extends AbstractCommandHandler {
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     log.info("Handling command");
-    var existingRecord = recordService.findIncompleteRecordForTelegramChat(update.getChatId());
+    var user = userService.findByTelegramId(update.getChatId());
+    var existingRecord = recordService.findIncompleteRecordsForUser(user.getId());
 
     return existingRecord.map(record -> handleExistingIncompleteRecord(update, record))
         .orElseGet(() -> createNewRecord(update));
   }
 
   private TelegramInlineKeyboardResponse createNewRecord(TelegramUpdate update) {
-    var record = recordService.initializeFrom(update);
+    var user = userService.findByTelegramId(update.getChatId());
+    var record = recordService.initializeFrom(user);
+
     var firstMetric = recordService.getNextIncompleteMetric(record)
         .orElseThrow(() -> new IllegalStateException("No empty metrics found for record after initialization."));
 
@@ -49,7 +55,7 @@ public class RecordHandler extends AbstractCommandHandler {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .content(callbackGenerator.createCallbacks(firstMetric))
-        .text(firstMetric.getChatPrompt())
+        .text(firstMetric.getDescription())
         .build();
   }
 
@@ -65,7 +71,7 @@ public class RecordHandler extends AbstractCommandHandler {
         .content(callbackGenerator.createCallbacks(nextMetric))
         .text(format("%s%n%n%s",
             messageUtil.getMessage("command.record.already-recording"),
-            nextMetric.getChatPrompt()
+            nextMetric.getDescription()
         ))
         .build();
   }

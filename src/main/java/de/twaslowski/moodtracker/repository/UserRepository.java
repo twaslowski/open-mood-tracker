@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-  Optional<User> findByTelegramId(Long telegramId);
+  Optional<User> findByTelegramId(long telegramId);
 
   @Query("SELECT u FROM User u JOIN u.configuration c WHERE c.notificationsEnabled = true")
   List<User> findAllByNotificationsEnabledIsTrue();

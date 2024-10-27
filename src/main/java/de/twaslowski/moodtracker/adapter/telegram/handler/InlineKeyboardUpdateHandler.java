@@ -12,6 +12,7 @@ import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.service.RecordService;
+import de.twaslowski.moodtracker.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +28,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   private final RecordService recordService;
   private final CallbackGenerator callbackGenerator;
   private final MessageUtil messageUtil;
+  private final UserService userService;
 
   @Override
   @SneakyThrows
@@ -35,7 +37,8 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     var inlineKeyboardUpdate = (TelegramInlineKeyboardUpdate) update;
     log.info("Received inline keyboard update with callback: {}", inlineKeyboardUpdate.getCallbackData());
 
-    var existingRecord = recordService.findIncompleteRecordForTelegramChat(update.getChatId());
+    var user = userService.findByTelegramId(update.getChatId());
+    var existingRecord = recordService.findIncompleteRecordsForUser(user.getId());
     return existingRecord
         .map(record -> enrichExistingRecord(record, inlineKeyboardUpdate))
         .orElseGet(() -> noRecordInProgressResponse(update));
@@ -47,13 +50,14 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     record.updateMetric(receivedMetric);
 
     log.info("Updated record {} with metric {}, value {}",
-        record.getId(), receivedMetric.metricName(), receivedMetric.value());
+        record.getId(), receivedMetric.metricId(), receivedMetric.value());
     return recordService.getNextIncompleteMetric(record)
         .map(nextMetric -> sendNextMetric(update, nextMetric))
-        .orElse(completeRecord(update));
+        .orElseGet(() -> completeRecord(update));
   }
 
   private TelegramResponse completeRecord(TelegramUpdate update) {
+    log.info("Completing record for user with chatId {}", update.getChatId());
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
         .text(messageUtil.getMessage("command.record.saved"))
@@ -61,10 +65,11 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   }
 
   private TelegramResponse sendNextMetric(TelegramUpdate update, Metric nextMetric) {
+    log.info("Sending next metric [id={} name={}] for incomplete record", nextMetric.getId(), nextMetric.getName());
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .content(callbackGenerator.createCallbacks(nextMetric))
-        .text(nextMetric.getChatPrompt())
+        .text(nextMetric.getDescription())
         .build();
   }
 

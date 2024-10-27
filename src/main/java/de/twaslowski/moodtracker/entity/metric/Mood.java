@@ -1,43 +1,38 @@
 package de.twaslowski.moodtracker.entity.metric;
 
-import java.util.Comparator;
 import java.util.Map;
 
 public class Mood extends Metric {
 
-  public static final String TYPE = "MOOD";
+  public static final String NAME = "MOOD";
   private static final String PROMPT = "How do you feel today?";
+
+  private static final Integer DEFAULT_OWNER = 1;
   private static final Integer MIN_VALUE = -3;
   private static final Integer MAX_VALUE = 3;
-  public static final Map<MetricDatapoint, String> LABELS = Map.of(
-      datapoint(3), "SEVERELY_MANIC",
-      datapoint(2), "MANIC",
-      datapoint(1), "HYPOMANIC",
-      datapoint(0), "NEUTRAL",
-      datapoint(-1), "MILDLY_DEPRESSED",
-      datapoint(-2), "MODERATELY_DEPRESSED",
-      datapoint(-3), "SEVERELY_DEPRESSED"
-  );
-  private static final Comparator<MetricDatapoint> COMPARATOR = Comparator.comparingInt(MetricDatapoint::value).reversed();
   private static final Integer DEFAULT = 0;
 
-  public Mood() {
-    super(
-        TYPE,
-        PROMPT,
-        MIN_VALUE,
-        MAX_VALUE,
-        LABELS,
-        COMPARATOR,
-        DEFAULT
-    );
-  }
+  private static final SortOrder SORT_ORDER = SortOrder.DESC;
 
-  private static MetricDatapoint datapoint(Integer value) {
-    return new MetricDatapoint(TYPE, value);
-  }
+  private static final Map<Integer, String> LABELS = Map.of(
+      3, "SEVERELY_MANIC",
+      2, "MANIC",
+      1, "HYPOMANIC",
+      0, "NEUTRAL",
+      -1, "MILDLY_DEPRESSED",
+      -2, "MODERATELY_DEPRESSED",
+      -3, "SEVERELY_DEPRESSED"
+  );
 
-  public static MetricDatapoint defaultDatapoint() {
-    return new MetricDatapoint(TYPE, DEFAULT);
-  }
+  public static final Metric INSTANCE = Metric.builder()
+      .id(1)
+      .name(NAME)
+      .ownerId(DEFAULT_OWNER)
+      .description(PROMPT)
+      .maxValue(MAX_VALUE)
+      .minValue(MIN_VALUE)
+      .defaultValue(DEFAULT)
+      .labels(LABELS)
+      .sortOrder(SORT_ORDER)
+      .build();
 }

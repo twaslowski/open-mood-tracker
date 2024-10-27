@@ -17,8 +17,8 @@ public class ObjectMapperTest {
   @Test
   @SneakyThrows
   void shouldSerializeEmptyMetric() {
-    var mood = new MetricDatapoint(Mood.TYPE, null);
-    var json = "{\"metricName\":\"MOOD\",\"value\":null}";
+    var mood = new MetricDatapoint(1, null);
+    var json = "{\"metricId\":1,\"value\":null}";
 
     assertThat(objectMapper.writeValueAsString(mood)).isEqualTo(json);
   }
@@ -26,8 +26,8 @@ public class ObjectMapperTest {
   @Test
   @SneakyThrows
   void shouldSerializePopulatedMetric() {
-    var mood = new MetricDatapoint(Sleep.TYPE, 8);
-    var json = "{\"metricName\":\"SLEEP\",\"value\":8}";
+    var mood = new MetricDatapoint(2, 8);
+    var json = "{\"metricId\":2,\"value\":8}";
 
     assertThat(objectMapper.writeValueAsString(mood)).isEqualTo(json);
   }
@@ -36,23 +36,23 @@ public class ObjectMapperTest {
   @SneakyThrows
   void shouldSerializeListOfMetrics() {
     var metrics = List.of(
-        new MetricDatapoint(Mood.TYPE, 3),
-        new MetricDatapoint(Sleep.TYPE, 8)
+        new MetricDatapoint(1, 3),
+        new MetricDatapoint(2, 8)
     );
 
     var serialized = objectMapper.writeValueAsString(metrics);
-    assertThat(serialized).contains("\"metricName\":\"MOOD\"");
-    assertThat(serialized).contains("\"metricName\":\"SLEEP\"");
+    assertThat(serialized).contains("\"metricId\":1");
+    assertThat(serialized).contains("\"metricId\":2");
   }
 
   @Test
   @SneakyThrows
   void shouldDeserializeMetric() {
-    var json = "{\"metricName\":\"MOOD\",\"value\":3}";
+    var json = "{\"metricId\":1,\"value\":3}";
     var datapoint = objectMapper.readValue(json, MetricDatapoint.class);
 
     assertThat(datapoint).isInstanceOf(MetricDatapoint.class);
     assertThat(datapoint.value()).isEqualTo(3);
-    assertThat(datapoint.metricName()).isEqualTo(Mood.TYPE);
+    assertThat(datapoint.metricId()).isEqualTo(1);
   }
 }

@@ -1,6 +1,7 @@
 package de.twaslowski.moodtracker.entity;
 
-import java.util.Set;
+import de.twaslowski.moodtracker.entity.metric.Mood;
+import java.util.List;
 
 public class UserSpec {
 
@@ -8,15 +9,19 @@ public class UserSpec {
     return User.builder()
         .id(1)
         .telegramId(1)
-        .configuration(ConfigurationSpec.valid().build());
+        .configuration(ConfigurationSpec.valid()
+            .baselineMetrics(List.of(
+                Mood.INSTANCE.defaultDatapoint()
+            ))
+            .trackedMetricIds(List.of(1L, 2L))
+            .build());
   }
 
   public static User.UserBuilder noBaselineConfiguration() {
     return User.builder()
-        .id(1)
         .telegramId(1)
         .configuration(ConfigurationSpec.valid()
-            .baselineConfiguration(Set.of())
+            .baselineMetrics(List.of())
             .build()
         );
   }

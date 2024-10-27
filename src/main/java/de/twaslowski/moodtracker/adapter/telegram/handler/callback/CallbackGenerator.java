@@ -3,10 +3,9 @@ package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
-import de.twaslowski.moodtracker.entity.metric.Mood;
-import de.twaslowski.moodtracker.entity.metric.Sleep;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.TreeMap;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -29,13 +28,14 @@ public class CallbackGenerator {
   }
 
   private Map<MetricDatapoint, String> getCallbackMappingForMetric(Metric metric) {
-    TreeMap<MetricDatapoint, String> sortedMap;
+    TreeMap<MetricDatapoint, String> sortedMap = new TreeMap<>(metric.getComparator());
 
-    switch (metric.getName()) {
-      case Mood.TYPE, Sleep.TYPE -> sortedMap = new TreeMap<>(metric.getComparator());
-      default -> throw new IllegalArgumentException("Unknown type: " + metric.getName());
+    for (Entry<Integer, String> entry : metric.getLabels().entrySet()) {
+      sortedMap.put(
+          metric.datapointWithValue(entry.getKey()),
+          entry.getValue()
+      );
     }
-    sortedMap.putAll(metric.getLabels());
     return sortedMap;
   }
 

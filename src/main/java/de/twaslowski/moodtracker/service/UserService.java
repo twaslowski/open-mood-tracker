@@ -2,10 +2,10 @@ package de.twaslowski.moodtracker.service;
 
 import de.twaslowski.moodtracker.entity.Configuration;
 import de.twaslowski.moodtracker.entity.User;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
+import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.exception.UserNotFoundException;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +14,17 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final Set<MetricDatapoint> defaultBaselineConfiguration;
+  private final MetricService metricService;
 
   public boolean createUserFromTelegramId(long telegramId) {
+    var defaultMetricIds = metricService.getDefaultMetrics().stream()
+        .map(Metric::getId)
+        .toList();
+    var defaultBaselineConfiguration = metricService.getDefaultBaselineConfiguration();
+
     var defaultConfiguration = Configuration.defaults()
-        .baselineConfiguration(defaultBaselineConfiguration)
+        .trackedMetricIds(defaultMetricIds)
+        .baselineMetrics(defaultBaselineConfiguration)
         .build();
 
     return userRepository.findByTelegramId(telegramId)
@@ -32,9 +38,21 @@ public class UserService {
         });
   }
 
+  public Configuration getUserConfiguration(long userId) {
+    return userRepository.findById(userId)
+        .map(User::getConfiguration)
+        .orElseThrow(() -> new IllegalStateException("User not found"));
+  }
+
+  public List<Long> getTrackedMetrics(long userId) {
+    return userRepository.findById(userId)
+        .map(user -> user.getConfiguration().getTrackedMetricIds())
+        .orElseThrow(() -> new UserNotFoundException(userId));
+  }
+
   public User findByTelegramId(long telegramId) {
     return userRepository.findByTelegramId(telegramId)
-        .orElseThrow(() -> new IllegalStateException("User not found"));
+        .orElseThrow(() -> new UserNotFoundException(telegramId));
   }
 
   public List<User> findAllUsersWithNotifications() {
@@ -44,7 +62,7 @@ public class UserService {
   public List<User> findAutoBaselineEligibleUsers() {
     return userRepository.findAll().stream()
         .filter(user -> user.getConfiguration().isAutoBaselineEnabled())
-        .filter(user -> !user.getConfiguration().getBaselineConfiguration().isEmpty())
+        .filter(user -> !user.getConfiguration().getBaselineMetrics().isEmpty())
         .toList();
   }
 }

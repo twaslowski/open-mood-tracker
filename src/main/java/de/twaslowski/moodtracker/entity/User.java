@@ -10,7 +10,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import java.util.Set;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,12 +31,13 @@ public class User {
   @NotNull
   private long telegramId;
 
+  // todo remove this from the User entity, create ConfigurationService for connection instead
   @OneToOne(cascade = CascadeType.ALL)
   @JoinColumn(name = "configuration_id", referencedColumnName = "id")
   private Configuration configuration;
 
-  public Set<MetricDatapoint> getBaselineConfiguration() {
-    return configuration.getBaselineConfiguration();
+  public List<MetricDatapoint> getBaselineConfiguration() {
+    return configuration.getBaselineMetrics();
   }
 
   public boolean toggleAutoBaseline() {

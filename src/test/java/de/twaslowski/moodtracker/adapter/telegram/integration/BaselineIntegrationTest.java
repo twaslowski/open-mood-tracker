@@ -7,9 +7,8 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.AutoBaselineHandler;
 import de.twaslowski.moodtracker.entity.ConfigurationSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
-import java.util.Set;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -26,16 +25,18 @@ public class BaselineIntegrationTest extends IntegrationBase {
 
     // Auto-baseline active, but no baseline configuration
     var ineligibleUser = UserSpec.valid()
+        .id(2)
         .telegramId(2)
         .configuration(
             ConfigurationSpec.valid()
-                .baselineConfiguration(Set.of())
+                .baselineMetrics(List.of())
                 .autoBaselineEnabled(true)
                 .build())
         .build();
 
     // Auto-baseline inactive
     var ineligibleUser2 = UserSpec.valid()
+        .id(3)
         .telegramId(3)
         .configuration(
             ConfigurationSpec.valid()
@@ -43,17 +44,17 @@ public class BaselineIntegrationTest extends IntegrationBase {
                 .build())
         .build();
 
-    givenUser(eligibleUser);
-    givenUser(ineligibleUser);
-    givenUser(ineligibleUser2);
+    userRepository.save(eligibleUser);
+    userRepository.save(ineligibleUser);
+    userRepository.save(ineligibleUser2);
 
     autoBaselineService.createAutoBaselines();
 
     assertThat(recordRepository.findAll()).hasSize(1);
     var record = recordRepository.findAll().getFirst();
 
-    assertThat(record.getValues()).isEqualTo(Set.of(MetricDatapoint.fromMetricDefault(new Mood())));
-    assertThat(record.getTelegramId()).isEqualTo(eligibleUser.getId());
+    assertThat(record.getValues()).isEqualTo(List.of(Mood.INSTANCE.defaultDatapoint()));
+    assertThat(record.getUserId()).isEqualTo(userRepository.findByTelegramId(1L).get().getId());
 
     assertMessageWithTextSent(messageUtil.getMessage("notification.baseline.created"));
   }

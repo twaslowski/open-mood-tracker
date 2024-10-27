@@ -35,7 +35,7 @@ public class BaselineHandler extends AbstractCommandHandler {
     if (baselineConfiguration == null || baselineConfiguration.isEmpty()) {
       return noBaselineConfigurationFound(update.getChatId());
     } else {
-      recordService.fromBaselineConfiguration(user);
+      recordService.recordFromBaseline(user);
       log.info("Baseline record created");
       return baselineRecordCreated(update.getChatId());
     }

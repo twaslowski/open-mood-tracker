@@ -3,10 +3,8 @@ package de.twaslowski.moodtracker.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.metric.Mood;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 import org.junit.jupiter.api.Test;
 
 class RecordTest {
@@ -15,15 +13,16 @@ class RecordTest {
   void shouldOverwriteExistingMetric() {
     // given
     var record = Record.builder()
-        .values(new HashSet<>(Set.of(new MetricDatapoint(Mood.TYPE, 1))))
+        .values(List.of(Mood.INSTANCE.datapointWithValue(1)))
         .build();
-    var metric = new MetricDatapoint(Mood.TYPE, 2);
+
+    var newDatapoint = Mood.INSTANCE.datapointWithValue(2);
 
     // when
-    record.updateMetric(metric);
+    record.updateMetric(newDatapoint);
 
     // then
     assertEquals(1, record.getValues().size());
-    assertTrue(record.getValues().contains(metric));
+    assertTrue(record.getValues().contains(newDatapoint));
   }
 }
