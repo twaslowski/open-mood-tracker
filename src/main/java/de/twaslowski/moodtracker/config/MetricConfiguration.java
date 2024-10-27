@@ -16,16 +16,12 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class MetricConfiguration {
 
-  /**
-   * Defines a list of Metrics to be recorded IN ORDER via a LinkedHashMap that is autowired
-   * to the RecordService.
-   */
-
   private final MetricRepository metricRepository;
 
   @Getter
   @RequiredArgsConstructor
   public enum DefaultMetrics {
+    // The INSTANCE constructs are used only for initialization and testing purposes
     MOOD(Mood.INSTANCE),
     SLEEP(Sleep.INSTANCE);
 
