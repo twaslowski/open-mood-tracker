@@ -29,9 +29,9 @@ public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleTh
 
   @Override
   public void consume(Update update) {
-    log.info("Received update: {}", update.getUpdateId());
     try {
       var telegramUpdate = TelegramUpdateFactory.createTelegramUpdate(update);
+      log.info("Received update: {}, text: {}", telegramUpdate.getChatId(), telegramUpdate.getText());
       incomingMessageQueue.add(telegramUpdate);
     } catch (NullPointerException e) {
       log.error("Required data missing", e);

@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -26,7 +27,7 @@ import org.hibernate.type.SqlTypes;
 public class Metric {
 
   @Id
-  @GeneratedValue(generator = "metric_id_seq")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metric_id_seq")
   private long id;
 
   @NotNull

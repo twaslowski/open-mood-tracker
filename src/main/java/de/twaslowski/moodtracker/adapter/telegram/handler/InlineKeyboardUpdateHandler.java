@@ -53,7 +53,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
         record.getId(), receivedMetric.metricName(), receivedMetric.value());
     return recordService.getNextIncompleteMetric(record)
         .map(nextMetric -> sendNextMetric(update, nextMetric))
-        .orElse(completeRecord(update));
+        .orElseGet(() -> completeRecord(update));
   }
 
   private TelegramResponse completeRecord(TelegramUpdate update) {
@@ -65,6 +65,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   }
 
   private TelegramResponse sendNextMetric(TelegramUpdate update, Metric nextMetric) {
+    log.info("Sending next metric [id={} name={}] for incomplete record", nextMetric.getId(), nextMetric.getName());
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .content(callbackGenerator.createCallbacks(nextMetric))

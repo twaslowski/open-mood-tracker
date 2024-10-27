@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-trap stop EXIT SIGINT
+trap stop SIGINT EXIT SIGTERM
 
 function stop() {
   ./scripts/stop-environment.sh
