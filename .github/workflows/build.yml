@@ -51,7 +51,7 @@ jobs:
           path: target/
 
   deploy:
-    runs-on: mood-tracker-arc
+    runs-on: open-mood-tracker-arc
     needs: build_docker_image
     steps:
       - name: Checkout
