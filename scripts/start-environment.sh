@@ -1,3 +1,8 @@
 #!/usr/bin/env bash
 
-docker compose -p mood-tracker -f local/docker-compose.yaml up -d
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+export PROJECT_ROOT
+
+source "$PROJECT_ROOT/scripts/common.sh"
+
+start_environment

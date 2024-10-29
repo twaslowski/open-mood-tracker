@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 
-./mvnw clean test
+set -eo pipefail
 
-./scripts/start-environment.sh
-./mvnw test -P integration
-./scripts/stop-environment.sh
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+export PROJECT_ROOT
+source "$PROJECT_ROOT/scripts/common.sh"./scripts/start-environment.sh
 
-./mvnw jacoco:report
+trap stop_environment SIGINT EXIT SIGTERM
+
+unit_test
+start_environment
+integration_test

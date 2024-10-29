@@ -1,4 +1,8 @@
 #!/usr/bin/env bash
 
-./mvnw clean test
-./mvnw jacoco:report
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+export PROJECT_ROOT
+
+source "$PROJECT_ROOT/scripts/common.sh"
+
+unit_test

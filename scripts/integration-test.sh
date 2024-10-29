@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 
-trap stop SIGINT EXIT SIGTERM
+set -eo pipefail
 
-function stop() {
-  ./scripts/stop-environment.sh
-}
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+export PROJECT_ROOT
+source "$PROJECT_ROOT/scripts/common.sh"
 
-./scripts/start-environment.sh
-source .env
+trap stop_environment SIGINT EXIT SIGTERM
 
-./mvnw test -P integration
-./mvnw jacoco:report
+start_environment
+integration_test

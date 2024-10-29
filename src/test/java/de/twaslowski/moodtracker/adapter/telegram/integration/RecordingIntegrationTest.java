@@ -94,7 +94,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
           var temporaryRecord = maybeTemporaryRecord.getFirst();
 
           assertThat(temporaryRecord.getValues()).containsAll(Set.of(
-              MOOD.datapointWithValue(3),
+              MOOD.datapointWithValue(-3),
               SLEEP.emptyDatapoint()
           ));
         }

@@ -18,8 +18,11 @@ jobs:
           distribution: corretto
           cache: maven
 
-      - name: Run tests
-        run: ./scripts/qa.sh
+      - name: Unit tests
+        run: ./scripts/unit-test.sh
+
+      - name: Integration tests
+        run: ./scripts/integration-test.sh
 
       - name: Upload jar artifact
         uses: actions/upload-artifact@v4

@@ -1,16 +1,12 @@
 #!/usr/bin/env bash
 
-trap stop SIGINT EXIT SIGTERM
+set -eo pipefail
 
-function stop() {
-  echo "Stopping ..."
-  unset SPRING_PROFILES_ACTIVE
-  scripts/stop-environment.sh
-}
+PROJECT_ROOT=$(git rev-parse --show-toplevel)
+export PROJECT_ROOT
+source "$PROJECT_ROOT/scripts/common.sh"
 
-source ".env"
-export SPRING_PROFILES_ACTIVE=local
+trap stop_environment SIGINT EXIT SIGTERM
 
-scripts/start-environment.sh
-
-./mvnw clean spring-boot:run
+start_environment
+run
