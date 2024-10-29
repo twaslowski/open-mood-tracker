@@ -13,7 +13,7 @@ function unit_test() {
 }
 
 function integration_test() {
-  ./mvnw test -P integration
+  ./mvnw package test -P integration
 }
 
 function run() {
