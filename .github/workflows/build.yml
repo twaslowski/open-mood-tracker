@@ -78,7 +78,7 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy:
-    runs-on: open-mood-tracker-arc
+    runs-on: open-mood-tracker-arc-runner
     needs: build_docker_image
     steps:
       - name: Checkout
