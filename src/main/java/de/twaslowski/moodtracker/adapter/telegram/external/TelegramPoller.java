@@ -1,8 +1,10 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.exception.NoTelegramTokenProvidedException;
 import de.twaslowski.moodtracker.adapter.telegram.exception.RequiredDataMissingException;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.TelegramUpdateFactory;
+import java.math.BigInteger;
 import java.util.Queue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +44,9 @@ public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleTh
   // SpringLongPollingBot boilerplate
   @Override
   public String getBotToken() {
+    if (botToken == null || botToken.isEmpty()) {
+      throw new NoTelegramTokenProvidedException();
+    }
     return botToken;
   }
 

@@ -29,7 +29,10 @@ resource "helm_release" "application" {
       - name: SPRING_PROFILES_ACTIVE
         value: prod
       - name: TELEGRAM_TOKEN
-        value: ${var.telegram_token}
+        valueFrom:
+            secretKeyRef:
+                name: telegram-token
+                key: telegram_token
       - name: DATASOURCE_URL
         value: "jdbc:postgresql://postgres.${local.namespace}.svc.cluster.local:5432/mood-tracker"
       - name: DATASOURCE_USERNAME
