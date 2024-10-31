@@ -6,9 +6,8 @@ replicaCount: 1
 
 image:
   repository: tobiaswaslowski/open-mood-tracker
-  pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  pullPolicy: Never
+  tag: "local"
 
 imagePullSecrets: []
 nameOverride: ""
@@ -44,7 +43,7 @@ securityContext: {}
 service:
   enabled: false
   type: ClusterIP
-  port: 80
+  port: 8080
 
 ingress:
   enabled: false

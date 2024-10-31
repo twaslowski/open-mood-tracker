@@ -1,3 +1,0 @@
-environmentVariables:
-  - name: TELEGRAM_TOKEN
-    value: ${TELEGRAM_TOKEN}
