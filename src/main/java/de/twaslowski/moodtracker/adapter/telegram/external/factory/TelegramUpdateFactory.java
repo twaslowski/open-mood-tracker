@@ -14,6 +14,7 @@ public class TelegramUpdateFactory {
       return TelegramInlineKeyboardUpdate.builder()
           .chatId(update.getCallbackQuery().getMessage().getChatId())
           .callbackData(update.getCallbackQuery().getData())
+          .callbackQueryId(update.getCallbackQuery().getId())
           .updateId(update.getUpdateId())
           .build();
     } else {

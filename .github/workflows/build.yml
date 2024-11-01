@@ -84,5 +84,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: hello world
-        run: echo "Hello from the deploy job"
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.8.0
+
+      - name: apply
+        run: terraform init && terraform apply -auto-approve

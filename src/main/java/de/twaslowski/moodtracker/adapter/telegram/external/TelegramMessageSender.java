@@ -1,8 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.BotApiMessageFactory;
 import jakarta.annotation.PostConstruct;
 import java.util.Queue;
@@ -13,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -36,17 +35,17 @@ public class TelegramMessageSender {
   public void sendResponses() {
     if (!outgoingMessageQueue.isEmpty()) {
       var response = outgoingMessageQueue.remove();
-      var telegramResponseObject = switch (response.getResponseType()) {
-        case TEXT -> BotApiMessageFactory.createTextResponse((TelegramTextResponse) response);
-        case INLINE_KEYBOARD ->
-            BotApiMessageFactory.createInlineKeyboardResponse((TelegramInlineKeyboardResponse) response);
-      };
-      try {
-        telegramClient.execute(telegramResponseObject);
-        log.info("Sent response to chat: {}", response.getChatId());
-      } catch (TelegramApiException | RuntimeException e) {
-        log.error("Error while sending message: {}", e.getMessage());
-      }
+      var telegramResponseObjects = BotApiMessageFactory.createResponse(response);
+      log.info("Sending {} messages", telegramResponseObjects.size());
+      telegramResponseObjects.forEach(this::executeUpdate);
+    }
+  }
+
+  private void executeUpdate(BotApiMethod<?> response) {
+    try {
+      telegramClient.execute(response);
+    } catch (TelegramApiException e) {
+      log.error("Error while sending message: {}", e.getMessage());
     }
   }
 }

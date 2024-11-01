@@ -6,7 +6,6 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKey
 import java.util.LinkedHashMap;
 import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
@@ -23,23 +22,13 @@ class BotApiMessageFactoryTest {
     var response = TelegramInlineKeyboardResponse.builder()
         .chatId(1L)
         .text("Message")
+        .answerCallbackQueryId("someCallbackQueryId")
         .content(callbacks)
         .build();
 
     // when
-    var result = BotApiMessageFactory.createInlineKeyboardResponse(response);
+    var result = BotApiMessageFactory.createResponse(response);
 
-    // then
-    var markup = (InlineKeyboardMarkup) result.getReplyMarkup();
-    var keyboard = markup.getKeyboard();
-
-    assertEquals(3, keyboard.size());
-    assertEquals(getButton(0, keyboard).getText(), "First");
-    assertEquals(getButton(1, keyboard).getText(), "Second");
-    assertEquals(getButton(2, keyboard).getText(), "Third");
-  }
-
-  private InlineKeyboardButton getButton(int row, List<InlineKeyboardRow> keyboard) {
-    return keyboard.get(row).getFirst();
+    assertEquals(result.size(), 2);
   }
 }

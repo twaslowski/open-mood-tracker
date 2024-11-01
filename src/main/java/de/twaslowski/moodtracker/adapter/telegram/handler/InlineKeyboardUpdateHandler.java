@@ -41,7 +41,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     var existingRecord = recordService.findIncompleteRecordsForUser(user.getId());
     return existingRecord
         .map(record -> enrichExistingRecord(record, inlineKeyboardUpdate))
-        .orElseGet(() -> noRecordInProgressResponse(update));
+        .orElseGet(() -> noRecordInProgressResponse(inlineKeyboardUpdate));
   }
 
   @SneakyThrows
@@ -56,26 +56,29 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
         .orElseGet(() -> completeRecord(update));
   }
 
-  private TelegramResponse completeRecord(TelegramUpdate update) {
+  private TelegramResponse completeRecord(TelegramInlineKeyboardUpdate update) {
     log.info("Completing record for user with chatId {}", update.getChatId());
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
+        .answerCallbackQueryId(update.getCallbackQueryId())
         .text(messageUtil.getMessage("command.record.saved"))
         .build();
   }
 
-  private TelegramResponse sendNextMetric(TelegramUpdate update, Metric nextMetric) {
+  private TelegramResponse sendNextMetric(TelegramInlineKeyboardUpdate update, Metric nextMetric) {
     log.info("Sending next metric [id={} name={}] for incomplete record", nextMetric.getId(), nextMetric.getName());
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
+        .answerCallbackQueryId(update.getCallbackQueryId())
         .content(callbackGenerator.createCallbacks(nextMetric))
         .text(nextMetric.getDescription())
         .build();
   }
 
-  private TelegramResponse noRecordInProgressResponse(TelegramUpdate update) {
+  private TelegramResponse noRecordInProgressResponse(TelegramInlineKeyboardUpdate update) {
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
+        .answerCallbackQueryId(update.getCallbackQueryId())
         .text(messageUtil.getMessage("command.record.not-recording"))
         .build();
   }
