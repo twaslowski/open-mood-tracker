@@ -1,6 +1,9 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.value.EditableMarkupMessage;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.BotApiMessageFactory;
 import jakarta.annotation.PostConstruct;
 import java.util.Queue;
@@ -8,11 +11,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
 @Component
@@ -22,6 +27,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 public class TelegramMessageSender {
 
   private final Queue<TelegramResponse> outgoingMessageQueue;
+  private final Queue<EditableMarkupMessage> messagePersistenceQueue;
   private final TelegramClient telegramClient;
 
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
@@ -35,17 +41,52 @@ public class TelegramMessageSender {
   public void sendResponses() {
     if (!outgoingMessageQueue.isEmpty()) {
       var response = outgoingMessageQueue.remove();
-      var telegramResponseObjects = BotApiMessageFactory.createResponse(response);
-      log.info("Sending {} messages", telegramResponseObjects.size());
-      telegramResponseObjects.forEach(this::executeUpdate);
+      handleResponse(response);
     }
   }
 
-  private void executeUpdate(BotApiMethod<?> response) {
-    try {
-      telegramClient.execute(response);
-    } catch (TelegramApiException e) {
-      log.error("Error while sending message: {}", e.getMessage());
+  private void handleResponse(TelegramResponse response) {
+    switch (response.getResponseType()) {
+      case TEXT -> handleTextResponse((TelegramTextResponse) response);
+      case INLINE_KEYBOARD ->
+          handleInlineKeyboardResponse((TelegramInlineKeyboardResponse) response);
+      default -> throw new IllegalArgumentException("Unknown response type");
     }
+  }
+
+  private void handleTextResponse(TelegramTextResponse response) {
+    executeUpdate(BotApiMessageFactory.createTextResponse(response));
+    handleAnswerCallbackQuery(response);
+  }
+
+  private void handleInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
+    var message = executeUpdate(BotApiMessageFactory.createInlineKeyboardResponse(response));
+    handleAnswerCallbackQuery(response);
+    addToMessagePersistenceQueue(message);
+  }
+
+  private void handleAnswerCallbackQuery(TelegramResponse response) {
+    if (response.hasAnswerCallbackQueryId()) {
+      executeUpdate(BotApiMessageFactory.createCallbackQueryAnswerResponse(response));
+    }
+  }
+
+  private void addToMessagePersistenceQueue(Message message) {
+    messagePersistenceQueue.add(
+        EditableMarkupMessage.builder()
+            .messageId(message.getMessageId())
+            .chatId(message.getChatId())
+            .build()
+    );
+  }
+
+  @SneakyThrows
+  private Message executeUpdate(SendMessage update) {
+    return telegramClient.execute(update);
+  }
+
+  @SneakyThrows
+  public void executeUpdate(AnswerCallbackQuery response) {
+    telegramClient.execute(response);
   }
 }

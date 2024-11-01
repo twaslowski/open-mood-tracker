@@ -7,20 +7,21 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder
 public abstract class TelegramResponse {
 
+  // todo these messages should be moved to messages.properties
+  public static final String UNKNOWN_COMMAND_RESPONSE = "Unfortunately, I cannot process that message.";
+  public static final String ERROR_RESPONSE = "An error occurred. Please try again later.";
+
   protected long chatId;
   protected String text;
   protected String answerCallbackQueryId;
 
-  public static final String UNKNOWN_COMMAND_RESPONSE = "Unfortunately, I cannot process that message.";
-  public static final String ERROR_RESPONSE = "An error occurred. Please try again later.";
-
-  public TelegramResponse(long chatId) {
-    this.chatId = chatId;
-  }
-
   public enum ResponseType {
     TEXT,
     INLINE_KEYBOARD
+  }
+
+  public TelegramResponse(long chatId) {
+    this.chatId = chatId;
   }
 
   public static TelegramTextResponse.TelegramTextResponseBuilder error() {
@@ -32,4 +33,8 @@ public abstract class TelegramResponse {
   }
 
   public abstract ResponseType getResponseType();
+
+  public boolean hasAnswerCallbackQueryId() {
+    return answerCallbackQueryId != null;
+  }
 }

@@ -5,6 +5,7 @@ import static org.mockito.Mockito.verify;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.value.EditableMarkupMessage;
 import java.util.LinkedList;
 import java.util.Queue;
 import lombok.SneakyThrows;
@@ -20,9 +21,10 @@ public class TelegramMessageSenderTest {
 
   private final TelegramClient telegramClient = mock(TelegramClient.class);
   private final Queue<TelegramResponse> outgoingQueue = new LinkedList<>();
+  private final Queue<EditableMarkupMessage> messagePersistenceQueue = new LinkedList<>();
 
   private final TelegramMessageSender telegramMessageSender =
-      new TelegramMessageSender(outgoingQueue, telegramClient);
+      new TelegramMessageSender(outgoingQueue, messagePersistenceQueue, telegramClient);
 
   @Test
   @SneakyThrows
