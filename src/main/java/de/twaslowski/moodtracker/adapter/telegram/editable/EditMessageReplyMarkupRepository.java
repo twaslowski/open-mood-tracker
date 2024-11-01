@@ -1,6 +1,5 @@
-package de.twaslowski.moodtracker.adapter.telegram.repository;
+package de.twaslowski.moodtracker.adapter.telegram.editable;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.value.EditableMarkupMessage;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface EditMessageReplyMarkupRepository extends JpaRepository<EditableMarkupMessage, Long> {

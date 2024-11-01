@@ -1,7 +1,5 @@
-package de.twaslowski.moodtracker.adapter.telegram.service;
+package de.twaslowski.moodtracker.adapter.telegram.editable;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.value.EditableMarkupMessage;
-import de.twaslowski.moodtracker.adapter.telegram.repository.EditMessageReplyMarkupRepository;
 import jakarta.annotation.PostConstruct;
 import java.util.Queue;
 import java.util.concurrent.Executors;

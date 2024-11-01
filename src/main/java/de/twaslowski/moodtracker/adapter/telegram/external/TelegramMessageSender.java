@@ -3,7 +3,7 @@ package de.twaslowski.moodtracker.adapter.telegram.external;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.value.EditableMarkupMessage;
+import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.BotApiMessageFactory;
 import jakarta.annotation.PostConstruct;
 import java.util.Queue;
@@ -62,7 +62,7 @@ public class TelegramMessageSender {
   private void handleInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
     var message = executeUpdate(BotApiMessageFactory.createInlineKeyboardResponse(response));
     handleAnswerCallbackQuery(response);
-    addToMessagePersistenceQueue(message);
+    addToEditableMessagePersistenceQueue(message);
   }
 
   private void handleAnswerCallbackQuery(TelegramResponse response) {
@@ -71,7 +71,7 @@ public class TelegramMessageSender {
     }
   }
 
-  private void addToMessagePersistenceQueue(Message message) {
+  private void addToEditableMessagePersistenceQueue(Message message) {
     messagePersistenceQueue.add(
         EditableMarkupMessage.builder()
             .messageId(message.getMessageId())
