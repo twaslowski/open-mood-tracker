@@ -79,6 +79,7 @@ jobs:
 
   deploy:
     runs-on: open-mood-tracker-arc
+    needs: build_docker_image
     steps:
       - name: Checkout
         uses: actions/checkout@v4
