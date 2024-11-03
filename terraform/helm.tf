@@ -21,7 +21,7 @@ resource "helm_release" "postgres" {
 resource "helm_release" "application" {
   chart     = "../charts/open-mood-tracker"
   name      = "open-mood-tracker"
-  namespace = "open-mood-tracker"
+  namespace = local.namespace
 
   values = [
     <<YAML

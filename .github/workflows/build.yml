@@ -104,3 +104,7 @@ jobs:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
         run: |
           ./scripts/deploy.sh
+
+      - name: Sleep for debugging
+        run: |
+          sleep 900
