@@ -2,6 +2,7 @@ package de.twaslowski.moodtracker.adapter.telegram.external;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -17,8 +18,6 @@ import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
@@ -27,17 +26,15 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @ExtendWith(MockitoExtension.class)
 public class TelegramMessageSenderTest {
 
-  @Mock
-  private TelegramClient telegramClient;
+  private final TelegramClient telegramClient = mock(TelegramClient.class);
 
-  @Mock
-  private Queue<TelegramResponse> outgoingQueue = new LinkedList<>();
+  private final Queue<TelegramResponse> outgoingQueue = new LinkedList<>();
 
-  @Mock
-  private LinkedList<EditableMarkupMessage> messagePersistenceQueue = new LinkedList<>();
+  private final LinkedList<EditableMarkupMessage> messagePersistenceQueue = new LinkedList<>();
 
-  @InjectMocks
-  private TelegramMessageSender telegramMessageSender;
+  private final TelegramMessageSender telegramMessageSender = new TelegramMessageSender(
+      outgoingQueue, messagePersistenceQueue, telegramClient
+  );
 
   @Test
   @SneakyThrows
@@ -48,7 +45,7 @@ public class TelegramMessageSenderTest {
         .text("Hello")
         .build();
 
-    when(outgoingQueue.remove()).thenReturn(response);
+    outgoingQueue.add(response);
 
     // When
     telegramMessageSender.sendResponses();
@@ -78,18 +75,16 @@ public class TelegramMessageSenderTest {
         .chat(chat)
         .build();
 
-    when(outgoingQueue.remove()).thenReturn(response);
+    outgoingQueue.add(response);
     when(telegramClient.execute(any(SendMessage.class))).thenReturn(message);
 
     // When
     telegramMessageSender.sendResponses();
 
-    var captor = ArgumentCaptor.forClass(EditableMarkupMessage.class);
-    // Then
-    verify(messagePersistenceQueue).add(captor.capture());
-    var editableMessage = captor.getValue();
+    assertThat(messagePersistenceQueue).hasSize(1);
+    var editableMessage = messagePersistenceQueue.getFirst();
 
-    assertThat(editableMessage.getMessageId()).isEqualTo(1);
     assertThat(editableMessage.getChatId()).isEqualTo(1);
+    assertThat(editableMessage.getMessageId()).isEqualTo(1);
   }
 }

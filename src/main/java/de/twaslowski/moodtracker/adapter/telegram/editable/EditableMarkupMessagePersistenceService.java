@@ -12,12 +12,12 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class EditMessageReplyMarkupPersistenceService {
+public class EditableMarkupMessagePersistenceService {
 
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
-  private final EditMessageReplyMarkupRepository editMessageReplyMarkupRepository;
   private final Queue<EditableMarkupMessage> editableMarkupMessageQueue;
+  private final EditableMarkupMessageService editableMarkupMessageService;
 
   @PostConstruct
   public void init() {
@@ -28,7 +28,7 @@ public class EditMessageReplyMarkupPersistenceService {
   private void persistEditMessageReplyMarkup() {
     if (!editableMarkupMessageQueue.isEmpty()) {
       var message = editableMarkupMessageQueue.remove();
-      editMessageReplyMarkupRepository.save(message);
+      editableMarkupMessageService.persist(message);
     }
   }
 }

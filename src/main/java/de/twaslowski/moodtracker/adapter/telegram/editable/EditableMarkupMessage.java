@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import java.time.ZonedDateTime;
 
 /**
  * In order to overwrite the previous Inline Keyboard, message IDs have to be stored.
@@ -28,4 +30,7 @@ public class EditableMarkupMessage {
 
   @NotNull
   private long messageId;
+
+  @CreationTimestamp
+  private ZonedDateTime creationTimestamp;
 }

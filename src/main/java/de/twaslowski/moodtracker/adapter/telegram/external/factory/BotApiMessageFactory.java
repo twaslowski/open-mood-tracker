@@ -7,24 +7,29 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 public class BotApiMessageFactory {
 
-  public static AnswerCallbackQuery createCallbackQueryAnswerResponse(TelegramResponse telegramResponse) {
-    return AnswerCallbackQuery.builder()
-        .text("Callback successfully processed")
-        .callbackQueryId(telegramResponse.getAnswerCallbackQueryId())
-        .showAlert(false)
-        .build();
-  }
+  // todo: Logic for EditMessageReplyMarkup can probably be performed here.
 
   public static SendMessage createTextResponse(TelegramTextResponse response) {
     return SendMessage.builder()
         .chatId(response.getChatId())
         .text(response.getText())
+        .build();
+  }
+
+  public static EditMessageReplyMarkup createEditMessageReplyMarkupResponse(TelegramResponse response) {
+    return EditMessageReplyMarkup.builder()
+        .chatId(response.getChatId())
+        .messageId(response.getEditableMessageId())
+        .replyMarkup(InlineKeyboardMarkup.builder()
+            .keyboard(generateInlineKeyboardRows((TelegramInlineKeyboardResponse) response))
+            .build())
         .build();
   }
 
@@ -37,6 +42,14 @@ public class BotApiMessageFactory {
         .replyMarkup(InlineKeyboardMarkup.builder()
             .keyboard(rows)
             .build())
+        .build();
+  }
+
+  public static AnswerCallbackQuery createCallbackQueryAnswerResponse(TelegramResponse telegramResponse) {
+    return AnswerCallbackQuery.builder()
+        .text("Callback successfully processed")
+        .callbackQueryId(telegramResponse.getAnswerCallbackQueryId())
+        .showAlert(false)
         .build();
   }
 

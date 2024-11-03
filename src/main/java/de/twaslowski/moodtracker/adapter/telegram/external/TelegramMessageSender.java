@@ -15,8 +15,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -54,20 +52,26 @@ public class TelegramMessageSender {
     }
   }
 
+  @SneakyThrows
   private void handleTextResponse(TelegramTextResponse response) {
-    executeUpdate(BotApiMessageFactory.createTextResponse(response));
+    telegramClient.execute(BotApiMessageFactory.createTextResponse(response));
     handleAnswerCallbackQuery(response);
   }
 
+  @SneakyThrows
   private void handleInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
-    var message = executeUpdate(BotApiMessageFactory.createInlineKeyboardResponse(response));
+    if (response.hasEditableMessageId()) {
+      var message = telegramClient.execute(BotApiMessageFactory.createEditMessageReplyMarkupResponse(response));
+    }
+    var message = telegramClient.execute(BotApiMessageFactory.createInlineKeyboardResponse(response));
     handleAnswerCallbackQuery(response);
     addToEditableMessagePersistenceQueue(message);
   }
 
+  @SneakyThrows
   private void handleAnswerCallbackQuery(TelegramResponse response) {
     if (response.hasAnswerCallbackQueryId()) {
-      executeUpdate(BotApiMessageFactory.createCallbackQueryAnswerResponse(response));
+      telegramClient.execute(BotApiMessageFactory.createCallbackQueryAnswerResponse(response));
     }
   }
 
@@ -78,15 +82,5 @@ public class TelegramMessageSender {
             .chatId(message.getChatId())
             .build()
     );
-  }
-
-  @SneakyThrows
-  private Message executeUpdate(SendMessage update) {
-    return telegramClient.execute(update);
-  }
-
-  @SneakyThrows
-  public void executeUpdate(AnswerCallbackQuery response) {
-    telegramClient.execute(response);
   }
 }
