@@ -1,6 +1,6 @@
 terraform {
   backend "kubernetes" {
-    secret_suffix = "${local.application_name}-state"
+    secret_suffix = "open-mood-tracker-state"
     namespace     = "arc-runner"
   }
 }
