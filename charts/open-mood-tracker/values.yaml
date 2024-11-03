@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: tobiaswaslowski/open-mood-tracker
-  pullPolicy: Never
+  pullPolicy: IfNotPresent
   tag: "latest"
 
 imagePullSecrets: []

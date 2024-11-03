@@ -90,4 +90,7 @@ jobs:
           terraform_version: 1.8.0
 
       - name: apply
-        run: terraform init && terraform apply -auto-approve
+        env:
+          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        run: |
+          ./scripts/deploy.sh
