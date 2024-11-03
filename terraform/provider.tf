@@ -16,3 +16,7 @@ terraform {
     }
   }
 }
+
+provider "kubernetes" {}
+
+provider "helm" {}
