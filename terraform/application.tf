@@ -26,6 +26,8 @@ resource "helm_release" "application" {
 
   values = [
     <<YAML
+    image:
+      tag: ${var.image_tag}
     environmentVariables:
       - name: SPRING_PROFILES_ACTIVE
         value: prod
