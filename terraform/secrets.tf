@@ -1,6 +1,6 @@
 resource "kubernetes_secret" "telegram_token" {
   metadata {
-    name = "telegram-token"
+    name      = "telegram-token"
     namespace = local.namespace
   }
 

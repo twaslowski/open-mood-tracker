@@ -1,8 +1,8 @@
 resource "helm_release" "postgres" {
-  name = "postgres"
-  repository = "oci://registry-1.docker.io/bitnamicharts"
-  chart = "postgresql"
-  namespace = local.namespace
+  name             = "postgres"
+  repository       = "oci://registry-1.docker.io/bitnamicharts"
+  chart            = "postgresql"
+  namespace        = local.namespace
   create_namespace = true
 
   values = [
@@ -19,8 +19,8 @@ resource "helm_release" "postgres" {
 }
 
 resource "helm_release" "application" {
-  chart = "../charts/open-mood-tracker"
-  name = "open-mood-tracker"
+  chart     = "../charts/open-mood-tracker"
+  name      = "open-mood-tracker"
   namespace = "open-mood-tracker"
 
   values = [
@@ -42,6 +42,6 @@ resource "helm_release" "application" {
     YAML
   ]
 
-  timeout = 150
+  timeout    = 150
   depends_on = [helm_release.postgres]
 }
