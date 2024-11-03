@@ -1,9 +1,8 @@
 resource "helm_release" "postgres" {
-  name             = "postgres"
-  repository       = "oci://registry-1.docker.io/bitnamicharts"
-  chart            = "postgresql"
-  namespace        = local.namespace
-  create_namespace = true
+  name       = "postgres"
+  repository = "oci://registry-1.docker.io/bitnamicharts"
+  chart      = "postgresql"
+  namespace  = local.namespace
 
   values = [
     <<YAML
@@ -16,6 +15,8 @@ resource "helm_release" "postgres" {
     nameOverride: postgres
   YAML
   ]
+
+  timeout = 600
 }
 
 resource "helm_release" "application" {

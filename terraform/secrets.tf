@@ -7,4 +7,6 @@ resource "kubernetes_secret" "telegram_token" {
   data = {
     telegram_token = var.telegram_token
   }
+
+  depends_on = [kubernetes_namespace.namespace]
 }
