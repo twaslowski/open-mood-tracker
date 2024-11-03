@@ -3,11 +3,16 @@ terraform {
     secret_suffix = "open-mood-tracker-state"
     namespace     = "arc-runner"
   }
-}
 
-provider "helm" {
-}
+  required_providers {
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.0"
+    }
 
-provider "kubernetes" {
-
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.0"
+    }
+  }
 }

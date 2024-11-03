@@ -42,6 +42,9 @@ resource "helm_release" "application" {
     YAML
   ]
 
-  timeout    = 150
-  depends_on = [helm_release.postgres]
+  timeout = 150
+  depends_on = [
+    helm_release.postgres,
+    kubernetes_secret.telegram_token
+  ]
 }
