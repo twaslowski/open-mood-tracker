@@ -7,6 +7,7 @@ on:
 jobs:
   compile_and_test:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.commits[0].message, '[skip build]')"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,6 +33,7 @@ jobs:
 
   build_docker_image:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.commits[0].message, '[skip build]')"
     needs: compile_and_test
     steps:
       - name: Checkout
@@ -79,10 +81,14 @@ jobs:
 
   deploy:
     runs-on: open-mood-tracker-arc
-    needs: build_docker_image
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: check-env
+        run: |
+          echo $KUBERNETES_SERVICE_HOST
+          echo $KUBERNETES_SERVICE_PORT
 
       # Required for Terraform action
       - name: Set up Node.js
