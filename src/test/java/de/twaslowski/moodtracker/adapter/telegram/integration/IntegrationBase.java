@@ -7,6 +7,7 @@ import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageRepository;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
 import de.twaslowski.moodtracker.entity.User;
@@ -75,6 +76,9 @@ public class IntegrationBase {
 
   @Autowired
   protected MetricRepository metricRepository;
+
+  @Autowired
+  protected EditableMarkupMessageRepository editableMarkupMessageRepository;
 
   protected Metric MOOD;
   protected Metric SLEEP;

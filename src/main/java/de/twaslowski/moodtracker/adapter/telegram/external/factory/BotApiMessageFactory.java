@@ -3,6 +3,7 @@ package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
@@ -14,8 +15,6 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 
 public class BotApiMessageFactory {
 
-  // todo: Logic for EditMessageReplyMarkup can probably be performed here.
-
   public static SendMessage createTextResponse(TelegramTextResponse response) {
     return SendMessage.builder()
         .chatId(response.getChatId())
@@ -23,10 +22,10 @@ public class BotApiMessageFactory {
         .build();
   }
 
-  public static EditMessageReplyMarkup createEditMessageReplyMarkupResponse(TelegramResponse response) {
+  public static EditMessageReplyMarkup createEditMessageReplyMarkupResponse(TelegramResponse response, EditableMarkupMessage message) {
     return EditMessageReplyMarkup.builder()
         .chatId(response.getChatId())
-        .messageId(response.getEditableMessageId())
+        .messageId(message.getMessageId())
         .replyMarkup(InlineKeyboardMarkup.builder()
             .keyboard(generateInlineKeyboardRows((TelegramInlineKeyboardResponse) response))
             .build())

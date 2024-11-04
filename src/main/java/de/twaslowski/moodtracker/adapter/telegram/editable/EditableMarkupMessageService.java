@@ -16,6 +16,11 @@ public class EditableMarkupMessageService {
     return editableMarkupMessageRepository.findById(chatId);
   }
 
+  public void deleteMessageForChatId(long chatId) {
+    log.info("Deleting editable message for chat {}", chatId);
+    editableMarkupMessageRepository.deleteById(chatId);
+  }
+
   public void persist(EditableMarkupMessage message) {
     log.info("Persisting editable message id {} for chat {}",
         message.getMessageId(), message.getChatId());

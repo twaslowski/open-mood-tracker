@@ -4,6 +4,7 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKey
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
+import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.BotApiMessageFactory;
 import jakarta.annotation.PostConstruct;
 import java.util.Queue;
@@ -15,6 +16,7 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -27,6 +29,7 @@ public class TelegramMessageSender {
   private final Queue<TelegramResponse> outgoingMessageQueue;
   private final Queue<EditableMarkupMessage> messagePersistenceQueue;
   private final TelegramClient telegramClient;
+  private final EditableMarkupMessageService editableMarkupMessageService;
 
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
@@ -38,8 +41,13 @@ public class TelegramMessageSender {
 
   public void sendResponses() {
     if (!outgoingMessageQueue.isEmpty()) {
+      log.info("Processing outgoing response ...");
       var response = outgoingMessageQueue.remove();
-      handleResponse(response);
+      try {
+        handleResponse(response);
+      } catch (Exception e) {
+        log.error("Error processing response", e);
+      }
     }
   }
 
@@ -54,18 +62,29 @@ public class TelegramMessageSender {
 
   @SneakyThrows
   private void handleTextResponse(TelegramTextResponse response) {
+    // editableMarkupMessageService.findMessageForChatId(response.getChatId())
+    //     .ifPresent(message -> deleteTemporaryMessage(message));
     telegramClient.execute(BotApiMessageFactory.createTextResponse(response));
     handleAnswerCallbackQuery(response);
   }
 
   @SneakyThrows
   private void handleInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
-    if (response.hasEditableMessageId()) {
-      var message = telegramClient.execute(BotApiMessageFactory.createEditMessageReplyMarkupResponse(response));
-    }
-    var message = telegramClient.execute(BotApiMessageFactory.createInlineKeyboardResponse(response));
+    editableMarkupMessageService.findMessageForChatId(response.getChatId())
+        .ifPresentOrElse(
+            message -> editExistingInlineKeyboard(response, message),
+            () -> createNewInlineKeyboardResponse(response));
+
     handleAnswerCallbackQuery(response);
-    addToEditableMessagePersistenceQueue(message);
+  }
+
+  @SneakyThrows
+  private void deleteTemporaryMessage(EditableMarkupMessage message) {
+    editableMarkupMessageService.deleteMessageForChatId(message.getChatId());
+    telegramClient.execute(DeleteMessage.builder()
+        .messageId(message.getMessageId())
+        .chatId(String.valueOf(message.getChatId()))
+        .build());
   }
 
   @SneakyThrows
@@ -75,11 +94,22 @@ public class TelegramMessageSender {
     }
   }
 
+  @SneakyThrows
+  private void createNewInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
+    var message = telegramClient.execute(BotApiMessageFactory.createInlineKeyboardResponse(response));
+    addToEditableMessagePersistenceQueue(message);
+  }
+
+  @SneakyThrows
+  private void editExistingInlineKeyboard(TelegramInlineKeyboardResponse response, EditableMarkupMessage message) {
+    telegramClient.execute(BotApiMessageFactory.createEditMessageReplyMarkupResponse(response, message));
+  }
+
   private void addToEditableMessagePersistenceQueue(Message message) {
     messagePersistenceQueue.add(
         EditableMarkupMessage.builder()
-            .messageId(message.getMessageId())
             .chatId(message.getChatId())
+            .messageId(message.getMessageId())
             .build()
     );
   }

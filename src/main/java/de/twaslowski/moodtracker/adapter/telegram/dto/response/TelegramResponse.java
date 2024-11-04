@@ -22,9 +22,6 @@ public abstract class TelegramResponse {
   @Nullable
   protected String answerCallbackQueryId;
 
-  @Nullable
-  protected Integer editableMessageId;
-
   public enum ResponseType {
     TEXT,
     INLINE_KEYBOARD
@@ -46,9 +43,5 @@ public abstract class TelegramResponse {
 
   public boolean hasAnswerCallbackQueryId() {
     return answerCallbackQueryId != null;
-  }
-
-  public boolean hasEditableMessageId() {
-    return editableMessageId != null;
   }
 }
