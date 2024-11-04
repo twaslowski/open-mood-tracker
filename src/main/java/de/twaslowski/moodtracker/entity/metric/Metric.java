@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.entity.metric;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -49,6 +50,7 @@ public class Metric {
   private Map<Integer, String> labels;
 
   @CreationTimestamp
+  @Column(updatable = false)
   private LocalDateTime creationTimestamp;
 
   @UpdateTimestamp

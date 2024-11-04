@@ -1,6 +1,7 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.vdurmont.emoji.EmojiParser;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import java.util.LinkedHashMap;
@@ -17,12 +18,13 @@ public class CallbackGenerator {
 
   private final ObjectMapper objectMapper;
 
+  @SneakyThrows
   public LinkedHashMap<String, String> createCallbacks(Metric metric) {
     var orderedCallbacks = getCallbackMappingForMetric(metric);
 
     LinkedHashMap<String, String> callbacks = new LinkedHashMap<>();
     for (var entry : orderedCallbacks.entrySet()) {
-      callbacks.put(entry.getValue(), safeWriteValueAsString(entry.getKey()));
+      callbacks.put(entry.getValue(), objectMapper.writeValueAsString(entry.getKey()));
     }
     return callbacks;
   }
@@ -33,14 +35,9 @@ public class CallbackGenerator {
     for (Entry<Integer, String> entry : metric.getLabels().entrySet()) {
       sortedMap.put(
           metric.datapointWithValue(entry.getKey()),
-          entry.getValue()
+          EmojiParser.parseToUnicode(entry.getValue())
       );
     }
     return sortedMap;
-  }
-
-  @SneakyThrows
-  private String safeWriteValueAsString(MetricDatapoint metric) {
-    return objectMapper.writeValueAsString(metric);
   }
 }
