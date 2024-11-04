@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
@@ -31,6 +32,15 @@ public class BotApiMessageFactory {
             .build())
         .build();
   }
+
+  public static EditMessageText createEditMessageTextResponse(TelegramResponse response, EditableMarkupMessage message) {
+    return EditMessageText.builder()
+        .chatId(response.getChatId())
+        .text(response.getText())
+        .messageId(message.getMessageId())
+        .build();
+  }
+
 
   public static SendMessage createInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
     var rows = generateInlineKeyboardRows(response);

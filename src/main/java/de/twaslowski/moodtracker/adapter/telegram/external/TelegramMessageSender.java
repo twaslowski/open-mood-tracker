@@ -62,10 +62,10 @@ public class TelegramMessageSender {
 
   @SneakyThrows
   private void handleTextResponse(TelegramTextResponse response) {
-    // editableMarkupMessageService.findMessageForChatId(response.getChatId())
-    //     .ifPresent(message -> deleteTemporaryMessage(message));
+     editableMarkupMessageService.findMessageForChatId(response.getChatId())
+         .ifPresent(this::deleteTemporaryMessage);
     telegramClient.execute(BotApiMessageFactory.createTextResponse(response));
-    handleAnswerCallbackQuery(response);
+    answerCallbackQuery(response);
   }
 
   @SneakyThrows
@@ -75,20 +75,20 @@ public class TelegramMessageSender {
             message -> editExistingInlineKeyboard(response, message),
             () -> createNewInlineKeyboardResponse(response));
 
-    handleAnswerCallbackQuery(response);
+    answerCallbackQuery(response);
   }
 
   @SneakyThrows
   private void deleteTemporaryMessage(EditableMarkupMessage message) {
     editableMarkupMessageService.deleteMessageForChatId(message.getChatId());
-    telegramClient.execute(DeleteMessage.builder()
-        .messageId(message.getMessageId())
-        .chatId(String.valueOf(message.getChatId()))
-        .build());
+    // telegramClient.execute(DeleteMessage.builder()
+    //     .messageId(message.getMessageId())
+    //     .chatId(String.valueOf(message.getChatId()))
+    //     .build());
   }
 
   @SneakyThrows
-  private void handleAnswerCallbackQuery(TelegramResponse response) {
+  private void answerCallbackQuery(TelegramResponse response) {
     if (response.hasAnswerCallbackQueryId()) {
       telegramClient.execute(BotApiMessageFactory.createCallbackQueryAnswerResponse(response));
     }
@@ -102,6 +102,7 @@ public class TelegramMessageSender {
 
   @SneakyThrows
   private void editExistingInlineKeyboard(TelegramInlineKeyboardResponse response, EditableMarkupMessage message) {
+    telegramClient.execute(BotApiMessageFactory.createEditMessageTextResponse(response, message));
     telegramClient.execute(BotApiMessageFactory.createEditMessageReplyMarkupResponse(response, message));
   }
 
