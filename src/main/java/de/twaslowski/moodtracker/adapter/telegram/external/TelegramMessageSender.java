@@ -62,8 +62,10 @@ public class TelegramMessageSender {
 
   @SneakyThrows
   private void handleTextResponse(TelegramTextResponse response) {
-     editableMarkupMessageService.findMessageForChatId(response.getChatId())
-         .ifPresent(this::deleteTemporaryMessage);
+    if (response.isTerminalAction()) {
+      editableMarkupMessageService.findMessageForChatId(response.getChatId())
+          .ifPresent(this::deleteTemporaryMessage);
+    }
     telegramClient.execute(BotApiMessageFactory.createTextResponse(response));
     answerCallbackQuery(response);
   }
@@ -81,10 +83,7 @@ public class TelegramMessageSender {
   @SneakyThrows
   private void deleteTemporaryMessage(EditableMarkupMessage message) {
     editableMarkupMessageService.deleteMessageForChatId(message.getChatId());
-    // telegramClient.execute(DeleteMessage.builder()
-    //     .messageId(message.getMessageId())
-    //     .chatId(String.valueOf(message.getChatId()))
-    //     .build());
+    telegramClient.execute(BotApiMessageFactory.createDeleteMessageResponse(message));
   }
 
   @SneakyThrows

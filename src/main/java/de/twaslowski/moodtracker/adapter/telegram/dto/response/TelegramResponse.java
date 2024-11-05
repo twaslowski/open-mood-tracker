@@ -19,6 +19,10 @@ public abstract class TelegramResponse {
   @NonNull
   protected String text;
 
+  // If an action is terminal, it ends an interaction with the user.
+  @NonNull
+  protected boolean isTerminalAction = false;
+
   @Nullable
   protected String answerCallbackQueryId;
 

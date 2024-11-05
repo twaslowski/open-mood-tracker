@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -41,7 +42,6 @@ public class BotApiMessageFactory {
         .build();
   }
 
-
   public static SendMessage createInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
     var rows = generateInlineKeyboardRows(response);
 
@@ -73,5 +73,12 @@ public class BotApiMessageFactory {
       inlineKeyboardButtons.add(keyboardButtons);
     }
     return inlineKeyboardButtons;
+  }
+
+  public static DeleteMessage createDeleteMessageResponse(EditableMarkupMessage message) {
+    return DeleteMessage.builder()
+        .messageId(message.getMessageId())
+        .chatId(String.valueOf(message.getChatId()))
+        .build();
   }
 }

@@ -61,6 +61,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     log.info("Completing record for user with chatId {}", update.getChatId());
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
+        .isTerminalAction(true)
         .answerCallbackQueryId(update.getCallbackQueryId())
         .text(messageUtil.getMessage("command.record.saved"))
         .build();

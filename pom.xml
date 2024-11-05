@@ -47,7 +47,6 @@
             <scope>provided</scope>
         </dependency>
 
-
         <!-- Database -->
         <dependency>
             <groupId>org.hibernate.validator</groupId>
@@ -91,6 +90,12 @@
             <groupId>org.telegram</groupId>
             <artifactId>telegrambots-client</artifactId>
             <version>7.10.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.vdurmont</groupId>
+            <artifactId>emoji-java</artifactId>
+            <version>5.1.1</version>
         </dependency>
 
         <!-- Test -->
