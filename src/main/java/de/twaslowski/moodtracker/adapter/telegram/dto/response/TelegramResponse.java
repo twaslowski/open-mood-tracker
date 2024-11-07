@@ -13,17 +13,12 @@ public abstract class TelegramResponse {
   public static final String UNKNOWN_COMMAND_RESPONSE = "Unfortunately, I cannot process that message.";
   public static final String ERROR_RESPONSE = "An error occurred. Please try again later.";
 
-  @NonNull
   protected long chatId;
-
-  @NonNull
   protected String text;
 
   // If an action is terminal, it ends an interaction with the user.
-  @NonNull
   protected boolean isTerminalAction = false;
 
-  @Nullable
   protected String answerCallbackQueryId;
 
   public enum ResponseType {
