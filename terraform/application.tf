@@ -1,9 +1,8 @@
 resource "helm_release" "postgres" {
-  name = "postgres"
+  name       = "postgres"
   repository = "oci://registry-1.docker.io/bitnamicharts"
-  chart = "postgresql"
-  namespace = local.namespace
-  create_namespace = true
+  chart      = "postgresql"
+  namespace  = local.namespace
 
   values = [
     <<YAML
@@ -16,15 +15,19 @@ resource "helm_release" "postgres" {
     nameOverride: postgres
   YAML
   ]
+
+  timeout = 600
 }
 
 resource "helm_release" "application" {
-  chart = "../charts/open-mood-tracker"
-  name = "open-mood-tracker"
-  namespace = "open-mood-tracker"
+  chart     = "../charts/open-mood-tracker"
+  name      = "open-mood-tracker"
+  namespace = local.namespace
 
   values = [
     <<YAML
+    image:
+      tag: ${var.image_tag}
     environmentVariables:
       - name: SPRING_PROFILES_ACTIVE
         value: prod
@@ -43,5 +46,8 @@ resource "helm_release" "application" {
   ]
 
   timeout = 150
-  depends_on = [helm_release.postgres]
+  depends_on = [
+    helm_release.postgres,
+    kubernetes_secret.telegram_token
+  ]
 }

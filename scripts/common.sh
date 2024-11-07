@@ -25,8 +25,14 @@ function build() {
   docker build -t "open-mood-tracker:$TAG" "$ROOT"
 }
 
-function terraform_apply() {
-  cd terraform || exit
+function deploy() {
+  TAG="sha-$(git rev-parse --short HEAD)"
+
+  export TF_VAR_image_tag="$TAG"
+  export TF_VAR_telegram_token="$TELEGRAM_TOKEN"
+
+  pushd terraform || exit
+  terraform init
   terraform apply -auto-approve
 }
 

@@ -1,3 +1,4 @@
 locals {
-  namespace = "open-mood-tracker"
+  application_name = "open-mood-tracker"
+  namespace        = local.application_name
 }
