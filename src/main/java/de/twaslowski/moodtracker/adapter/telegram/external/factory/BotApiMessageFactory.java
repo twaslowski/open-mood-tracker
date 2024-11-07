@@ -3,51 +3,46 @@ package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map.Entry;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
-import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.message.Message;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 public class BotApiMessageFactory {
 
-  public static List<BotApiMethod<?>> createResponse(TelegramResponse response) {
-    List<BotApiMethod<?>> responses = new ArrayList<>();
-    switch (response.getResponseType()) {
-      case TEXT -> responses.add(createTextResponse((TelegramTextResponse) response));
-      case INLINE_KEYBOARD ->
-          responses.add(createInlineKeyboardResponse((TelegramInlineKeyboardResponse) response));
-      default -> throw new IllegalArgumentException("Unknown response type");
-    }
-
-    if (response.getAnswerCallbackQueryId() != null) {
-      responses.add(createCallbackQueryAnswerResponse(response.getAnswerCallbackQueryId()));
-    }
-
-    return responses;
-  }
-
-  private static BotApiMethod<Boolean> createCallbackQueryAnswerResponse(String callbackQueryId) {
-    return AnswerCallbackQuery.builder()
-        .text("Callback successfully processed")
-        .callbackQueryId(callbackQueryId)
-        .showAlert(false)
-        .build();
-  }
-
-  private static BotApiMethod<Message> createTextResponse(TelegramTextResponse response) {
+  public static SendMessage createTextResponse(TelegramTextResponse response) {
     return SendMessage.builder()
         .chatId(response.getChatId())
         .text(response.getText())
         .build();
   }
 
-  private static BotApiMethod<Message> createInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
+  public static EditMessageReplyMarkup createEditMessageReplyMarkupResponse(TelegramResponse response, EditableMarkupMessage message) {
+    return EditMessageReplyMarkup.builder()
+        .chatId(response.getChatId())
+        .messageId(message.getMessageId())
+        .replyMarkup(InlineKeyboardMarkup.builder()
+            .keyboard(generateInlineKeyboardRows((TelegramInlineKeyboardResponse) response))
+            .build())
+        .build();
+  }
+
+  public static EditMessageText createEditMessageTextResponse(TelegramResponse response, EditableMarkupMessage message) {
+    return EditMessageText.builder()
+        .chatId(response.getChatId())
+        .text(response.getText())
+        .messageId(message.getMessageId())
+        .build();
+  }
+
+  public static SendMessage createInlineKeyboardResponse(TelegramInlineKeyboardResponse response) {
     var rows = generateInlineKeyboardRows(response);
 
     return SendMessage.builder()
@@ -56,6 +51,14 @@ public class BotApiMessageFactory {
         .replyMarkup(InlineKeyboardMarkup.builder()
             .keyboard(rows)
             .build())
+        .build();
+  }
+
+  public static AnswerCallbackQuery createCallbackQueryAnswerResponse(TelegramResponse telegramResponse) {
+    return AnswerCallbackQuery.builder()
+        .text("Callback successfully processed")
+        .callbackQueryId(telegramResponse.getAnswerCallbackQueryId())
+        .showAlert(false)
         .build();
   }
 
@@ -70,5 +73,12 @@ public class BotApiMessageFactory {
       inlineKeyboardButtons.add(keyboardButtons);
     }
     return inlineKeyboardButtons;
+  }
+
+  public static DeleteMessage createDeleteMessageResponse(EditableMarkupMessage message) {
+    return DeleteMessage.builder()
+        .messageId(message.getMessageId())
+        .chatId(String.valueOf(message.getChatId()))
+        .build();
   }
 }

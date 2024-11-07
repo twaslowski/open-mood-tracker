@@ -32,13 +32,15 @@ public class MetricConfiguration {
   public List<Metric> defaultMetrics() {
     return Arrays.stream(DefaultMetrics.values())
         .map(DefaultMetrics::getMetric)
-        .map(this::getOrCreate)
+        .map(this::createOrUpdate)
         .toList();
   }
 
-  private Metric getOrCreate(Metric metric) {
+  private Metric createOrUpdate(Metric metric) {
+    // If the metric is already present in the database, update it; otherwise, create a new one
     return metricRepository.findByName(metric.getName())
-        .orElseGet(() -> metricRepository.save(metric));
+        .map(metricRepository::save)
+        .orElse(metricRepository.save(metric));
   }
 
   public List<MetricDatapoint> defaultBaselineConfiguration() {

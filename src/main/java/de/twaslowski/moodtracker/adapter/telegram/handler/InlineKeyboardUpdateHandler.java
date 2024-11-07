@@ -7,6 +7,7 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.metric.Metric;
@@ -26,9 +27,9 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
 
   private final ObjectMapper objectMapper;
   private final RecordService recordService;
+  private final UserService userService;
   private final CallbackGenerator callbackGenerator;
   private final MessageUtil messageUtil;
-  private final UserService userService;
 
   @Override
   @SneakyThrows
@@ -60,6 +61,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     log.info("Completing record for user with chatId {}", update.getChatId());
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
+        .isTerminalAction(true)
         .answerCallbackQueryId(update.getCallbackQueryId())
         .text(messageUtil.getMessage("command.record.saved"))
         .build();

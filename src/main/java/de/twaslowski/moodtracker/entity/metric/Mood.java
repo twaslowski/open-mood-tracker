@@ -15,13 +15,13 @@ public class Mood extends Metric {
   private static final SortOrder SORT_ORDER = SortOrder.DESC;
 
   private static final Map<Integer, String> LABELS = Map.of(
-      3, "SEVERELY_MANIC",
-      2, "MANIC",
-      1, "HYPOMANIC",
-      0, "NEUTRAL",
-      -1, "MILDLY_DEPRESSED",
-      -2, "MODERATELY_DEPRESSED",
-      -3, "SEVERELY_DEPRESSED"
+      3, "Strongly Manic",
+      2, "Manic",
+      1, "Hypomanic",
+      0, "Neutral",
+      -1, "Mildly Depressed",
+      -2, "Depressed",
+      -3, "Strongly Depressed"
   );
 
   public static final Metric INSTANCE = Metric.builder()
