@@ -3,6 +3,7 @@ package de.twaslowski.moodtracker.service;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import java.util.Comparator;
 import java.util.Optional;
@@ -59,5 +60,16 @@ public class RecordService {
     return record.getIncompleteMetricIds().stream()
         .map(metricService::getMetricById)
         .findFirst();
+  }
+
+  public String stringifyRecord(Record record) {
+    var result = new StringBuilder();
+    for (MetricDatapoint value : record.getValues()) {
+      result.append(metricService.getMetricName(value.metricId()));
+      result.append(": ");
+      result.append(value.value());
+      result.append("\n");
+    }
+    return result.toString();
   }
 }

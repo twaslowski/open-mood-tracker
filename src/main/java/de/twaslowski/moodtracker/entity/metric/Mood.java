@@ -4,7 +4,7 @@ import java.util.Map;
 
 public class Mood extends Metric {
 
-  public static final String NAME = "MOOD";
+  public static final String NAME = "Mood";
   private static final String PROMPT = "How do you feel today?";
 
   private static final Integer DEFAULT_OWNER = 1;

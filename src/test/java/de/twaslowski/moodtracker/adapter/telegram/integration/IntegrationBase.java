@@ -33,8 +33,8 @@ public class IntegrationBase {
     recordRepository.deleteAll();
     configurationRepository.deleteAll();
 
-    MOOD = metricRepository.findByName("MOOD").orElseThrow();
-    SLEEP = metricRepository.findByName("SLEEP").orElseThrow();
+    MOOD = metricRepository.findByName("Mood").orElseThrow();
+    SLEEP = metricRepository.findByName("Sleep").orElseThrow();
   }
 
   @AfterEach
@@ -87,9 +87,16 @@ public class IntegrationBase {
     return userRepository.save(user);
   }
 
-  protected void assertMessageWithTextSent(String message) {
+  protected void assertMessageWithExactTextSent(String message) {
     assertThat(outgoingMessageQueue.stream().anyMatch(
         response -> message.equals(response.getText())
     )).isTrue();
   }
+
+  protected void assertMessageContainingTextSent(String message) {
+    assertThat(outgoingMessageQueue.stream().anyMatch(
+        response -> message.contains(response.getText())
+    )).isTrue();
+  }
+
 }

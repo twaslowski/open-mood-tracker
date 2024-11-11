@@ -138,7 +138,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
               )
           );
           assertThat(recordService.findIncompleteRecordsForUser(user.getId())).isEmpty();
-          assertMessageWithTextSent(messageUtil.getMessage("command.record.saved"));
+          assertMessageWithExactTextSent(messageUtil.getMessage("command.record.saved", recordService.stringifyRecord(record)));
         }
     );
   }

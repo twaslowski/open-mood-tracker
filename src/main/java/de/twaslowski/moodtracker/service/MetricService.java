@@ -30,6 +30,10 @@ public class MetricService {
         .orElseThrow(() -> new MetricNotFoundException("Could not find Metric with id: " + id));
   }
 
+  public String getMetricName(long id) {
+    return getMetricById(id).getName();
+  }
+
   public List<MetricDatapoint> getDefaultBaselineConfiguration() {
     return metricConfiguration.defaultBaselineConfiguration();
   }

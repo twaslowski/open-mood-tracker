@@ -56,7 +56,7 @@ public class BaselineIntegrationTest extends IntegrationBase {
     assertThat(record.getValues()).isEqualTo(List.of(Mood.INSTANCE.defaultDatapoint()));
     assertThat(record.getUserId()).isEqualTo(userRepository.findByTelegramId(1L).get().getId());
 
-    assertMessageWithTextSent(messageUtil.getMessage("notification.baseline.created"));
+    assertMessageWithExactTextSent(messageUtil.getMessage("notification.baseline.created"));
   }
 
   @Test

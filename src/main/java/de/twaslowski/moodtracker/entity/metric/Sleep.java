@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 
 public class Sleep extends Metric {
 
-  public static final String NAME = "SLEEP";
+  public static final String NAME = "Sleep";
   private static final String PROMPT = "How much did you sleep today?";
 
   private static final Integer DEFAULT_OWNER = 1;

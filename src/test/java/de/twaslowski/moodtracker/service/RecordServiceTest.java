@@ -86,4 +86,23 @@ public class RecordServiceTest {
     assertThat(incompleteRecord).isPresent();
     assertThat(incompleteRecord.get()).isEqualTo(record2);
   }
+
+  @Test
+  void shouldStringifyRecord() {
+    // given
+    var record = Record.builder()
+        .userId(1)
+        .values(List.of(
+            Sleep.INSTANCE.datapointWithValue(5)
+        ))
+        .build();
+
+    when(metricService.getMetricName(2)).thenReturn(Sleep.NAME);
+
+    // when
+    var stringifiedRecord = recordService.stringifyRecord(record);
+
+    // then
+    assertThat(stringifiedRecord).isEqualToIgnoringCase("Sleep: 5\n");
+  }
 }

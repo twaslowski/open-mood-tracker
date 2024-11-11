@@ -7,7 +7,6 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.metric.Metric;
@@ -54,16 +53,16 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
         record.getId(), receivedMetric.metricId(), receivedMetric.value());
     return recordService.getNextIncompleteMetric(record)
         .map(nextMetric -> sendNextMetric(update, nextMetric))
-        .orElseGet(() -> completeRecord(update));
+        .orElseGet(() -> completeRecord(update, record));
   }
 
-  private TelegramResponse completeRecord(TelegramInlineKeyboardUpdate update) {
+  private TelegramResponse completeRecord(TelegramInlineKeyboardUpdate update, Record record) {
     log.info("Completing record for user with chatId {}", update.getChatId());
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
         .isTerminalAction(true)
         .answerCallbackQueryId(update.getCallbackQueryId())
-        .text(messageUtil.getMessage("command.record.saved"))
+        .text(messageUtil.getMessage("command.record.saved", recordService.stringifyRecord(record)))
         .build();
   }
 
