@@ -10,14 +10,17 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageRepository;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
+import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationService;
+import de.twaslowski.moodtracker.adapter.telegram.scheduled.SchedulerConfiguration;
 import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.repository.ConfigurationRepository;
 import de.twaslowski.moodtracker.repository.MetricRepository;
+import de.twaslowski.moodtracker.repository.NotificationRepository;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import de.twaslowski.moodtracker.service.RecordService;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +38,9 @@ public class IntegrationBase {
 
     MOOD = metricRepository.findByName("Mood").orElseThrow();
     SLEEP = metricRepository.findByName("Sleep").orElseThrow();
+
+    outgoingMessageQueue.clear();
+    incomingMessageQueue.clear();
   }
 
   @AfterEach
@@ -45,10 +51,10 @@ public class IntegrationBase {
   }
 
   @Autowired
-  protected Queue<TelegramUpdate> incomingMessageQueue;
+  protected BlockingQueue<TelegramUpdate> incomingMessageQueue;
 
   @Autowired
-  protected Queue<TelegramResponse> outgoingMessageQueue;
+  protected BlockingQueue<TelegramResponse> outgoingMessageQueue;
 
   @Autowired
   protected UserRepository userRepository;
@@ -80,6 +86,15 @@ public class IntegrationBase {
   @Autowired
   protected EditableMarkupMessageRepository editableMarkupMessageRepository;
 
+  @Autowired
+  protected NotificationRepository notificationRepository;
+
+  @Autowired
+  protected SchedulerConfiguration schedulerConfiguration;
+
+  @Autowired
+  protected NotificationService notificationService;
+
   protected Metric MOOD;
   protected Metric SLEEP;
 
@@ -98,5 +113,4 @@ public class IntegrationBase {
         response -> message.contains(response.getText())
     )).isTrue();
   }
-
 }

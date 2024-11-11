@@ -5,6 +5,7 @@ import de.twaslowski.moodtracker.adapter.telegram.exception.NoTelegramTokenProvi
 import de.twaslowski.moodtracker.adapter.telegram.exception.RequiredDataMissingException;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.TelegramUpdateFactory;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +24,9 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 @Profile("!test")
 public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleThreadUpdateConsumer {
 
-  private final Queue<TelegramUpdate> incomingMessageQueue;
+  private final BlockingQueue<TelegramUpdate> incomingMessageQueue;
 
-  @Value("${mood-tracker.telegram.bot.token}")
+  @Value("${telegram.bot.token}")
   private String botToken;
 
   @Override

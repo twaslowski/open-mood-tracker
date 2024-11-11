@@ -8,6 +8,7 @@ import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.BotApiMessageFactory;
 import jakarta.annotation.PostConstruct;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -16,7 +17,6 @@ import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
 
@@ -26,7 +26,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 @Profile("!test")
 public class TelegramMessageSender {
 
-  private final Queue<TelegramResponse> outgoingMessageQueue;
+  private final BlockingQueue<TelegramResponse> outgoingMessageQueue;
   private final Queue<EditableMarkupMessage> messagePersistenceQueue;
   private final TelegramClient telegramClient;
   private final EditableMarkupMessageService editableMarkupMessageService;

@@ -38,25 +38,15 @@ public class UserService {
         });
   }
 
-  public Configuration getUserConfiguration(long userId) {
-    return userRepository.findById(userId)
-        .map(User::getConfiguration)
-        .orElseThrow(() -> new IllegalStateException("User not found"));
-  }
-
-  public List<Long> getTrackedMetrics(long userId) {
-    return userRepository.findById(userId)
-        .map(user -> user.getConfiguration().getTrackedMetricIds())
-        .orElseThrow(() -> new UserNotFoundException(userId));
+  public long getTelegramId(long telegramId) {
+    return userRepository.findById(telegramId)
+        .map(User::getTelegramId)
+        .orElseThrow(() -> new UserNotFoundException(telegramId));
   }
 
   public User findByTelegramId(long telegramId) {
     return userRepository.findByTelegramId(telegramId)
         .orElseThrow(() -> new UserNotFoundException(telegramId));
-  }
-
-  public List<User> findAllUsersWithNotifications() {
-    return userRepository.findAllByNotificationsEnabledIsTrue();
   }
 
   public List<User> findAutoBaselineEligibleUsers() {

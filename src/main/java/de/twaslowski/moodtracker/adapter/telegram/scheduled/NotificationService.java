@@ -1,36 +1,32 @@
 package de.twaslowski.moodtracker.adapter.telegram.scheduled;
 
-import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.entity.Notification;
 import de.twaslowski.moodtracker.service.UserService;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-@Service
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
+@Service
 public class NotificationService {
 
+  private final BlockingQueue<TelegramResponse> outgoingMessageQueue;
   private final UserService userService;
-  private final Queue<TelegramResponse> outgoingMessageQueue;
-  private final MessageUtil messageUtil;
 
-  @Scheduled(cron = "${telegram.notifications.cron}")
-  public void sendRecordingReminder() {
-    userService.findAllUsersWithNotifications().forEach(user -> {
-      log.info("Sending recording reminder to user {}", user.getId());
-      outgoingMessageQueue.add(createRecordingReminder(user.getId()));
-    });
+  public void sendNotification(Notification notification) {
+    log.info("Sending notification with id {}", notification.getId());
+    outgoingMessageQueue.add(createTelegramResponse(notification));
   }
 
-  private TelegramResponse createRecordingReminder(long chatId) {
+  private TelegramResponse createTelegramResponse(Notification notification) {
+    var chatId = userService.getTelegramId(notification.getUserId());
     return TelegramTextResponse.builder()
         .chatId(chatId)
-        .text(messageUtil.getMessage("notification.reminder"))
+        .text(notification.getMessage())
         .build();
   }
 }

@@ -7,7 +7,7 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.exception.RequiredDataMissingException;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.TelegramUpdateFactory;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -24,7 +24,7 @@ class TelegramPollerTest {
   private TelegramPoller telegramPoller;
 
   @Mock
-  private Queue<TelegramUpdate> incomingQueue;
+  private BlockingQueue<TelegramUpdate> incomingQueue;
 
   @Test
   void shouldAddUpdateToIncomingQueue() {

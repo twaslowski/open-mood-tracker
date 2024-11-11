@@ -12,10 +12,10 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextRespo
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,9 +32,9 @@ public class TelegramMessageSenderTest {
   private final TelegramClient telegramClient = mock(TelegramClient.class);
   private final EditableMarkupMessageService editableMarkupMessageService = mock(EditableMarkupMessageService.class);
 
-  private final Queue<TelegramResponse> outgoingQueue = new LinkedList<>();
+  private final BlockingQueue<TelegramResponse> outgoingQueue = new LinkedBlockingQueue<>();
 
-  private final LinkedList<EditableMarkupMessage> messagePersistenceQueue = new LinkedList<>();
+  private final BlockingQueue<EditableMarkupMessage> messagePersistenceQueue = new LinkedBlockingQueue<>();
 
   private final TelegramMessageSender telegramMessageSender = new TelegramMessageSender(
       outgoingQueue,
@@ -89,7 +89,7 @@ public class TelegramMessageSenderTest {
     telegramMessageSender.sendResponses();
 
     assertThat(messagePersistenceQueue).hasSize(1);
-    var editableMessage = messagePersistenceQueue.getFirst();
+    var editableMessage = messagePersistenceQueue.take();
 
     assertThat(editableMessage.getChatId()).isEqualTo(1);
     assertThat(editableMessage.getMessageId()).isEqualTo(1);

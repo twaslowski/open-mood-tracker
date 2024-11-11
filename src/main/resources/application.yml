@@ -24,14 +24,11 @@ spring:
   flyway:
     schemas: mood-tracker
 
-mood_tracker:
-  telegram:
-    bot:
-      token: ${TELEGRAM_TOKEN}
-    notifications:
-      cron: 0 18 * * *
-    auto-baseline:
-      cron: 0 22 * * *
+telegram:
+  bot:
+    token: ${TELEGRAM_TOKEN}
+  auto-baseline:
+    cron: 0 22 * * * *
 
 management:
   endpoints:

@@ -9,7 +9,6 @@ public class ConfigurationSpec {
     return Configuration.builder()
         .id(1)
         .baselineMetrics(List.of(Mood.INSTANCE.defaultDatapoint()))
-        .autoBaselineEnabled(true)
-        .notificationsEnabled(true);
+        .autoBaselineEnabled(true);
   }
 }

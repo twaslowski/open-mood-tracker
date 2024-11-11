@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.config.telegram;
+package de.twaslowski.moodtracker.adapter.telegram.config;
 
 import java.util.Locale;
 import org.springframework.context.MessageSource;

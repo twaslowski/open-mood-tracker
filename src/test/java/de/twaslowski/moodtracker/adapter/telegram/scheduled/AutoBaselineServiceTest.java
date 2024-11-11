@@ -13,6 +13,7 @@ import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -32,7 +33,7 @@ class AutoBaselineServiceTest {
   private MessageUtil messageUtil;
 
   @Mock
-  private Queue<TelegramResponse> outgoingMessageQueue;
+  private BlockingQueue<TelegramResponse> outgoingMessageQueue;
 
   @InjectMocks
   private AutoBaselineService autoBaselineService;

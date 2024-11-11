@@ -5,7 +5,7 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
-import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -18,7 +18,7 @@ public class AutoBaselineService {
 
   private final UserService userService;
   private final RecordService recordService;
-  private final Queue<TelegramResponse> outgoingMessageQueue;
+  private final BlockingQueue<TelegramResponse> outgoingMessageQueue;
   private final MessageUtil messageUtil;
 
   @Scheduled(cron = "${telegram.auto-baseline.cron}")

@@ -25,8 +25,6 @@ public class Configuration {
   @GeneratedValue(generator = "configuration_id_seq")
   private long id;
 
-  private boolean notificationsEnabled;
-
   private boolean autoBaselineEnabled;
 
   @JdbcTypeCode(SqlTypes.JSON)
@@ -37,7 +35,6 @@ public class Configuration {
 
   public static Configuration.ConfigurationBuilder defaults() {
     return Configuration.builder()
-        .notificationsEnabled(true)
         .autoBaselineEnabled(false);
   }
 

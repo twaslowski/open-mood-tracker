@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.config.telegram;
+package de.twaslowski.moodtracker.adapter.telegram.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 public class TelegramClientConfiguration {
 
   @Bean
-  public TelegramClient telegramClient(@Value("${mood-tracker.telegram.bot.token}") String token) {
+  public TelegramClient telegramClient(@Value("${telegram.bot.token}") String token) {
     return new OkHttpTelegramClient(token);
   }
 }

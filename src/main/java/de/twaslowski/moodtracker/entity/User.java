@@ -33,7 +33,6 @@ public class User {
 
   // todo remove this from the User entity, create ConfigurationService for connection instead
   @OneToOne(cascade = CascadeType.ALL)
-  @JoinColumn(name = "configuration_id", referencedColumnName = "id")
   private Configuration configuration;
 
   public List<MetricDatapoint> getBaselineConfiguration() {
