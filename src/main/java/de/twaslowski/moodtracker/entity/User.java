@@ -1,16 +1,11 @@
 package de.twaslowski.moodtracker.entity;
 
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,16 +25,4 @@ public class User {
 
   @NotNull
   private long telegramId;
-
-  // todo remove this from the User entity, create ConfigurationService for connection instead
-  @OneToOne(cascade = CascadeType.ALL)
-  private Configuration configuration;
-
-  public List<MetricDatapoint> getBaselineConfiguration() {
-    return configuration.getBaselineMetrics();
-  }
-
-  public boolean toggleAutoBaseline() {
-    return configuration.toggleAutoBaseline();
-  }
 }

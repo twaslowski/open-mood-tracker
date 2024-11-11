@@ -8,6 +8,7 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.command.AutoBaselineHa
 import de.twaslowski.moodtracker.entity.ConfigurationSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.entity.metric.Mood;
+import de.twaslowski.moodtracker.entity.metric.Sleep;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,39 +22,32 @@ public class BaselineIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldCreateAutoBaselineOnlyForEligibleUsers() {
-    var eligibleUser = UserSpec.valid().build();
+    var invalidConfiguration1 = ConfigurationSpec.valid()
+        .baselineMetrics(List.of())
+        .build();
 
-    // Auto-baseline active, but no baseline configuration
-    var ineligibleUser = UserSpec.valid()
-        .id(2)
+    var invalidConfiguration2 = ConfigurationSpec.withoutBaselineConfiguration()
+        .autoBaselineEnabled(false)
+        .build();
+
+    var ineligibleUser1 = UserSpec.valid()
         .telegramId(2)
-        .configuration(
-            ConfigurationSpec.valid()
-                .baselineMetrics(List.of())
-                .autoBaselineEnabled(true)
-                .build())
         .build();
 
-    // Auto-baseline inactive
     var ineligibleUser2 = UserSpec.valid()
-        .id(3)
         .telegramId(3)
-        .configuration(
-            ConfigurationSpec.valid()
-                .autoBaselineEnabled(false)
-                .build())
         .build();
 
-    userRepository.save(eligibleUser);
-    userRepository.save(ineligibleUser);
-    userRepository.save(ineligibleUser2);
+    saveUserWithDefaultConfiguration(UserSpec.valid().build());
+    saveUserWithConfiguration(ineligibleUser1, invalidConfiguration1);
+    saveUserWithConfiguration(ineligibleUser2, invalidConfiguration2);
 
     autoBaselineService.createAutoBaselines();
 
     assertThat(recordRepository.findAll()).hasSize(1);
     var record = recordRepository.findAll().getFirst();
 
-    assertThat(record.getValues()).isEqualTo(List.of(Mood.INSTANCE.defaultDatapoint()));
+    assertThat(record.getValues()).isEqualTo(List.of(Mood.INSTANCE.defaultDatapoint(), Sleep.INSTANCE.defaultDatapoint()));
     assertThat(record.getUserId()).isEqualTo(userRepository.findByTelegramId(1L).get().getId());
 
     assertMessageWithExactTextSent(messageUtil.getMessage("notification.baseline.created"));
@@ -61,7 +55,7 @@ public class BaselineIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldToggleAutoBaseline() {
-    givenUser(UserSpec.valid().build());
+    saveUserWithDefaultConfiguration(UserSpec.valid().build());
 
     var update = TelegramTextUpdate.builder()
         .text(AutoBaselineHandler.COMMAND)
@@ -69,14 +63,10 @@ public class BaselineIntegrationTest extends IntegrationBase {
 
     autoBaselineHandler.handleUpdate(update);
 
-    var user = userRepository.findByTelegramId(1L);
-    assertThat(user).isPresent();
-    assertThat(user.get().getConfiguration().isAutoBaselineEnabled()).isFalse();
+    assertThat(userService.findAutoBaselineEligibleUsers()).isEmpty();
 
     autoBaselineHandler.handleUpdate(update);
 
-    user = userRepository.findByTelegramId(1L);
-    assertThat(user).isPresent();
-    assertThat(user.get().getConfiguration().isAutoBaselineEnabled()).isTrue();
+    assertThat(userService.findAutoBaselineEligibleUsers()).isNotEmpty();
   }
 }

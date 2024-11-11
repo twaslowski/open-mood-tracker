@@ -5,8 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.entity.User;
+import de.twaslowski.moodtracker.repository.ConfigurationRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.Optional;
+import org.hibernate.engine.config.spi.ConfigurationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,10 +19,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 class UserServiceTest {
 
   @Mock
-  UserRepository userRepository;
+  private UserRepository userRepository;
 
   @Mock
-  MetricService metricService;
+  private MetricService metricService;
+
+  @Mock
+  private ConfigurationRepository configurationRepository;
 
   @InjectMocks
   private UserService userService;

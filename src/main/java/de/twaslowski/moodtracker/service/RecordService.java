@@ -19,9 +19,11 @@ public class RecordService {
 
   private final RecordRepository recordRepository;
   private final MetricService metricService;
+  private final UserService userService;
 
   public Record initializeFrom(User user) {
-    var initialDatapoints = user.getConfiguration().getTrackedMetricIds().stream()
+    var configuration = userService.getUserConfiguration(user);
+    var initialDatapoints = configuration.getTrackedMetricIds().stream()
         .map(metricService::getMetricById)
         .map(Metric::emptyDatapoint)
         .toList();
@@ -35,10 +37,11 @@ public class RecordService {
   }
 
   public void recordFromBaseline(User user) {
+    var baselineConfiguration = userService.getBaselineConfiguration(user.getId());
     recordRepository.save(
         Record.builder()
             .userId(user.getId())
-            .values(user.getBaselineConfiguration())
+            .values(baselineConfiguration)
             .build()
     );
   }

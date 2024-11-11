@@ -37,7 +37,7 @@ public class UserIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldGreetUserIfAlreadyExists() {
-    givenUser(UserSpec.valid().build());
+    saveUserWithDefaultConfiguration(UserSpec.valid().build());
     var update = TelegramTextUpdate.builder()
         .chatId(1L)
         .text(StartHandler.COMMAND)

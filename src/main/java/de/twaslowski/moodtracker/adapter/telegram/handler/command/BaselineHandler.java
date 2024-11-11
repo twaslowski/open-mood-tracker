@@ -29,7 +29,7 @@ public class BaselineHandler extends AbstractCommandHandler {
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     var user = userService.findByTelegramId(update.getChatId());
-    var baselineConfiguration = user.getBaselineConfiguration();
+    var baselineConfiguration = userService.getBaselineConfiguration(user.getId());
 
     if (baselineConfiguration == null || baselineConfiguration.isEmpty()) {
       return noBaselineConfigurationFound(update.getChatId());

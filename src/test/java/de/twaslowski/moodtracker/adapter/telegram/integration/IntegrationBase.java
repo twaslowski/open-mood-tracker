@@ -12,6 +12,8 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGener
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationService;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.SchedulerConfiguration;
+import de.twaslowski.moodtracker.entity.Configuration;
+import de.twaslowski.moodtracker.entity.ConfigurationSpec;
 import de.twaslowski.moodtracker.entity.User;
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.repository.ConfigurationRepository;
@@ -20,6 +22,7 @@ import de.twaslowski.moodtracker.repository.NotificationRepository;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import de.twaslowski.moodtracker.service.RecordService;
+import de.twaslowski.moodtracker.service.UserService;
 import java.util.concurrent.BlockingQueue;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -95,11 +98,26 @@ public class IntegrationBase {
   @Autowired
   protected NotificationService notificationService;
 
+  @Autowired
+  protected UserService userService;
+
   protected Metric MOOD;
   protected Metric SLEEP;
 
-  protected User givenUser(User user) {
-    return userRepository.save(user);
+  protected User saveUserWithDefaultConfiguration(User user) {
+    user = userRepository.save(user);
+    var configuration = ConfigurationSpec.valid()
+        .userId(user.getId())
+        .build();
+    configurationRepository.save(configuration);
+    return user;
+  }
+
+  protected User saveUserWithConfiguration(User user, Configuration configuration) {
+    user = userRepository.save(user);
+    configuration.setUserId(user.getId());
+    configurationRepository.save(configuration);
+    return user;
   }
 
   protected void assertMessageWithExactTextSent(String message) {

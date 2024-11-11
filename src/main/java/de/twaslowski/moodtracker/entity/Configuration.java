@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,6 +25,9 @@ public class Configuration {
   @Id
   @GeneratedValue(generator = "configuration_id_seq")
   private long id;
+
+  @NotNull
+  private long userId;
 
   private boolean autoBaselineEnabled;
 

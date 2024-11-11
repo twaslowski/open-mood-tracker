@@ -21,7 +21,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldCreateTemporaryRecordIfNoneExists() {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = saveUserWithDefaultConfiguration(UserSpec.valid().build());
     // when
     incomingMessageQueue.add(TelegramTextUpdate.builder()
         .chatId(1)
@@ -45,7 +45,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
   @Test
   @SneakyThrows
   void shouldDoNothingWhenReceivingAMetricUpdateWhileNotRecording() {
-    givenUser(UserSpec.valid().build());
+    saveUserWithDefaultConfiguration(UserSpec.valid().build());
     // when
     assertThat(recordRepository.findAll()).isEmpty();
 
@@ -63,7 +63,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
   @Test
   @SneakyThrows
   void shouldOverwriteExistingRecordIfUserSubmitsTwice() {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = saveUserWithDefaultConfiguration(UserSpec.valid().build());
     // when
     incomingMessageQueue.add(TelegramTextUpdate.builder()
         .chatId(1)
@@ -104,7 +104,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
   @Test
   @SneakyThrows
   void shouldCompleteRecordOnceAllMetricsAreSubmitted() {
-    var user = userRepository.save(UserSpec.valid().build());
+    var user = saveUserWithDefaultConfiguration(UserSpec.valid().build());
     // when
     incomingMessageQueue.add(TelegramTextUpdate.builder()
         .chatId(1)

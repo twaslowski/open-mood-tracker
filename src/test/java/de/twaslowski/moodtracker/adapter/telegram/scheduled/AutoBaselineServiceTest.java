@@ -40,12 +40,7 @@ class AutoBaselineServiceTest {
 
   @Test
   void shouldCreateBaselineRecordAndSendMessage() {
-    var user = UserSpec.valid()
-        .configuration(ConfigurationSpec.valid()
-            .baselineMetrics(List.of(Mood.INSTANCE.defaultDatapoint()))
-            .autoBaselineEnabled(true)
-            .build())
-        .build();
+    var user = UserSpec.valid().build();
 
     when(userService.findAutoBaselineEligibleUsers()).thenReturn(List.of(user));
 

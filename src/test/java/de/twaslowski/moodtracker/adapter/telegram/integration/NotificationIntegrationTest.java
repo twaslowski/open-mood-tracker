@@ -4,7 +4,6 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.entity.NotificationSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import java.time.LocalDateTime;
@@ -20,21 +19,14 @@ public class NotificationIntegrationTest extends IntegrationBase {
     var triggerTime = LocalDateTime.now().plusSeconds(2);
     var cron = buildCron(triggerTime);
 
+    var user = saveUserWithDefaultConfiguration(UserSpec.valid().build());
+
     var notification = NotificationSpec.valid()
+        .userId(user.getId())
         .cron(cron)
         .build();
+
     notificationRepository.save(notification);
-
-    var user = UserSpec.valid()
-        .id(notification.getUserId())
-        .telegramId(1)
-        .build();
-    userRepository.save(user);
-
-    var expectedMessage = TelegramTextResponse.builder()
-        .text(notification.getMessage())
-        .chatId(user.getTelegramId())
-        .build();
 
     schedulerConfiguration.scheduleActiveNotifications();
 
