@@ -11,13 +11,14 @@ import org.springframework.context.annotation.Configuration;
 public class DefaultNotificationConfiguration {
 
   @Bean
-  public Notification.NotificationBuilder defaultNotification(
+  public Notification defaultNotification(
       @Value("${mood-tracker.telegram.scheduled.notification.recording-reminder.cron}") String cron,
       @Value("${mood-tracker.telegram.scheduled.notification.recording-reminder.text}") String text
   ) {
     return Notification.builder()
         .cron(cron)
         .message(text)
-        .active(true);
+        .active(true)
+        .build();
   }
 }

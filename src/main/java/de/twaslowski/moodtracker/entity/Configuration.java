@@ -37,7 +37,7 @@ public class Configuration {
   @JdbcTypeCode(SqlTypes.ARRAY)
   private List<Long> trackedMetricIds;
 
-  public static Configuration.ConfigurationBuilder defaults() {
+  public static Configuration.ConfigurationBuilder noBaselineEnabled() {
     return Configuration.builder()
         .autoBaselineEnabled(false);
   }

@@ -25,7 +25,7 @@ public class UserInitializationService {
 
   private final List<Metric> defaultMetrics;
   private final List<MetricDatapoint> defaultBaselineConfiguration;
-  private final Notification.NotificationBuilder defaultNotification;
+  private final Notification defaultNotification;
 
   @Transactional
   public boolean initializeUser(long telegramId) {
@@ -44,7 +44,7 @@ public class UserInitializationService {
         .map(Metric::getId)
         .toList();
 
-    var defaultConfiguration = Configuration.defaults()
+    var defaultConfiguration = Configuration.noBaselineEnabled()
         .trackedMetricIds(defaultMetricIds)
         .baselineMetrics(defaultBaselineConfiguration)
         .userId(user.getId())
@@ -56,7 +56,8 @@ public class UserInitializationService {
 
   private void initializeDefaultNotification(User user) {
     var notification = notificationRepository.save(
-        defaultNotification.userId(user.getTelegramId())
+        defaultNotification.toBuilder()
+            .userId(user.getTelegramId())
             .build()
     );
     log.info("Created default notification {}", notification);
