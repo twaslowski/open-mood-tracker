@@ -1,7 +1,7 @@
 package de.twaslowski.moodtracker.entity;
 
-import de.twaslowski.moodtracker.entity.metric.Mood;
-import de.twaslowski.moodtracker.entity.metric.Sleep;
+import de.twaslowski.moodtracker.config.defaults.MoodMetric;
+import de.twaslowski.moodtracker.config.defaults.SleepMetric;
 import java.util.List;
 
 public class ConfigurationSpec {
@@ -10,8 +10,8 @@ public class ConfigurationSpec {
     return Configuration.builder()
         .id(1)
         .baselineMetrics(List.of(
-            Mood.INSTANCE.defaultDatapoint(),
-            Sleep.INSTANCE.defaultDatapoint()
+            MoodMetric.INSTANCE.defaultDatapoint(),
+            SleepMetric.INSTANCE.defaultDatapoint()
         ))
         .trackedMetricIds(List.of(1L, 2L))
         .autoBaselineEnabled(true);

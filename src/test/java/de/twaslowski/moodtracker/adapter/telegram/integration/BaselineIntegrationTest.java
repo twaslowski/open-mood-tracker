@@ -7,8 +7,8 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.AutoBaselineHandler;
 import de.twaslowski.moodtracker.entity.ConfigurationSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
-import de.twaslowski.moodtracker.entity.metric.Mood;
-import de.twaslowski.moodtracker.entity.metric.Sleep;
+import de.twaslowski.moodtracker.config.defaults.MoodMetric;
+import de.twaslowski.moodtracker.config.defaults.SleepMetric;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ public class BaselineIntegrationTest extends IntegrationBase {
     assertThat(recordRepository.findAll()).hasSize(1);
     var record = recordRepository.findAll().getFirst();
 
-    assertThat(record.getValues()).isEqualTo(List.of(Mood.INSTANCE.defaultDatapoint(), Sleep.INSTANCE.defaultDatapoint()));
+    assertThat(record.getValues()).isEqualTo(List.of(MoodMetric.INSTANCE.defaultDatapoint(), SleepMetric.INSTANCE.defaultDatapoint()));
     assertThat(record.getUserId()).isEqualTo(userRepository.findByTelegramId(1L).get().getId());
 
     assertMessageWithExactTextSent(messageUtil.getMessage("notification.baseline.created"));

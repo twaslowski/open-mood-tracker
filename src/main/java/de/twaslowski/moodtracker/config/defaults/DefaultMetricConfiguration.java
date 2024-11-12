@@ -1,9 +1,7 @@
-package de.twaslowski.moodtracker.config;
+package de.twaslowski.moodtracker.config.defaults;
 
 import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
-import de.twaslowski.moodtracker.entity.metric.Mood;
-import de.twaslowski.moodtracker.entity.metric.Sleep;
 import de.twaslowski.moodtracker.repository.MetricRepository;
 import java.util.Arrays;
 import java.util.List;
@@ -14,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @RequiredArgsConstructor
-public class MetricConfiguration {
+public class DefaultMetricConfiguration {
 
   private final MetricRepository metricRepository;
 
@@ -22,8 +20,8 @@ public class MetricConfiguration {
   @RequiredArgsConstructor
   public enum DefaultMetrics {
     // The INSTANCE constructs are used only for initialization and testing purposes
-    MOOD(Mood.INSTANCE),
-    SLEEP(Sleep.INSTANCE);
+    MOOD(MoodMetric.INSTANCE),
+    SLEEP(SleepMetric.INSTANCE);
 
     private final Metric metric;
   }
@@ -36,16 +34,17 @@ public class MetricConfiguration {
         .toList();
   }
 
+  @Bean
+  public List<MetricDatapoint> defaultBaselineConfiguration() {
+    return defaultMetrics().stream()
+        .map(Metric::defaultDatapoint)
+        .toList();
+  }
+
   private Metric createOrUpdate(Metric metric) {
     // If the metric is already present in the database, update it; otherwise, create a new one
     return metricRepository.findByName(metric.getName())
         .map(metricRepository::save)
         .orElse(metricRepository.save(metric));
-  }
-
-  public List<MetricDatapoint> defaultBaselineConfiguration() {
-    return defaultMetrics().stream()
-        .map(Metric::defaultDatapoint)
-        .toList();
   }
 }

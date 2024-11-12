@@ -24,11 +24,17 @@ spring:
   flyway:
     schemas: mood-tracker
 
-telegram:
-  bot:
-    token: ${TELEGRAM_TOKEN}
-  auto-baseline:
-    cron: 0 22 * * * *
+mood-tracker:
+  telegram:
+    bot:
+      token: ${TELEGRAM_TOKEN}
+    scheduled:
+      auto-baseline:
+        cron: 0 22 * * * *
+      notification:
+        recording-reminder:
+          cron: 0 0 18 * * *
+          text: "It's time to record your mood! Just press /record"
 
 management:
   endpoints:

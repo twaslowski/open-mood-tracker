@@ -1,11 +1,12 @@
-package de.twaslowski.moodtracker.entity.metric;
+package de.twaslowski.moodtracker.config.defaults;
 
+import de.twaslowski.moodtracker.entity.metric.Metric;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class Sleep extends Metric {
+public class SleepMetric extends Metric {
 
   public static final String NAME = "Sleep";
   private static final String PROMPT = "How much did you sleep today?";

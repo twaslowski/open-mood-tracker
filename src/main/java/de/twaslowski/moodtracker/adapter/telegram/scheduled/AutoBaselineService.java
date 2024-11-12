@@ -21,7 +21,7 @@ public class AutoBaselineService {
   private final BlockingQueue<TelegramResponse> outgoingMessageQueue;
   private final MessageUtil messageUtil;
 
-  @Scheduled(cron = "${telegram.auto-baseline.cron}")
+  @Scheduled(cron = "${mood-tracker.telegram.scheduled.auto-baseline.cron}")
   public void createAutoBaselines() {
     userService.findAutoBaselineEligibleUsers().forEach(user -> {
       recordService.recordFromBaseline(user);

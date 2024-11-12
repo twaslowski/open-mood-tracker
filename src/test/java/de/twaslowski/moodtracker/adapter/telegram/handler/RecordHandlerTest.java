@@ -11,7 +11,7 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGener
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
 import de.twaslowski.moodtracker.entity.Record;
 import de.twaslowski.moodtracker.entity.UserSpec;
-import de.twaslowski.moodtracker.entity.metric.Mood;
+import de.twaslowski.moodtracker.config.defaults.MoodMetric;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.List;
@@ -50,13 +50,13 @@ class RecordHandlerTest {
 
     var record = Record.builder()
         .id(1L)
-        .values(List.of(Mood.INSTANCE.emptyDatapoint()))
+        .values(List.of(MoodMetric.INSTANCE.emptyDatapoint()))
         .build();
 
     when(userService.findByTelegramId(1L)).thenReturn(user);
     when(recordService.findIncompleteRecordsForUser(1L)).thenReturn(Optional.empty());
     when(recordService.initializeFrom(user)).thenReturn(record);
-    when(recordService.getNextIncompleteMetric(any())).thenReturn(Optional.of(Mood.INSTANCE));
+    when(recordService.getNextIncompleteMetric(any())).thenReturn(Optional.of(MoodMetric.INSTANCE));
 
     recordHandler.handleUpdate(update);
 
@@ -73,7 +73,7 @@ class RecordHandlerTest {
 
     when(userService.findByTelegramId(1L)).thenReturn(user);
     when(recordService.findIncompleteRecordsForUser(1L)).thenReturn(Optional.of(record));
-    when(recordService.getNextIncompleteMetric(record)).thenReturn(Optional.of(Mood.INSTANCE));
+    when(recordService.getNextIncompleteMetric(record)).thenReturn(Optional.of(MoodMetric.INSTANCE));
 
     recordHandler.handleUpdate(update);
 

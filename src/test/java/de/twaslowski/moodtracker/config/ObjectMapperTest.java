@@ -4,8 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
-import de.twaslowski.moodtracker.entity.metric.Mood;
-import de.twaslowski.moodtracker.entity.metric.Sleep;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;

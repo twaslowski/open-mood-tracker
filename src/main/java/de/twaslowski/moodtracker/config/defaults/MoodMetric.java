@@ -1,8 +1,9 @@
-package de.twaslowski.moodtracker.entity.metric;
+package de.twaslowski.moodtracker.config.defaults;
 
+import de.twaslowski.moodtracker.entity.metric.Metric;
 import java.util.Map;
 
-public class Mood extends Metric {
+public class MoodMetric extends Metric {
 
   public static final String NAME = "Mood";
   private static final String PROMPT = "How do you feel today?";

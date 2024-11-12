@@ -29,8 +29,8 @@ public class SchedulerConfiguration {
   }
 
   private void scheduleNotification(Notification notification) {
+    log.info("Scheduling notification with id {} and cron expression {}", notification.getId(), notification.getCron());
     taskScheduler.schedule(() -> notificationService.sendNotification(notification),
         new CronTrigger(notification.getCron()));
-    log.info("Scheduled notification with id {} and cron expression {}", notification.getId(), notification.getCron());
   }
 }

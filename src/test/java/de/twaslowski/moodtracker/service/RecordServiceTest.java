@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.entity.Record;
-import de.twaslowski.moodtracker.entity.metric.Mood;
-import de.twaslowski.moodtracker.entity.metric.Sleep;
+import de.twaslowski.moodtracker.config.defaults.MoodMetric;
+import de.twaslowski.moodtracker.config.defaults.SleepMetric;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -34,18 +34,18 @@ public class RecordServiceTest {
   void shouldReturnFirstIncompleteMetric() {
     // given
     var record = Record.builder()
-        .values(List.of(Mood.INSTANCE.emptyDatapoint()))
+        .values(List.of(MoodMetric.INSTANCE.emptyDatapoint()))
         .userId(1)
         .build();
 
-    when(metricService.getMetricById(1L)).thenReturn(Mood.INSTANCE);
+    when(metricService.getMetricById(1L)).thenReturn(MoodMetric.INSTANCE);
 
     // when
     var nextIncompleteMetric = recordService.getNextIncompleteMetric(record);
 
     // then
     assertThat(nextIncompleteMetric).isPresent();
-    assertThat(nextIncompleteMetric.get().getName()).isEqualTo(Mood.NAME);
+    assertThat(nextIncompleteMetric.get().getName()).isEqualTo(MoodMetric.NAME);
   }
 
   @Test
@@ -53,7 +53,7 @@ public class RecordServiceTest {
     // given
     var record = Record.builder()
         .userId(1L)
-        .values(List.of(Mood.INSTANCE.datapointWithValue(2)))
+        .values(List.of(MoodMetric.INSTANCE.datapointWithValue(2)))
         .build();
 
     var nextIncompleteMetric = recordService.getNextIncompleteMetric(record);
@@ -68,13 +68,13 @@ public class RecordServiceTest {
     var record1 = Record.builder()
         .userId(1)
         .creationTimestamp(ZonedDateTime.now().minusHours(1))
-        .values(List.of(Mood.INSTANCE.emptyDatapoint()))
+        .values(List.of(MoodMetric.INSTANCE.emptyDatapoint()))
         .build();
 
     var record2 = Record.builder()
         .userId(1)
         .creationTimestamp(ZonedDateTime.now())
-        .values(List.of(Sleep.INSTANCE.emptyDatapoint()))
+        .values(List.of(SleepMetric.INSTANCE.emptyDatapoint()))
         .build();
 
     when(recordRepository.findByUserId(1)).thenReturn(List.of(record1, record2));
@@ -93,11 +93,11 @@ public class RecordServiceTest {
     var record = Record.builder()
         .userId(1)
         .values(List.of(
-            Sleep.INSTANCE.datapointWithValue(5)
+            SleepMetric.INSTANCE.datapointWithValue(5)
         ))
         .build();
 
-    when(metricService.getMetricName(2)).thenReturn(Sleep.NAME);
+    when(metricService.getMetricName(2)).thenReturn(SleepMetric.NAME);
 
     // when
     var stringifiedRecord = recordService.stringifyRecord(record);

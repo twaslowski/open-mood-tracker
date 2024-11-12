@@ -9,7 +9,7 @@ import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.BaselineHandler;
 import de.twaslowski.moodtracker.entity.UserSpec;
-import de.twaslowski.moodtracker.entity.metric.Mood;
+import de.twaslowski.moodtracker.config.defaults.MoodMetric;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.List;
@@ -52,7 +52,7 @@ class BaselineHandlerTest {
     var userWithBaselineConfig = UserSpec.valid().build();
     when(userService.findByTelegramId(1)).thenReturn(userWithBaselineConfig);
     when(userService.getBaselineConfiguration(userWithBaselineConfig.getId()))
-        .thenReturn(List.of(Mood.INSTANCE.defaultDatapoint()));
+        .thenReturn(List.of(MoodMetric.INSTANCE.defaultDatapoint()));
 
     var update = TelegramTextUpdate.builder().text("/baseline").chatId(1).build();
 

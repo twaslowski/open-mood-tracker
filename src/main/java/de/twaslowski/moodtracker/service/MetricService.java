@@ -1,11 +1,8 @@
 package de.twaslowski.moodtracker.service;
 
-import de.twaslowski.moodtracker.config.MetricConfiguration;
 import de.twaslowski.moodtracker.entity.metric.Metric;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import de.twaslowski.moodtracker.exception.MetricNotFoundException;
 import de.twaslowski.moodtracker.repository.MetricRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,17 +10,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class MetricService {
 
+  // This class looks like it could be deleted now; however, it will hold functionality
+  // for editing metrics when that feature becomes available.
+
   private final MetricRepository metricRepository;
-  private final MetricConfiguration metricConfiguration;
-
-  public List<Metric> getDefaultMetrics() {
-    return metricConfiguration.defaultMetrics();
-  }
-
-  public Metric getMetricByName(String name) {
-    return metricRepository.findByName(name)
-        .orElseThrow(() -> new MetricNotFoundException("Could not find Metric with name: " + name));
-  }
 
   public Metric getMetricById(long id) {
     return metricRepository.findById(id)
@@ -32,9 +22,5 @@ public class MetricService {
 
   public String getMetricName(long id) {
     return getMetricById(id).getName();
-  }
-
-  public List<MetricDatapoint> getDefaultBaselineConfiguration() {
-    return metricConfiguration.defaultBaselineConfiguration();
   }
 }
