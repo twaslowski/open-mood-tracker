@@ -7,12 +7,13 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKey
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
-import de.twaslowski.moodtracker.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.User.State;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Slf4j
@@ -35,6 +36,7 @@ public class RecordHandler extends AbstractCommandHandler {
   }
 
   @Override
+  @Transactional
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     var user = userService.findByTelegramId(update.getChatId());
     var existingRecord = recordService.findIncompleteRecordsForUser(user.getId());
@@ -45,7 +47,10 @@ public class RecordHandler extends AbstractCommandHandler {
 
   private TelegramInlineKeyboardResponse createNewRecord(TelegramUpdate update) {
     var user = userService.findByTelegramId(update.getChatId());
+    requireIdleState(user);
+
     var record = recordService.initializeFrom(user);
+    userService.transitionUserState(user, State.RECORDING);
 
     var firstMetric = recordService.getNextIncompleteMetric(record)
         .orElseThrow(() -> new IllegalStateException("No empty metrics found for record after initialization."));

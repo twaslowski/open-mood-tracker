@@ -76,8 +76,6 @@ public class TelegramMessageSender {
         .ifPresentOrElse(
             message -> editExistingInlineKeyboard(response, message),
             () -> createNewInlineKeyboardResponse(response));
-
-    answerCallbackQuery(response);
   }
 
   @SneakyThrows

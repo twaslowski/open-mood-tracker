@@ -1,7 +1,9 @@
 package de.twaslowski.moodtracker.adapter.telegram;
 
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.exception.IdleStateRequiredException;
 import de.twaslowski.moodtracker.adapter.telegram.handler.UpdateHandler;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class TelegramUpdateDelegator {
 
+  private final MessageUtil messageUtil;
   private final Collection<UpdateHandler> handlers;
 
   public TelegramResponse delegateUpdate(TelegramUpdate update) {
@@ -31,16 +34,23 @@ public class TelegramUpdateDelegator {
   private TelegramResponse invokeHandler(UpdateHandler handler, TelegramUpdate update) {
     try {
       return handler.handleUpdate(update);
+    } catch (IdleStateRequiredException e) {
+      return TelegramTextResponse.builder()
+          .chatId(update.getChatId())
+          .text(e.getMessage())
+          .build();
     } catch (Exception e) {
       log.error("Error while processing update:", e);
-      return TelegramResponse.error()
+      return TelegramTextResponse.builder()
+          .text(messageUtil.getMessage("error.generic"))
           .chatId(update.getChatId())
           .build();
     }
   }
 
   private TelegramResponse respondToUnhandleableUpdate(long chatId) {
-    return TelegramResponse.unhandleableUpdate()
+    return TelegramTextResponse.builder()
+        .text(messageUtil.getMessage("error.unknown-command"))
         .chatId(chatId)
         .build();
   }

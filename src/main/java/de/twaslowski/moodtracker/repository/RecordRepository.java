@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.repository;
 
-import de.twaslowski.moodtracker.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.Record;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 

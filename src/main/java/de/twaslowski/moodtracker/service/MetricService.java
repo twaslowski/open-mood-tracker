@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.service;
 
-import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.exception.MetricNotFoundException;
 import de.twaslowski.moodtracker.repository.MetricRepository;
 import lombok.RequiredArgsConstructor;

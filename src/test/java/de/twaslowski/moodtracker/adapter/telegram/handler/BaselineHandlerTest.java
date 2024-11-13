@@ -36,7 +36,7 @@ class BaselineHandlerTest {
 
   @Test
   void shouldNotCreateBaselineRecordIfConfigNotPresent() {
-    var userWithoutBaselineConfig = UserSpec.noBaselineConfiguration().build();
+    var userWithoutBaselineConfig = UserSpec.valid().build();
     when(userService.findByTelegramId(1)).thenReturn(userWithoutBaselineConfig);
 
     var update = TelegramTextUpdate.builder().text("/baseline").chatId(1).build();

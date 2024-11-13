@@ -3,7 +3,7 @@ package de.twaslowski.moodtracker.config;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
+import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import java.util.List;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;

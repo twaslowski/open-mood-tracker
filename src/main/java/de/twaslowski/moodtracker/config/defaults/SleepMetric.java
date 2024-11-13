@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.config.defaults;
 
-import de.twaslowski.moodtracker.entity.metric.Metric;
+import de.twaslowski.moodtracker.domain.entity.Metric;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;

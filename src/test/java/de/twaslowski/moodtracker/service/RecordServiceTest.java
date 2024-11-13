@@ -3,7 +3,7 @@ package de.twaslowski.moodtracker.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-import de.twaslowski.moodtracker.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.Record;
 import de.twaslowski.moodtracker.config.defaults.MoodMetric;
 import de.twaslowski.moodtracker.config.defaults.SleepMetric;
 import de.twaslowski.moodtracker.repository.RecordRepository;

@@ -9,7 +9,7 @@ import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
-import de.twaslowski.moodtracker.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.Record;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.config.defaults.MoodMetric;
 import de.twaslowski.moodtracker.service.RecordService;

@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.handler;
+package de.twaslowski.moodtracker.adapter.telegram.handler.inlinekeyboard;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
@@ -7,10 +7,13 @@ import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.handler.UpdateHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
-import de.twaslowski.moodtracker.entity.Record;
-import de.twaslowski.moodtracker.entity.metric.Metric;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
+import de.twaslowski.moodtracker.domain.entity.Metric;
+import de.twaslowski.moodtracker.domain.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.User;
+import de.twaslowski.moodtracker.domain.entity.User.State;
+import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -40,12 +43,12 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     var user = userService.findByTelegramId(update.getChatId());
     var existingRecord = recordService.findIncompleteRecordsForUser(user.getId());
     return existingRecord
-        .map(record -> enrichExistingRecord(record, inlineKeyboardUpdate))
+        .map(record -> enrichExistingRecord(record, inlineKeyboardUpdate, user))
         .orElseGet(() -> noRecordInProgressResponse(inlineKeyboardUpdate));
   }
 
   @SneakyThrows
-  private TelegramResponse enrichExistingRecord(Record record, TelegramInlineKeyboardUpdate update) {
+  private TelegramResponse enrichExistingRecord(Record record, TelegramInlineKeyboardUpdate update, User user) {
     var receivedMetric = objectMapper.readValue(update.getCallbackData(), MetricDatapoint.class);
     record.updateMetric(receivedMetric);
 
@@ -53,11 +56,12 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
         record.getId(), receivedMetric.metricId(), receivedMetric.value());
     return recordService.getNextIncompleteMetric(record)
         .map(nextMetric -> sendNextMetric(update, nextMetric))
-        .orElseGet(() -> completeRecord(update, record));
+        .orElseGet(() -> completeRecord(update, record, user));
   }
 
-  private TelegramResponse completeRecord(TelegramInlineKeyboardUpdate update, Record record) {
+  private TelegramResponse completeRecord(TelegramInlineKeyboardUpdate update, Record record, User user) {
     log.info("Completing record for user with chatId {}", update.getChatId());
+    userService.transitionUserState(user, State.IDLE);
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
         .isTerminalAction(true)

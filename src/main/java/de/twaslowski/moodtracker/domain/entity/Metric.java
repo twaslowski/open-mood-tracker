@@ -1,5 +1,6 @@
-package de.twaslowski.moodtracker.entity.metric;
+package de.twaslowski.moodtracker.domain.entity;
 
+import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

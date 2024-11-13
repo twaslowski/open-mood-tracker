@@ -2,6 +2,8 @@ package de.twaslowski.moodtracker.entity;
 
 import de.twaslowski.moodtracker.config.defaults.MoodMetric;
 import de.twaslowski.moodtracker.config.defaults.SleepMetric;
+import de.twaslowski.moodtracker.domain.entity.Configuration;
+
 import java.util.List;
 
 public class ConfigurationSpec {

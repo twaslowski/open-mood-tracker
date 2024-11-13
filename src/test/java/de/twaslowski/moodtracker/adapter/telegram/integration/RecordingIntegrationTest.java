@@ -7,8 +7,9 @@ import static org.awaitility.Awaitility.await;
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
+import de.twaslowski.moodtracker.domain.entity.User.State;
+import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.UserSpec;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
 import java.util.List;
 import java.util.Set;
 import lombok.SneakyThrows;
@@ -38,6 +39,8 @@ public class RecordingIntegrationTest extends IntegrationBase {
               new MetricDatapoint(1, null),
               new MetricDatapoint(2, null)
           ));
+
+          assertThat(userRepository.findByTelegramId(user.getTelegramId()).get().getState()).isEqualTo(State.RECORDING);
         }
     );
   }
@@ -58,6 +61,8 @@ public class RecordingIntegrationTest extends IntegrationBase {
     // then
     await().atMost(3, SECONDS).untilAsserted(() ->
         assertThat(recordRepository.findAll()).isEmpty());
+
+    assertThat(userRepository.findByTelegramId(1).get().getState()).isEqualTo(State.IDLE);
   }
 
   @Test
@@ -139,6 +144,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
           );
           assertThat(recordService.findIncompleteRecordsForUser(user.getId())).isEmpty();
           assertMessageWithExactTextSent(messageUtil.getMessage("command.record.saved", recordService.stringifyRecord(record)));
+          assertThat(userRepository.findByTelegramId(user.getTelegramId()).get().getState()).isEqualTo(State.IDLE);
         }
     );
   }

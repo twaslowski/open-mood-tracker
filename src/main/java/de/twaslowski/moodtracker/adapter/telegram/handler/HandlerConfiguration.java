@@ -5,6 +5,7 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.command.BaselineHandle
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.HelpHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.StartHandler;
+import de.twaslowski.moodtracker.adapter.telegram.handler.inlinekeyboard.InlineKeyboardUpdateHandler;
 import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

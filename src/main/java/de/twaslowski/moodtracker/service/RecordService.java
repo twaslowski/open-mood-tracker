@@ -1,9 +1,9 @@
 package de.twaslowski.moodtracker.service;
 
-import de.twaslowski.moodtracker.entity.Record;
-import de.twaslowski.moodtracker.entity.User;
-import de.twaslowski.moodtracker.entity.metric.Metric;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
+import de.twaslowski.moodtracker.domain.entity.Metric;
+import de.twaslowski.moodtracker.domain.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.User;
+import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import java.util.Comparator;
 import java.util.Optional;

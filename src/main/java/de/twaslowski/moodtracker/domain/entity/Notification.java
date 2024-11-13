@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.entity;
+package de.twaslowski.moodtracker.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

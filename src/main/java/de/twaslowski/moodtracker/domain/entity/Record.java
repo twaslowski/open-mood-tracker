@@ -1,6 +1,6 @@
-package de.twaslowski.moodtracker.entity;
+package de.twaslowski.moodtracker.domain.entity;
 
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
+import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

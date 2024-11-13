@@ -2,8 +2,8 @@ package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.vdurmont.emoji.EmojiParser;
-import de.twaslowski.moodtracker.entity.metric.Metric;
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
+import de.twaslowski.moodtracker.domain.entity.Metric;
+import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;

@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.scheduled;
 
-import de.twaslowski.moodtracker.entity.Notification;
+import de.twaslowski.moodtracker.domain.entity.Notification;
 import de.twaslowski.moodtracker.repository.NotificationRepository;
 import jakarta.annotation.PostConstruct;
 import java.util.List;

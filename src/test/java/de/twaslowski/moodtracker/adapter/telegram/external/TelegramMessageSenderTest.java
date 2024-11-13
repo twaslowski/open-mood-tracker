@@ -21,7 +21,9 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
@@ -121,5 +123,32 @@ public class TelegramMessageSenderTest {
     verify(telegramClient).execute(messageCaptor.capture());
     assertThat(messageCaptor.getValue().getChatId()).isEqualTo("1");
     assertThat(messageCaptor.getValue().getMessageId()).isEqualTo(1);
+
+    verify(telegramClient).execute(any(AnswerCallbackQuery.class));
+  }
+
+  @Test
+  @SneakyThrows
+  void shouldDeleteEditableMessageUponTerminalAction() {
+    var editableMessage = EditableMarkupMessage.builder()
+        .chatId(1)
+        .messageId(1)
+        .build();
+
+    when(editableMarkupMessageService.findMessageForChatId(1))
+        .thenReturn(Optional.of(editableMessage));
+
+    var response = TelegramTextResponse.builder()
+        .chatId(1)
+        .text("Hello")
+        .isTerminalAction(true)
+        .build();
+
+    outgoingQueue.add(response);
+
+    telegramMessageSender.sendResponses();
+
+    verify(editableMarkupMessageService).deleteMessageForChatId(1);
+    verify(telegramClient).execute(any(DeleteMessage.class));
   }
 }

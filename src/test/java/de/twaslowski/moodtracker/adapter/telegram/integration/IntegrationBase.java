@@ -12,10 +12,10 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGener
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationService;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.SchedulerConfiguration;
-import de.twaslowski.moodtracker.entity.Configuration;
+import de.twaslowski.moodtracker.domain.entity.Configuration;
+import de.twaslowski.moodtracker.domain.entity.Metric;
+import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.entity.ConfigurationSpec;
-import de.twaslowski.moodtracker.entity.User;
-import de.twaslowski.moodtracker.entity.metric.Metric;
 import de.twaslowski.moodtracker.repository.ConfigurationRepository;
 import de.twaslowski.moodtracker.repository.MetricRepository;
 import de.twaslowski.moodtracker.repository.NotificationRepository;

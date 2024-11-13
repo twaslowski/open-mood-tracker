@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 
-import de.twaslowski.moodtracker.entity.metric.MetricDatapoint;
+import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import java.util.Comparator;
 
 public class MetricComparator {

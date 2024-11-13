@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.config.defaults;
 
-import de.twaslowski.moodtracker.entity.Notification;
+import de.twaslowski.moodtracker.domain.entity.Notification;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
