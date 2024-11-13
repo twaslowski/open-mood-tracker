@@ -1,6 +1,6 @@
 package de.twaslowski.moodtracker.config;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import org.slf4j.MDC;
 
 public class LogContext {

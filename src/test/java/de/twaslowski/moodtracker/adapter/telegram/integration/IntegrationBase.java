@@ -5,10 +5,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageRepository;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
+import de.twaslowski.moodtracker.adapter.telegram.handler.callback.MetricCallbackGenerator;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationService;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.SchedulerConfiguration;
@@ -72,7 +72,7 @@ public class IntegrationBase {
   protected RecordService recordService;
 
   @Autowired
-  protected CallbackGenerator callbackGenerator;
+  protected MetricCallbackGenerator metricCallbackGenerator;
 
   @Autowired
   protected AutoBaselineService autoBaselineService;

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class CallbackGenerator {
+public class MetricCallbackGenerator {
 
   private final ObjectMapper objectMapper;
 

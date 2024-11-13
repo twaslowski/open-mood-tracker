@@ -3,10 +3,10 @@ package de.twaslowski.moodtracker.adapter.telegram.handler.command;
 import static java.lang.String.format;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.handler.callback.MetricCallbackGenerator;
 import de.twaslowski.moodtracker.domain.entity.Record;
 import de.twaslowski.moodtracker.domain.entity.User.State;
 import de.twaslowski.moodtracker.service.RecordService;
@@ -23,16 +23,16 @@ public class RecordHandler extends AbstractCommandHandler {
 
   private final RecordService recordService;
   private final UserService userService;
-  private final CallbackGenerator callbackGenerator;
+  private final MetricCallbackGenerator metricCallbackGenerator;
 
   public RecordHandler(MessageUtil messageUtil,
                        RecordService recordService,
                        UserService userService,
-                       CallbackGenerator callbackGenerator) {
+                       MetricCallbackGenerator metricCallbackGenerator) {
     super(COMMAND, messageUtil);
     this.userService = userService;
     this.recordService = recordService;
-    this.callbackGenerator = callbackGenerator;
+    this.metricCallbackGenerator = metricCallbackGenerator;
   }
 
   @Override
@@ -58,7 +58,7 @@ public class RecordHandler extends AbstractCommandHandler {
     log.info("Created new record {}", record.getId());
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
-        .content(callbackGenerator.createCallbacks(firstMetric))
+        .content(metricCallbackGenerator.createCallbacks(firstMetric))
         .text(firstMetric.getDescription())
         .build();
   }
@@ -72,7 +72,7 @@ public class RecordHandler extends AbstractCommandHandler {
 
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
-        .content(callbackGenerator.createCallbacks(nextMetric))
+        .content(metricCallbackGenerator.createCallbacks(nextMetric))
         .text(format("%s%n%n%s",
             messageUtil.getMessage("command.record.already-recording"),
             nextMetric.getDescription()

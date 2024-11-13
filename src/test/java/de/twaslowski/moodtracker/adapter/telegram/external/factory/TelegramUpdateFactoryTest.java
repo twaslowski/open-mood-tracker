@@ -2,7 +2,7 @@ package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramInlineKeyboardUpdate;
 import org.junit.jupiter.api.Test;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Update;

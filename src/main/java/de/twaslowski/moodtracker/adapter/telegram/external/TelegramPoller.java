@@ -1,10 +1,9 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.exception.NoTelegramTokenProvidedException;
 import de.twaslowski.moodtracker.adapter.telegram.exception.RequiredDataMissingException;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.TelegramUpdateFactory;
-import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +32,7 @@ public class TelegramPoller implements SpringLongPollingBot, LongPollingSingleTh
   public void consume(Update update) {
     try {
       var telegramUpdate = TelegramUpdateFactory.createTelegramUpdate(update);
-      log.info("Received update: {}, text: {}", telegramUpdate.getChatId(), telegramUpdate.getText());
+      log.debug("Received update: {}, text: {}", telegramUpdate.getChatId(), telegramUpdate.getText());
       incomingMessageQueue.add(telegramUpdate);
     } catch (NullPointerException e) {
       log.error("Required data missing", e);

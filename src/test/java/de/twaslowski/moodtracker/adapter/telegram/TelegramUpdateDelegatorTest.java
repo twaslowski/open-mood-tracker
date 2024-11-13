@@ -6,7 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.exception.IdleStateRequiredException;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.StartHandler;
 import java.util.List;

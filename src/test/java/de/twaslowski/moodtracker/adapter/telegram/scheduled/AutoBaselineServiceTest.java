@@ -5,7 +5,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;

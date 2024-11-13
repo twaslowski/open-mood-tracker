@@ -2,13 +2,13 @@ package de.twaslowski.moodtracker.adapter.telegram.handler.inlinekeyboard;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramInlineKeyboardUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.UpdateHandler;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
+import de.twaslowski.moodtracker.adapter.telegram.handler.callback.MetricCallbackGenerator;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.Record;
 import de.twaslowski.moodtracker.domain.entity.User;
@@ -30,7 +30,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
   private final ObjectMapper objectMapper;
   private final RecordService recordService;
   private final UserService userService;
-  private final CallbackGenerator callbackGenerator;
+  private final MetricCallbackGenerator metricCallbackGenerator;
   private final MessageUtil messageUtil;
 
   @Override
@@ -75,7 +75,7 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .answerCallbackQueryId(update.getCallbackQueryId())
-        .content(callbackGenerator.createCallbacks(nextMetric))
+        .content(metricCallbackGenerator.createCallbacks(nextMetric))
         .text(nextMetric.getDescription())
         .build();
   }

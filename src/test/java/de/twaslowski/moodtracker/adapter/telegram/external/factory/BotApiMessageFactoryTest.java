@@ -2,12 +2,9 @@ package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
 import java.util.LinkedHashMap;
-import java.util.List;
 import org.junit.jupiter.api.Test;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow;
 
 class BotApiMessageFactoryTest {
 

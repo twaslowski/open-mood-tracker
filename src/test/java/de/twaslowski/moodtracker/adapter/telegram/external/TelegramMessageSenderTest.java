@@ -6,9 +6,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
 import java.util.LinkedHashMap;
@@ -21,7 +21,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
@@ -123,8 +122,6 @@ public class TelegramMessageSenderTest {
     verify(telegramClient).execute(messageCaptor.capture());
     assertThat(messageCaptor.getValue().getChatId()).isEqualTo("1");
     assertThat(messageCaptor.getValue().getMessageId()).isEqualTo(1);
-
-    verify(telegramClient).execute(any(AnswerCallbackQuery.class));
   }
 
   @Test

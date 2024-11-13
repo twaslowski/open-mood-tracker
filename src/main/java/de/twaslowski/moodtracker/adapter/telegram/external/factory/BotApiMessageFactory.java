@@ -1,8 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import java.util.ArrayList;
 import java.util.Map.Entry;

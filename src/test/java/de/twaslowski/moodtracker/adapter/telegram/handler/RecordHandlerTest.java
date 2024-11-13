@@ -6,8 +6,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.CallbackGenerator;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.handler.callback.MetricCallbackGenerator;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
 import de.twaslowski.moodtracker.domain.entity.Record;
 import de.twaslowski.moodtracker.entity.UserSpec;
@@ -38,7 +38,7 @@ class RecordHandlerTest {
   private MessageUtil messageUtil;
 
   @Mock
-  private CallbackGenerator callbackGenerator;
+  private MetricCallbackGenerator metricCallbackGenerator;
 
   @Test
   void shouldCreateNewRecordIfNoIncompleteRecordExists() {

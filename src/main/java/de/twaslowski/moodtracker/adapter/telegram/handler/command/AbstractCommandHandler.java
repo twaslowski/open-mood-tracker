@@ -1,7 +1,7 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.command;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.exception.IdleStateRequiredException;
 import de.twaslowski.moodtracker.adapter.telegram.handler.UpdateHandler;
 import de.twaslowski.moodtracker.domain.entity.User;

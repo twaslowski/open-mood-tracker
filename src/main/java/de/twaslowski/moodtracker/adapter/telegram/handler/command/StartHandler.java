@@ -1,12 +1,11 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.command;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 @Service

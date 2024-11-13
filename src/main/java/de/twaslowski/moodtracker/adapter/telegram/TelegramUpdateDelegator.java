@@ -1,8 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.exception.IdleStateRequiredException;
 import de.twaslowski.moodtracker.adapter.telegram.handler.UpdateHandler;
 import java.util.Collection;

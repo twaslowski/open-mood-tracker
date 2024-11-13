@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.dto.response;
+package de.twaslowski.moodtracker.adapter.telegram.domain.response;
 
 import java.util.LinkedHashMap;
 import lombok.EqualsAndHashCode;

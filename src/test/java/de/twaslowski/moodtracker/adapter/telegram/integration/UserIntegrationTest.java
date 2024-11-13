@@ -4,7 +4,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.StartHandler;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import java.util.concurrent.TimeUnit;

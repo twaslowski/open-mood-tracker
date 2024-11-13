@@ -1,8 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramInlineKeyboardResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.BotApiMessageFactory;
@@ -41,7 +41,6 @@ public class TelegramMessageSender {
 
   public void sendResponses() {
     if (!outgoingMessageQueue.isEmpty()) {
-      log.info("Processing outgoing response ...");
       var response = outgoingMessageQueue.remove();
       try {
         handleResponse(response);

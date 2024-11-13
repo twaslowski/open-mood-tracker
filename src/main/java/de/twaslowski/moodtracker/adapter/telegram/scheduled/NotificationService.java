@@ -1,7 +1,7 @@
 package de.twaslowski.moodtracker.adapter.telegram.scheduled;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.domain.entity.Notification;
 import de.twaslowski.moodtracker.repository.NotificationRepository;
 import de.twaslowski.moodtracker.service.UserService;

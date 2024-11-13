@@ -5,8 +5,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramInlineKeyboardUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.domain.entity.User.State;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.UserSpec;

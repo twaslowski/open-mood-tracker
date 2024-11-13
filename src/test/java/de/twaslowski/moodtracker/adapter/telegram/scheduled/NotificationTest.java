@@ -3,8 +3,8 @@ package de.twaslowski.moodtracker.adapter.telegram.scheduled;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.entity.NotificationSpec;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.concurrent.BlockingQueue;

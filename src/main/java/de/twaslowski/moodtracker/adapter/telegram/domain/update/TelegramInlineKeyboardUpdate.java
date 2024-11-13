@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.dto.update;
+package de.twaslowski.moodtracker.adapter.telegram.domain.update;
 
 import lombok.EqualsAndHashCode;
 import lombok.Value;

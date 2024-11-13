@@ -3,8 +3,8 @@ package de.twaslowski.moodtracker.adapter.telegram.external;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.verify;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.exception.RequiredDataMissingException;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.TelegramUpdateFactory;
 import java.util.concurrent.BlockingQueue;

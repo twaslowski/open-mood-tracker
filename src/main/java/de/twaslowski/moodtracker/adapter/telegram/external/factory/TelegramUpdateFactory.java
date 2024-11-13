@@ -1,8 +1,8 @@
 package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramInlineKeyboardUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramTextUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramInlineKeyboardUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import java.util.Optional;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.api.objects.message.Message;

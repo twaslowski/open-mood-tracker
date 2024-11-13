@@ -1,7 +1,7 @@
 package de.twaslowski.moodtracker.adapter.telegram;
 
-import de.twaslowski.moodtracker.adapter.telegram.dto.response.TelegramResponse;
-import de.twaslowski.moodtracker.adapter.telegram.dto.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.config.LogContext;
 import jakarta.annotation.PostConstruct;
 import java.util.concurrent.BlockingQueue;
@@ -34,8 +34,9 @@ public class TelegramUpdateProcessor {
       var update = incomingMessageQueue.remove();
       LogContext.enrichWithUpdate(update);
 
+      log.info("Processing incoming update: {}", update);
       var response = telegramUpdateDelegator.delegateUpdate(update);
-      log.info("Received response for update. Queueing for sending.");
+      log.info("Received response for update: '{}'. Queueing for sending.", response.getText());
 
       LogContext.clear();
       outgoingMessageQueue.add(response);
