@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.inlinekeyboard;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
@@ -25,7 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class InlineKeyboardUpdateHandler implements UpdateHandler {
+public class MetricDatapointUpdateHandler implements UpdateHandler {
 
   private final ObjectMapper objectMapper;
   private final RecordService recordService;
@@ -90,7 +91,20 @@ public class InlineKeyboardUpdateHandler implements UpdateHandler {
 
   @Override
   public boolean canHandle(TelegramUpdate update) {
-    // todo this should be a more specific check in the future
-    return update.hasCallback();
+    if (update.hasCallback()) {
+      var callbackData = ((TelegramInlineKeyboardUpdate) update).getCallbackData();
+      return callbackData != null && callbackIsParsable(callbackData);
+    } else {
+      return false;
+    }
+  }
+
+  private boolean callbackIsParsable(String callback) {
+    try {
+      objectMapper.readValue(callback, MetricDatapoint.class);
+      return true;
+    } catch (JsonProcessingException e) {
+      return false;
+    }
   }
 }

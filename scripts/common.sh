@@ -45,5 +45,6 @@ function integration_test() {
 }
 
 function run() {
-  ./mvnw spring-boot:run
+  start_environment
+  SPRING_PROFILES_ACTIVE=local ./mvnw spring-boot:run
 }

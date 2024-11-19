@@ -21,9 +21,13 @@ public class TelegramUpdateDelegator {
   public TelegramResponse delegateUpdate(TelegramUpdate update) {
     var relevantHandler = handlers.stream()
         .filter(handler -> handler.canHandle(update))
-        .findFirst();
+        .toList();
 
-    return relevantHandler
+    if (relevantHandler.size() > 1) {
+      log.warn("Multiple handlers found for update {}: {}", update, relevantHandler);
+    }
+
+    return relevantHandler.stream().findFirst()
         .map(handler -> invokeHandler(handler, update))
         .orElseGet(() -> {
           log.warn("No handler found");

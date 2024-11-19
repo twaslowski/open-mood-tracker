@@ -4,10 +4,9 @@ import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
+import de.twaslowski.moodtracker.adapter.telegram.handler.callback.SettingsCallbackGenerator;
 import de.twaslowski.moodtracker.domain.entity.User.State;
 import de.twaslowski.moodtracker.service.UserService;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -18,11 +17,14 @@ public class SettingsHandler extends AbstractCommandHandler {
   public static final String COMMAND = "/settings";
 
   private final UserService userService;
+  private final SettingsCallbackGenerator settingsCallbackGenerator;
 
   public SettingsHandler(MessageUtil messageUtil,
-                         UserService userService) {
+                         UserService userService,
+                         SettingsCallbackGenerator settingsCallbackGenerator) {
     super(COMMAND, messageUtil);
     this.userService = userService;
+    this.settingsCallbackGenerator = settingsCallbackGenerator;
   }
 
   @Override
@@ -34,9 +36,7 @@ public class SettingsHandler extends AbstractCommandHandler {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .text("What would you like to edit?")
-        .content(new LinkedHashMap<>(
-            Map.of("Notifications", "notifications")
-        ))
+        .content(settingsCallbackGenerator.createCallback())
         .build();
   }
 }

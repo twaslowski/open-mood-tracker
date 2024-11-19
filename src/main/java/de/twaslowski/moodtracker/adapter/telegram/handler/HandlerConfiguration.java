@@ -5,7 +5,8 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.command.BaselineHandle
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.HelpHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.StartHandler;
-import de.twaslowski.moodtracker.adapter.telegram.handler.inlinekeyboard.InlineKeyboardUpdateHandler;
+import de.twaslowski.moodtracker.adapter.telegram.handler.inlinekeyboard.EditNotificationsUpdateHandler;
+import de.twaslowski.moodtracker.adapter.telegram.handler.inlinekeyboard.MetricDatapointUpdateHandler;
 import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +20,10 @@ public class HandlerConfiguration {
   private final StartHandler startHandler;
   private final RecordHandler recordHandler;
   private final HelpHandler helpHandler;
-  private final InlineKeyboardUpdateHandler inlineKeyboardUpdateHandler;
+  private final MetricDatapointUpdateHandler metricDatapointUpdateHandler;
   private final BaselineHandler baselineHandler;
   private final AutoBaselineHandler autoBaselineHandler;
+  private final EditNotificationsUpdateHandler editNotificationsUpdateHandler;
 
   @Bean
   public Collection<UpdateHandler> handlers() {
@@ -29,7 +31,8 @@ public class HandlerConfiguration {
         startHandler,
         recordHandler,
         helpHandler,
-        inlineKeyboardUpdateHandler,
+        metricDatapointUpdateHandler,
+        editNotificationsUpdateHandler,
         baselineHandler,
         autoBaselineHandler
     );

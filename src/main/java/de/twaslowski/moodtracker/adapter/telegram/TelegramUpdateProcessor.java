@@ -36,7 +36,7 @@ public class TelegramUpdateProcessor {
 
       log.info("Processing incoming update: {}", update);
       var response = telegramUpdateDelegator.delegateUpdate(update);
-      log.info("Received response for update: '{}'. Queueing for sending.", response.getText());
+      log.info("Generated response for update: '{}'. Queueing for sending.", response.getText());
 
       LogContext.clear();
       outgoingMessageQueue.add(response);

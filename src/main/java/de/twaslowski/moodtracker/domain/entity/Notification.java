@@ -2,6 +2,7 @@ package de.twaslowski.moodtracker.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import java.time.ZonedDateTime;
@@ -20,6 +21,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class Notification {
 
   @Id
+  @GeneratedValue
   private long id;
 
   @NotNull
