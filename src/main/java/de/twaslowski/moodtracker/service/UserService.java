@@ -43,6 +43,12 @@ public class UserService {
     userRepository.save(user);
   }
 
+  public void resetUserState(long chatId) {
+    var user = findByTelegramId(chatId);
+    user.setState(State.IDLE);
+    userRepository.save(user);
+  }
+
   public long getTelegramId(long telegramId) {
     return userRepository.findById(telegramId)
         .map(User::getTelegramId)

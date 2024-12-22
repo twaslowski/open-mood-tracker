@@ -18,7 +18,7 @@ public class AutoBaselineHandler extends AbstractCommandHandler {
   private final UserService userService;
 
   public AutoBaselineHandler(MessageUtil messageUtil, UserService userService) {
-    super(COMMAND, messageUtil);
+    super(messageUtil);
     this.userService = userService;
   }
 
@@ -35,5 +35,10 @@ public class AutoBaselineHandler extends AbstractCommandHandler {
         .chatId(update.getChatId())
         .text(messageUtil.getMessage("command.auto-baseline.status", status))
         .build();
+  }
+
+  @Override
+  public String getCommand() {
+    return COMMAND;
   }
 }

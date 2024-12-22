@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public abstract class AbstractCommandHandler implements UpdateHandler {
 
-  protected final String command;
   protected final MessageUtil messageUtil;
 
   protected void requireIdleState(User user) {
@@ -24,6 +23,8 @@ public abstract class AbstractCommandHandler implements UpdateHandler {
 
   @Override
   public boolean canHandle(TelegramUpdate update) {
-    return update.getText() != null && update.getText().equals(command);
+    return update.getText() != null && update.getText().equals(getCommand());
   }
+
+  public abstract String getCommand();
 }

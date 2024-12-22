@@ -6,6 +6,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
@@ -31,6 +32,7 @@ import org.telegram.telegrambots.meta.generics.TelegramClient;
 public class TelegramMessageSenderTest {
 
   private final TelegramClient telegramClient = mock(TelegramClient.class);
+  private final MessageUtil messageUtil = mock(MessageUtil.class);
   private final EditableMarkupMessageService editableMarkupMessageService = mock(EditableMarkupMessageService.class);
 
   private final BlockingQueue<TelegramResponse> outgoingQueue = new LinkedBlockingQueue<>();
@@ -41,7 +43,8 @@ public class TelegramMessageSenderTest {
       outgoingQueue,
       messagePersistenceQueue,
       telegramClient,
-      editableMarkupMessageService
+      editableMarkupMessageService,
+      messageUtil
   );
 
   @Test

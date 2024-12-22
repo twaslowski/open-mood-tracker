@@ -21,7 +21,7 @@ public class BaselineHandler extends AbstractCommandHandler {
   public BaselineHandler(MessageUtil messageUtil,
                          UserService userService,
                          RecordService recordService) {
-    super(COMMAND, messageUtil);
+    super(messageUtil);
     this.userService = userService;
     this.recordService = recordService;
   }
@@ -59,5 +59,10 @@ public class BaselineHandler extends AbstractCommandHandler {
   @Override
   public boolean canHandle(TelegramUpdate update) {
     return update.getText() != null && update.getText().equals(COMMAND);
+  }
+
+  @Override
+  public String getCommand() {
+    return COMMAND;
   }
 }

@@ -29,7 +29,7 @@ public class RecordHandler extends AbstractCommandHandler {
                        RecordService recordService,
                        UserService userService,
                        MetricCallbackGenerator metricCallbackGenerator) {
-    super(COMMAND, messageUtil);
+    super(messageUtil);
     this.userService = userService;
     this.recordService = recordService;
     this.metricCallbackGenerator = metricCallbackGenerator;
@@ -78,5 +78,10 @@ public class RecordHandler extends AbstractCommandHandler {
             nextMetric.getDescription()
         ))
         .build();
+  }
+
+  @Override
+  public String getCommand() {
+    return COMMAND;
   }
 }

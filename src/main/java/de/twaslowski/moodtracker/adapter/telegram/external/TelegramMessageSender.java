@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.adapter.telegram.external;
 
+import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
@@ -32,6 +33,7 @@ public class TelegramMessageSender {
   private final EditableMarkupMessageService editableMarkupMessageService;
 
   private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+  private final MessageUtil messageUtil;
 
   @PostConstruct
   public void init() {
@@ -39,6 +41,7 @@ public class TelegramMessageSender {
     scheduler.scheduleWithFixedDelay(this::sendResponses, 0, 50, TimeUnit.MILLISECONDS);
   }
 
+  @SneakyThrows
   public void sendResponses() {
     if (!outgoingMessageQueue.isEmpty()) {
       var response = outgoingMessageQueue.remove();
@@ -46,6 +49,12 @@ public class TelegramMessageSender {
         handleResponse(response);
       } catch (Exception e) {
         log.error("Error processing response", e);
+        telegramClient.execute(BotApiMessageFactory.createTextResponse(
+            TelegramTextResponse.builder()
+                .chatId(response.getChatId())
+                .text(messageUtil.getMessage("error.internal"))
+                .build()
+        ));
       }
     }
   }
@@ -98,8 +107,13 @@ public class TelegramMessageSender {
 
   @SneakyThrows
   private void editExistingInlineKeyboard(TelegramInlineKeyboardResponse response, EditableMarkupMessage message) {
-    telegramClient.execute(BotApiMessageFactory.createEditMessageTextResponse(response, message));
-    telegramClient.execute(BotApiMessageFactory.createEditMessageReplyMarkupResponse(response, message));
+    try {
+      telegramClient.execute(BotApiMessageFactory.createEditMessageTextResponse(response, message));
+      telegramClient.execute(BotApiMessageFactory.createEditMessageReplyMarkupResponse(response, message));
+    } catch (Exception e) {
+      log.error("Error editing message", e);
+      createNewInlineKeyboardResponse(response);
+    }
   }
 
   private void addToEditableMessagePersistenceQueue(Message message) {

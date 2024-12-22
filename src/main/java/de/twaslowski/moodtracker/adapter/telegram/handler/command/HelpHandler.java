@@ -12,7 +12,7 @@ public class HelpHandler extends AbstractCommandHandler {
   public static final String COMMAND = "/help";
 
   public HelpHandler(MessageUtil messageUtil) {
-    super(COMMAND, messageUtil);
+    super(messageUtil);
   }
 
   @Override
@@ -21,5 +21,10 @@ public class HelpHandler extends AbstractCommandHandler {
         .text(messageUtil.getMessage("command.help"))
         .chatId(update.getChatId())
         .build();
+  }
+
+  @Override
+  public String getCommand() {
+    return COMMAND;
   }
 }

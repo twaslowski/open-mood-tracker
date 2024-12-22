@@ -22,7 +22,7 @@ public class SettingsHandler extends AbstractCommandHandler {
   public SettingsHandler(MessageUtil messageUtil,
                          UserService userService,
                          SettingsCallbackGenerator settingsCallbackGenerator) {
-    super(COMMAND, messageUtil);
+    super(messageUtil);
     this.userService = userService;
     this.settingsCallbackGenerator = settingsCallbackGenerator;
   }
@@ -38,5 +38,10 @@ public class SettingsHandler extends AbstractCommandHandler {
         .text("What would you like to edit?")
         .content(settingsCallbackGenerator.createCallback())
         .build();
+  }
+
+  @Override
+  public String getCommand() {
+    return COMMAND;
   }
 }

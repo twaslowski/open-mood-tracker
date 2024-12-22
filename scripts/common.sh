@@ -29,12 +29,7 @@ function deploy() {
   TAG="sha-$(git rev-parse --short HEAD)"
   HELM_TIMEOUT=300s
 
-  if [ -z "$DATASOURCE_PASSWORD" ]; then
-      DATASOURCE_PASSWORD=$(openssl rand -base64 32)
-  fi
-
   helm upgrade --install \
-    --set global.postgresql.auth.password="$DATASOURCE_PASSWORD" \
     --values ./charts/values/postgres-values.yaml \
     --namespace mood-tracker --create-namespace \
     --wait --timeout "$HELM_TIMEOUT" \
