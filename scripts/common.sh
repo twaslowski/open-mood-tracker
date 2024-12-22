@@ -32,14 +32,15 @@ function deploy() {
   helm upgrade --install \
     --set global.postgresql.auth.password="$DATASOURCE_PASSWORD" \
     --values ./charts/values/postgres-values.yaml \
-    --namespace grammr --create-namespace \
+    --namespace mood-tracker --create-namespace \
     --wait --timeout "$HELM_TIMEOUT" \
     postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
   helm upgrade --install \
     --set image.tag="$TAG" \
     --set telegramToken="$TELEGRAM_TOKEN" \
-    --vaues ./charts/values/application-values.yaml \
+    --values ./charts/values/application-values.yaml \
+    --namespace mood-tracker --create-namespace \
     --wait --timeout "$HELM_TIMEOUT" \
     open-mood-tracker ./charts/open-mood-tracker
 }
