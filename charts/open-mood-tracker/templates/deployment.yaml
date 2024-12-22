@@ -36,10 +36,19 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- with .Values.environmentVariables }}
           env:
-              {{- toYaml . | nindent 12 }}
-            {{- end }}
+          - name: DATASOURCE_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: postgres
+                key: password
+          - name: DATASOURCE_URL
+            value: {{ .Values.datasource.url }}
+          - name: TELEGRAM_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-secrets
+                key: telegram-token
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

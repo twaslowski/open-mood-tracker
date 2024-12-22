@@ -1,5 +1,5 @@
 spring:
   datasource:
     url: ${DATASOURCE_URL}
-    username: ${DATASOURCE_USERNAME}
+    username: mood-tracker
     password: ${DATASOURCE_PASSWORD}

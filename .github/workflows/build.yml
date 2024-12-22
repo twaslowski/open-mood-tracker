@@ -78,29 +78,13 @@ jobs:
           cache-to: type=gha,mode=max
 
   deploy:
-    runs-on: open-mood-tracker-arc
+    runs-on: self-hosted
     needs: build_docker_image
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: check-env
-        run: |
-          echo $KUBERNETES_SERVICE_HOST
-          echo $KUBERNETES_SERVICE_PORT
-
-      # Required for Terraform action
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.8.0
-
-      - name: apply
+      - name: deploy
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
         run: |
