@@ -20,6 +20,7 @@ public class BotApiMessageFactory {
   public static SendMessage createTextResponse(TelegramTextResponse response) {
     return SendMessage.builder()
         .chatId(response.getChatId())
+        .parseMode("html")
         .text(response.getText())
         .build();
   }
