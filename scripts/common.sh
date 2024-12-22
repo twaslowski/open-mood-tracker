@@ -29,8 +29,6 @@ function deploy() {
   TAG="sha-$(git rev-parse --short HEAD)"
   HELM_TIMEOUT=300s
 
-  export DATASOURCE_PASSWORD=$(tr -dc 'A-Za-z0-9' </dev/urandom | head -c 48; echo)
-
   helm upgrade --install \
     --set global.postgresql.auth.password="$DATASOURCE_PASSWORD" \
     --values ./charts/values/postgres-values.yaml \
@@ -41,6 +39,7 @@ function deploy() {
   helm upgrade --install \
     --set image.tag="$TAG" \
     --set telegramToken="$TELEGRAM_TOKEN" \
+    --vaues ./charts/values/application-values.yaml \
     --wait --timeout "$HELM_TIMEOUT" \
     open-mood-tracker ./charts/open-mood-tracker
 }

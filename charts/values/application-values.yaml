@@ -1,3 +1,2 @@
 datasource:
   url: "jdbc:postgresql://postgres.mood-tracker.svc.cluster.local:5432/mood-tracker?currentSchema=mood_tracker"
-  username: mood-tracker
