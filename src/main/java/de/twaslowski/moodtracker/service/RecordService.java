@@ -67,10 +67,11 @@ public class RecordService {
 
   public String stringifyRecord(Record record) {
     var result = new StringBuilder();
-    for (MetricDatapoint value : record.getValues()) {
-      result.append(metricService.getMetricName(value.metricId()));
+    for (MetricDatapoint datapoint : record.getValues()) {
+      var metric = metricService.getMetricById(datapoint.metricId());
+      result.append(metric.getName());
       result.append(": ");
-      result.append(value.value());
+      result.append(metric.getLabels().get(datapoint.value()));
       result.append("\n");
     }
     return result.toString();

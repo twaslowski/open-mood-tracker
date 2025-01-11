@@ -12,6 +12,9 @@ import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -66,6 +69,19 @@ public class Metric {
   public enum SortOrder {
     ASC,
     DESC
+  }
+
+  public Map<Integer, String> getLabels() {
+    if (labels == null || labels.isEmpty()) {
+      return generateLabels();
+    }
+    return labels;
+  }
+
+  private Map<Integer, String> generateLabels() {
+    return IntStream.range(minValue, maxValue + 1)
+        .boxed()
+        .collect(Collectors.toMap(Function.identity(), Object::toString));
   }
 
   public Comparator<MetricDatapoint> getComparator() {

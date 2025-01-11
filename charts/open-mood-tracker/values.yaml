@@ -100,8 +100,8 @@ volumes:
     configMap:
       name: {{ .Release.Name }}-metrics-config
       items:
-        - key: metrics.yaml
-          path: metrics.yaml
+        - key: metrics.yml
+          path: metrics.yml
 
 volumeMounts:
   - name: metrics-config-volume

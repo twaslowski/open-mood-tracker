@@ -97,7 +97,7 @@ public class RecordServiceTest {
         ))
         .build();
 
-    when(metricService.getMetricName(2)).thenReturn(SleepMetric.NAME);
+    when(metricService.getMetricById(2)).thenReturn(SleepMetric.INSTANCE);
 
     // when
     var stringifiedRecord = recordService.stringifyRecord(record);
