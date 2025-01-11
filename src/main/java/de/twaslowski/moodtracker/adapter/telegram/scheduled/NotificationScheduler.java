@@ -1,36 +1,30 @@
 package de.twaslowski.moodtracker.adapter.telegram.scheduled;
 
 import de.twaslowski.moodtracker.domain.entity.Notification;
-import de.twaslowski.moodtracker.repository.NotificationRepository;
 import jakarta.annotation.PostConstruct;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.support.CronTrigger;
+import org.springframework.stereotype.Service;
 
-@Configuration
+@Slf4j
+@Service
 @EnableScheduling
 @RequiredArgsConstructor
-@Slf4j
 public class NotificationScheduler {
 
-  private final NotificationRepository notificationRepository;
+  private final TaskScheduler taskScheduler;
   private final NotificationService notificationService;
 
-  private final TaskScheduler taskScheduler;
+  public void scheduleNotification(Notification notification) {
+    taskScheduler.schedule(() -> notificationService.sendNotification(notification),
+        new CronTrigger(notification.getCron()));
+  }
 
   @PostConstruct
   public void scheduleActiveNotifications() {
-    List<Notification> activeNotifications = notificationRepository.findAllByActiveIsTrue();
-    activeNotifications.forEach(this::scheduleNotification);
-  }
-
-  public void scheduleNotification(Notification notification) {
-    log.info("Scheduling notification with id {} and cron expression {}", notification.getId(), notification.getCron());
-    taskScheduler.schedule(() -> notificationService.sendNotification(notification),
-        new CronTrigger(notification.getCron()));
+    notificationService.getActiveNotifications().forEach(this::scheduleNotification);
   }
 }

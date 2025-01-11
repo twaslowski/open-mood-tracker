@@ -1,7 +1,5 @@
 package de.twaslowski.moodtracker.adapter.telegram.integration;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
@@ -10,24 +8,22 @@ import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageRepository;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.MetricCallbackGenerator;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
-import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationService;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationScheduler;
+import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationService;
 import de.twaslowski.moodtracker.domain.entity.Configuration;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.entity.ConfigurationSpec;
-import de.twaslowski.moodtracker.repository.ConfigurationRepository;
-import de.twaslowski.moodtracker.repository.MetricRepository;
-import de.twaslowski.moodtracker.repository.NotificationRepository;
-import de.twaslowski.moodtracker.repository.RecordRepository;
-import de.twaslowski.moodtracker.repository.UserRepository;
+import de.twaslowski.moodtracker.repository.*;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
-import java.util.concurrent.BlockingQueue;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import java.util.concurrent.BlockingQueue;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 @IntegrationTest
@@ -38,6 +34,7 @@ public class IntegrationBase {
     userRepository.deleteAll();
     recordRepository.deleteAll();
     configurationRepository.deleteAll();
+    notificationRepository.deleteAll();
 
     MOOD = metricRepository.findByName("Mood").orElseThrow();
     SLEEP = metricRepository.findByName("Sleep").orElseThrow();
@@ -51,6 +48,7 @@ public class IntegrationBase {
     userRepository.deleteAll();
     recordRepository.deleteAll();
     configurationRepository.deleteAll();
+    notificationRepository.deleteAll();
   }
 
   @Autowired
@@ -93,13 +91,13 @@ public class IntegrationBase {
   protected NotificationRepository notificationRepository;
 
   @Autowired
-  protected NotificationScheduler notificationScheduler;
-
-  @Autowired
   protected NotificationService notificationService;
 
   @Autowired
   protected UserService userService;
+
+  @Autowired
+  protected NotificationScheduler notificationScheduler;
 
   protected Metric MOOD;
   protected Metric SLEEP;

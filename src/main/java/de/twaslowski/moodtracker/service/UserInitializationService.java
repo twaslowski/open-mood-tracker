@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserInitializationService {
 
-  private final NotificationScheduler notificationScheduler;
   private final UserRepository userRepository;
   private final ConfigurationRepository configurationRepository;
   private final NotificationRepository notificationRepository;
@@ -29,6 +28,7 @@ public class UserInitializationService {
   private final List<Metric> defaultMetrics;
   private final List<MetricDatapoint> defaultBaselineConfiguration;
   private final Notification defaultNotification;
+  private final NotificationScheduler notificationScheduler;
 
   @Transactional
   public boolean initializeUser(long telegramId) {
@@ -61,7 +61,7 @@ public class UserInitializationService {
   private void initializeDefaultNotification(User user) {
     var notification = notificationRepository.save(
         defaultNotification.toBuilder()
-            .userId(user.getTelegramId())
+            .userId(user.getId())
             .build()
     );
     log.info("Created default notification {}", notification);

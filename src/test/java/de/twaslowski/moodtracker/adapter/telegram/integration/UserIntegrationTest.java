@@ -17,7 +17,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class UserIntegrationTest extends IntegrationBase {
 
   @Test
-  @Disabled("Works locally but fails in pipeline. Disabled until I figure out why it's flakey")
   void shouldCreateUserOnStartCommandIfNotExists() {
     var update = TelegramTextUpdate.builder()
         .chatId(1L)
@@ -31,7 +30,7 @@ public class UserIntegrationTest extends IntegrationBase {
           var user = userRepository.findByTelegramId(1L);
           assertThat(user).isPresent();
 
-          var userId = user.get().getId();
+          var userId = user.orElseThrow().getId();
 
           assertThat(configurationRepository.findByUserId(userId)).isPresent();
           assertThat(notificationRepository.findAllByUserId(userId).size()).isEqualTo(1);
