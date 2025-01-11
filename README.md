@@ -8,7 +8,7 @@ could be implemented in the future.
 
 You can find my personal instance of the bot running at:
 
-https://t.me/trackmymood_bot
+https://t.me/open_mood_tracker_bot
 
 The available commands are:
 
@@ -20,8 +20,14 @@ The available commands are:
 
 ## Roadmap
 
+**Features**
+
 - [ ] Allow users to fully configure the bot to their needs
 - [ ] Statistics and visualization
+
+**Tech Debt**
+
+- [ ] Ensure scheduled tasks can be canceled
 
 ## Configuring the bot
 
