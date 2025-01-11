@@ -28,7 +28,7 @@ public class NotificationIntegrationTest extends IntegrationBase {
 
     notificationRepository.save(notification);
 
-    schedulerConfiguration.scheduleActiveNotifications();
+    notificationScheduler.scheduleActiveNotifications();
 
     Awaitility.await().atMost(5, SECONDS).untilAsserted(() -> {
       // then the notification is sent

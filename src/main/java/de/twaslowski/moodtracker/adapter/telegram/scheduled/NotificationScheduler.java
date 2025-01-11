@@ -15,7 +15,7 @@ import org.springframework.scheduling.support.CronTrigger;
 @EnableScheduling
 @RequiredArgsConstructor
 @Slf4j
-public class SchedulerConfiguration {
+public class NotificationScheduler {
 
   private final NotificationRepository notificationRepository;
   private final NotificationService notificationService;
@@ -28,7 +28,7 @@ public class SchedulerConfiguration {
     activeNotifications.forEach(this::scheduleNotification);
   }
 
-  private void scheduleNotification(Notification notification) {
+  public void scheduleNotification(Notification notification) {
     log.info("Scheduling notification with id {} and cron expression {}", notification.getId(), notification.getCron());
     taskScheduler.schedule(() -> notificationService.sendNotification(notification),
         new CronTrigger(notification.getCron()));

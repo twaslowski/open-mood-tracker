@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.service;
 
+import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationScheduler;
 import de.twaslowski.moodtracker.domain.entity.Configuration;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.Notification;
@@ -20,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class UserInitializationService {
 
+  private final NotificationScheduler notificationScheduler;
   private final UserRepository userRepository;
   private final ConfigurationRepository configurationRepository;
   private final NotificationRepository notificationRepository;
@@ -63,5 +65,6 @@ public class UserInitializationService {
             .build()
     );
     log.info("Created default notification {}", notification);
+    notificationScheduler.scheduleNotification(notification);
   }
 }

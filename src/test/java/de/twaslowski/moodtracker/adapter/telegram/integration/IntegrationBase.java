@@ -11,7 +11,7 @@ import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.MetricCallbackGenerator;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.AutoBaselineService;
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationService;
-import de.twaslowski.moodtracker.adapter.telegram.scheduled.SchedulerConfiguration;
+import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationScheduler;
 import de.twaslowski.moodtracker.domain.entity.Configuration;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.User;
@@ -93,7 +93,7 @@ public class IntegrationBase {
   protected NotificationRepository notificationRepository;
 
   @Autowired
-  protected SchedulerConfiguration schedulerConfiguration;
+  protected NotificationScheduler notificationScheduler;
 
   @Autowired
   protected NotificationService notificationService;
