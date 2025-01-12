@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ .Release.Name }}-metrics-config
+  name: metrics-config
 data:
-  metrics.yaml: |
-    {{ toYaml .Values.metrics | indent 4 }}
+  metrics.yml: |
+    {{ toYaml .Values.metrics | nindent 4 }}

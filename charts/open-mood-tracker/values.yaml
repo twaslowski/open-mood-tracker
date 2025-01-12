@@ -98,7 +98,7 @@ autoscaling:
 volumes:
   - name: metrics-config-volume
     configMap:
-      name: {{ .Release.Name }}-metrics-config
+      name: metrics-config
       items:
         - key: metrics.yml
           path: metrics.yml
