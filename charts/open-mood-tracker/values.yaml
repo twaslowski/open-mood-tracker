@@ -100,8 +100,8 @@ volumes:
     configMap:
       name: defaults-config
       items:
-        - key: defaults.yml
-          path: defaults.yml
+        - key: metrics.yml
+          path: metrics.yml
 
 volumeMounts:
   - name: defaults-config-volume
