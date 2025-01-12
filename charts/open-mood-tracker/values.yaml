@@ -18,6 +18,8 @@ telegramToken: ""
 datasource:
   url: ""
 
+metrics: []
+
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
@@ -93,18 +95,17 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
+volumes:
+  - name: metrics-config-volume
+    configMap:
+      name: metrics-config
+      items:
+        - key: metrics.yml
+          path: metrics.yml
 
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
+volumeMounts:
+  - name: metrics-config-volume
+    mountPath: /app/config
 
 nodeSelector: {}
 

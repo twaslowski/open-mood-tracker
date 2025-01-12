@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.config.defaults;
+package de.twaslowski.moodtracker.entity;
 
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import java.util.Map;

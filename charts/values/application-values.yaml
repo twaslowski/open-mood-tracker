@@ -1,2 +1,41 @@
 datasource:
   url: "jdbc:postgresql://postgres.mood-tracker.svc.cluster.local:5432/mood-tracker?currentSchema=mood_tracker"
+
+metrics:
+  - name: Mood
+    default: true
+    userPrompt: "How are you feeling right now?"
+    minValue: -3
+    maxValue: 2
+    baseline: 0
+    sortOrder: DESC
+    labels:
+      - key: Manic
+        value: 2
+      - key: Hypomanic
+        value: 1
+      - key: Neutral
+        value: 0
+      - key: Mildly Depressed
+        value: -1
+      - key: Depressed
+        value: -2
+      - key: Severely Depressed
+        value: -3
+  - name: Sleep
+    default: true
+    userPrompt: "How many hours did you sleep last night?"
+    minValue: 4
+    maxValue: 12
+    baseline: 8
+    sortOrder: ASC
+  - name: Energy
+    userPrompt: "How much energy do you have?"
+    minValue: 0
+    maxValue: 10
+    sortOrder: ASC
+
+#notifications:
+#  - description: "Recording reminder"
+#    message: "It's time to record your mood! Just press /record"
+#    schedule: "0 0 18 * * *"

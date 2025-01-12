@@ -25,6 +25,8 @@ spring:
     schemas: mood-tracker
 
 mood-tracker:
+  metrics:
+    config-path: /app/config/metrics.yml
   telegram:
     bot:
       token: ${TELEGRAM_TOKEN}

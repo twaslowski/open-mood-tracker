@@ -3,7 +3,6 @@ package de.twaslowski.moodtracker.entity;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import de.twaslowski.moodtracker.config.defaults.MoodMetric;
 import java.util.List;
 
 import de.twaslowski.moodtracker.domain.entity.Record;

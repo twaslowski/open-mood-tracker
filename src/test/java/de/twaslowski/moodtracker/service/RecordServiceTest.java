@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.domain.entity.Record;
-import de.twaslowski.moodtracker.config.defaults.MoodMetric;
-import de.twaslowski.moodtracker.config.defaults.SleepMetric;
+import de.twaslowski.moodtracker.entity.MoodMetric;
+import de.twaslowski.moodtracker.entity.SleepMetric;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import java.time.ZonedDateTime;
 import java.util.List;
@@ -97,7 +97,7 @@ public class RecordServiceTest {
         ))
         .build();
 
-    when(metricService.getMetricName(2)).thenReturn(SleepMetric.NAME);
+    when(metricService.getMetricById(2)).thenReturn(SleepMetric.INSTANCE);
 
     // when
     var stringifiedRecord = recordService.stringifyRecord(record);

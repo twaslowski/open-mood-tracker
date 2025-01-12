@@ -6,7 +6,6 @@ import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.Notification;
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.domain.entity.User.State;
-import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.ConfigurationRepository;
 import de.twaslowski.moodtracker.repository.NotificationRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
@@ -26,7 +25,6 @@ public class UserInitializationService {
   private final NotificationRepository notificationRepository;
 
   private final List<Metric> defaultMetrics;
-  private final List<MetricDatapoint> defaultBaselineConfiguration;
   private final Notification defaultNotification;
   private final NotificationScheduler notificationScheduler;
 
@@ -48,9 +46,13 @@ public class UserInitializationService {
         .map(Metric::getId)
         .toList();
 
+    var defaultBaseline = defaultMetrics.stream()
+        .map(Metric::defaultDatapoint)
+        .toList();
+
     var defaultConfiguration = Configuration.noBaselineEnabled()
         .trackedMetricIds(defaultMetricIds)
-        .baselineMetrics(defaultBaselineConfiguration)
+        .baselineMetrics(defaultBaseline)
         .userId(user.getId())
         .build();
 

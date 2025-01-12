@@ -86,7 +86,6 @@ jobs:
 
       - name: deploy
         env:
-          DATASOURCE_PASSWORD: ${{ secrets.DATASOURCE_PASSWORD }}
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
         run: |
           ./scripts/deploy.sh
