@@ -18,6 +18,14 @@ The available commands are:
 - `/auto-baseline`: Toggle creation of automatic baseline records.
 - `/settings`: Configure the bot [in progress].
 
+### Baselines
+
+You can define baselines, which corresponds to your personal feeling of "normal". For me personally,
+this is eight hours of sleep and a neutral mood (as opposed to depressed or manic). You can record
+an average day by sending `/baseline` to the bot. Further, for extended periods of normalcy, you can
+configure a automatic baseline records to be created at a certain point throughout the day by sending
+`/auto-baseline`.
+
 ## Roadmap
 
 **Features**
@@ -31,10 +39,10 @@ The available commands are:
 
 ## Configuring the bot
 
-I'm not going to sugarcoat this: You can't really configure a lot if you use my instance of the bot.
-You would need to [run your own instance](#running). However, this is something I am currently working on.
+As of now, the bot is primarily configurable via a Configmap that is injected into the application.
+You can find the Configmap with the configuration for the demo bot [here](https://github.com/twaslowski/open-mood-tracker/blob/main/charts/values/application-values.yaml).
 
-You can toggle auto-baselines, but that's about it.
+I'm working on making Notifications and tracked Metrics as well as Baselines configurable right now.
 
 ## Running
 
@@ -48,11 +56,3 @@ cd open-mood-tracker
 ```
 
 For setting an initial postgres password (recommended), export a DATASOURCE_PASSWORD variable.
-
-### Baselines
-
-You can define baselines, which corresponds to your personal feeling of "normal". For me personally,
-this is eight hours of sleep and a neutral mood (as opposed to depressed or manic). You can record
-an average day by sending `/baseline` to the bot. Further, for extended periods of normalcy, you can
-configure a automatic baseline records to be created at a certain point throughout the day by sending
-`/auto-baseline`.
