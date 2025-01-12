@@ -62,7 +62,7 @@ public class Metric {
 
   // For sorting labels when creating Callbacks. Defaults to ASC.
   @Enumerated(EnumType.STRING)
-  private SortOrder sortOrder;
+  private SortOrder sortOrder = SortOrder.ASC;
 
   private Integer defaultValue;
 

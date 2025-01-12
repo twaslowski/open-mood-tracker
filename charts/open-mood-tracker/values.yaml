@@ -96,15 +96,15 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 volumes:
-  - name: metrics-config-volume
+  - name: defaults-config-volume
     configMap:
-      name: metrics-config
+      name: defaults-config
       items:
-        - key: metrics.yml
-          path: metrics.yml
+        - key: defaults.yml
+          path: defaults.yml
 
 volumeMounts:
-  - name: metrics-config-volume
+  - name: defaults-config-volume
     mountPath: /app/config
 
 nodeSelector: {}

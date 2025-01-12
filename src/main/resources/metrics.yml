@@ -1,22 +1,47 @@
-- name: Mood
-  id: 1
-  description: "How are you feeling right now?"
-  minValue: -3
-  maxValue: 2
-  defaultValue: 0
-  sortOrder: DESC
-  labels:
-    2: Manic
-    1: Hypomanic
-    0: Neutral
-    -1: Mildly Depressed
-    -2: Depressed
-    -3: Severely Depressed
+tracked:
+  - Mood
+  - Sleep
+defaults:
+  - name: Mood
+    description: "How are you feeling right now?"
+    minValue: -3
+    maxValue: 2
+    defaultValue: 0
+    sortOrder: DESC
+    labels:
+      2: Manic
+      1: Hypomanic
+      0: Neutral
+      -1: Mildly Depressed
+      -2: Depressed
+      -3: Severely Depressed
 
-- name: Sleep
-  id: 2
-  description: "How many hours did you sleep last night?"
-  minValue: 4
-  maxValue: 12
-  defaultValue: 8
-  sortOrder: ASC
+  - name: Sleep
+    description: "How many hours did you sleep last night?"
+    minValue: 4
+    maxValue: 12
+    defaultValue: 8
+
+  - name: Energy
+    description: "How much energy do you have right now?"
+    minValue: 0
+    maxValue: 5
+    defaultValue: 3
+
+  - name: Appetite
+    description: "How much appetite are you experiencing?"
+    minValue: 0
+    maxValue: 4
+    defaultValue: 2
+    labels:
+      0: None
+      1: Low
+      2: Normal
+      3: High
+      4: Very High
+
+  - name: Stress
+    description: "How stressed are you right now?"
+    minValue: 0
+    maxValue: 5
+    defaultValue: 1

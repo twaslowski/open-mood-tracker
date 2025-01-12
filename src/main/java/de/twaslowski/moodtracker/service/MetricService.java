@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class MetricService {
 
   // This class looks like it could be deleted now; however, it will hold functionality
-  // for editing metrics when that feature becomes available.
+  // for editing defaults when that feature becomes available.
 
   private final MetricRepository metricRepository;
 

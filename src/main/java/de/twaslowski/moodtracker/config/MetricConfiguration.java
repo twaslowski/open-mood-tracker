@@ -28,12 +28,22 @@ public class MetricConfiguration {
 
   @Bean
   public List<Metric> defaultMetrics() {
-    return metricRepository.saveAll(loadMetricsFromConfiguration());
+    var configuredMetrics = loadMetricsFromConfiguration();
+    metricRepository.saveAll(configuredMetrics.defaults);
+    return configuredMetrics.defaults.stream()
+        .filter(metric -> configuredMetrics.tracked.contains(metric.getName()))
+        .toList();
   }
 
   @SneakyThrows
-  public List<Metric> loadMetricsFromConfiguration() {
-    var metricCollectionType = metricMapper.getTypeFactory().constructCollectionType(List.class, Metric.class);
-    return metricMapper.readValue(new File(configPath), metricCollectionType);
+  public ParsedMetricConfiguration loadMetricsFromConfiguration() {
+    return metricMapper.readValue(new File(configPath), ParsedMetricConfiguration.class);
+  }
+
+  public record ParsedMetricConfiguration(
+      List<Metric> defaults,
+      List<String> tracked
+  ) {
+
   }
 }
