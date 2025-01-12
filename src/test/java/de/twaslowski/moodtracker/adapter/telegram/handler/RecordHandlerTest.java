@@ -11,7 +11,7 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.callback.MetricCallbac
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
 import de.twaslowski.moodtracker.domain.entity.Record;
 import de.twaslowski.moodtracker.entity.UserSpec;
-import de.twaslowski.moodtracker.config.defaults.MoodMetric;
+import de.twaslowski.moodtracker.entity.MoodMetric;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.List;

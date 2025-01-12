@@ -12,15 +12,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class MetricsProvider {
+public class MetricConfiguration {
 
   private final String configPath;
   private final ObjectMapper metricMapper;
   private final MetricRepository metricRepository;
 
-  public MetricsProvider(@Value("${mood-tracker.metrics.config-path}") String configPath,
-                         @Qualifier("metricMapper") ObjectMapper metricMapper,
-                         MetricRepository metricRepository) {
+  public MetricConfiguration(@Value("${mood-tracker.metrics.config-path}") String configPath,
+                             @Qualifier("metricMapper") ObjectMapper metricMapper,
+                             MetricRepository metricRepository) {
     this.configPath = configPath;
     this.metricRepository = metricRepository;
     this.metricMapper = metricMapper;

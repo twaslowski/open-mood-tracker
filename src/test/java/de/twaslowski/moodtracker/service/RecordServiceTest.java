@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.domain.entity.Record;
-import de.twaslowski.moodtracker.config.defaults.MoodMetric;
-import de.twaslowski.moodtracker.config.defaults.SleepMetric;
+import de.twaslowski.moodtracker.entity.MoodMetric;
+import de.twaslowski.moodtracker.entity.SleepMetric;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import java.time.ZonedDateTime;
 import java.util.List;

@@ -7,8 +7,8 @@ import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpda
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.AutoBaselineHandler;
 import de.twaslowski.moodtracker.entity.ConfigurationSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
-import de.twaslowski.moodtracker.config.defaults.MoodMetric;
-import de.twaslowski.moodtracker.config.defaults.SleepMetric;
+import de.twaslowski.moodtracker.entity.MoodMetric;
+import de.twaslowski.moodtracker.entity.SleepMetric;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

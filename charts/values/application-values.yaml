@@ -34,3 +34,8 @@ metrics:
     minValue: 0
     maxValue: 10
     sortOrder: ASC
+
+#notifications:
+#  - description: "Recording reminder"
+#    message: "It's time to record your mood! Just press /record"
+#    schedule: "0 0 18 * * *"

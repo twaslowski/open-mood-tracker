@@ -10,7 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class MetricsProviderTest {
 
   @Autowired
-  private MetricsProvider metricsProvider;
+  private MetricConfiguration metricsProvider;
 
   @Test
   void shouldLoadMetricsFromConfiguration() {
