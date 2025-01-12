@@ -3,37 +3,28 @@ datasource:
 
 metrics:
   - name: Mood
-    default: true
-    userPrompt: "How are you feeling right now?"
+    id: 1
+    description: "How are you feeling right now?"
     minValue: -3
     maxValue: 2
-    baseline: 0
+    defaultValue: 0
     sortOrder: DESC
     labels:
-      - key: Manic
-        value: 2
-      - key: Hypomanic
-        value: 1
-      - key: Neutral
-        value: 0
-      - key: Mildly Depressed
-        value: -1
-      - key: Depressed
-        value: -2
-      - key: Severely Depressed
-        value: -3
+      2: Manic
+      1: Hypomanic
+      0: Neutral
+      -1: Mildly Depressed
+      -2: Depressed
+      -3: Severely Depressed
+
   - name: Sleep
-    default: true
-    userPrompt: "How many hours did you sleep last night?"
+    id: 2
+    description: "How many hours did you sleep last night?"
     minValue: 4
     maxValue: 12
-    baseline: 8
+    defaultValue: 8
     sortOrder: ASC
-  - name: Energy
-    userPrompt: "How much energy do you have?"
-    minValue: 0
-    maxValue: 10
-    sortOrder: ASC
+
 
 #notifications:
 #  - description: "Recording reminder"
