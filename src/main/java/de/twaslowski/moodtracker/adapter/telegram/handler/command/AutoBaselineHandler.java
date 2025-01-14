@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 public class AutoBaselineHandler extends AbstractCommandHandler {
 
-  public static final String COMMAND = "/auto-baseline";
+  public static final String COMMAND = "/autobaseline";
 
   private final UserService userService;
 

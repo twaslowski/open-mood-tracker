@@ -1,11 +1,12 @@
 package de.twaslowski.moodtracker.adapter.telegram.external.factory;
 
+import de.twaslowski.moodtracker.adapter.telegram.domain.callback.Callback;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import java.util.ArrayList;
-import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
@@ -65,15 +66,16 @@ public class BotApiMessageFactory {
 
   private static ArrayList<InlineKeyboardRow> generateInlineKeyboardRows(TelegramInlineKeyboardResponse response) {
     // Generates a list of InlineKeyboardButtons, retaining order of the response's LinkedHashMap
-    var inlineKeyboardButtons = new ArrayList<InlineKeyboardRow>();
-    for (Entry<String, String> entry : response.getContent().entrySet()) {
-      InlineKeyboardRow keyboardButtons = new InlineKeyboardRow(InlineKeyboardButton.builder()
-          .text(entry.getKey())
-          .callbackData(entry.getValue())
-          .build());
-      inlineKeyboardButtons.add(keyboardButtons);
-    }
-    return inlineKeyboardButtons;
+    return response.getCallbacks().stream()
+        .map(callback -> new InlineKeyboardRow(buttonFromCallback(callback)))
+        .collect(Collectors.toCollection(ArrayList::new));
+  }
+
+  private static InlineKeyboardButton buttonFromCallback(Callback callback) {
+    return InlineKeyboardButton.builder()
+        .text(callback.text())
+        .callbackData(callback.data().toString())
+        .build();
   }
 
   public static DeleteMessage createDeleteMessageResponse(EditableMarkupMessage message) {

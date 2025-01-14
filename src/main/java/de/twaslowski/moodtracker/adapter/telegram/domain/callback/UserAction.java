@@ -2,6 +2,8 @@ package de.twaslowski.moodtracker.adapter.telegram.domain.callback;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
@@ -12,9 +14,14 @@ public class UserAction {
   @JsonInclude(JsonInclude.Include.NON_NULL)
   String parameter;
 
+  @Getter
+  @RequiredArgsConstructor
   public enum Action {
-    LIST_NOTIFICATIONS,
-    EDIT_NOTIFICATION
+    LIST_NOTIFICATIONS("Notifications"),
+    LIST_METRICS("Metrics"),
+    EDIT_NOTIFICATION("Edit Notification");
+
+    private final String text;
   }
 
   private UserAction(@JsonProperty("action") Action action,

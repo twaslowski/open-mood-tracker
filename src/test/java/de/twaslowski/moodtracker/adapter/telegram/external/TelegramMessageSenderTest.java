@@ -7,13 +7,13 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
+import de.twaslowski.moodtracker.adapter.telegram.domain.callback.Callback;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage;
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -74,10 +74,12 @@ public class TelegramMessageSenderTest {
   @SneakyThrows
   void shouldAddMessageToEditableMessagePersistenceQueue() {
     // Given
+    var callbacks = List.of(new Callback("1", "Button"));
+
     var response = TelegramInlineKeyboardResponse.builder()
         .chatId(1)
         .text("Hello")
-        .content(new LinkedHashMap<>(Map.of("1", "Button")))
+        .callbacks(callbacks)
         .build();
 
     var chat = TelegramObjectFactory.chat().build();
@@ -110,10 +112,12 @@ public class TelegramMessageSenderTest {
     when(editableMarkupMessageService.findMessageForChatId(1))
         .thenReturn(Optional.of(editableMessage));
 
+    var callbacks = List.of(new Callback("1", "Button"));
+
     var response = TelegramInlineKeyboardResponse.builder()
         .chatId(1)
         .text("Hello")
-        .content(new LinkedHashMap<>())
+        .callbacks(callbacks)
         .build();
 
     outgoingQueue.add(response);

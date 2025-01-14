@@ -84,12 +84,6 @@ public class Metric {
         .collect(Collectors.toMap(Function.identity(), Object::toString));
   }
 
-  public Comparator<MetricDatapoint> getComparator() {
-    return sortOrder.equals(SortOrder.ASC)
-        ? Comparator.comparing(MetricDatapoint::value)
-        : Comparator.comparing(MetricDatapoint::value).reversed();
-  }
-
   public MetricDatapoint emptyDatapoint() {
     return new MetricDatapoint(id, null);
   }

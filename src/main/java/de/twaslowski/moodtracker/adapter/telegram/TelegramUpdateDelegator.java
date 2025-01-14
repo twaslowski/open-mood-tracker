@@ -5,6 +5,7 @@ import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextRe
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.exception.IdleStateRequiredException;
 import de.twaslowski.moodtracker.adapter.telegram.handler.UpdateHandler;
+import de.twaslowski.moodtracker.exception.UserNotFoundException;
 import java.util.Collection;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,10 +39,16 @@ public class TelegramUpdateDelegator {
   private TelegramResponse invokeHandler(UpdateHandler handler, TelegramUpdate update) {
     try {
       return handler.handleUpdate(update);
+    // todo move exception handling somewhere else
     } catch (IdleStateRequiredException e) {
       return TelegramTextResponse.builder()
           .chatId(update.getChatId())
           .text(e.getMessage())
+          .build();
+    } catch (UserNotFoundException e) {
+      return TelegramTextResponse.builder()
+          .chatId(update.getChatId())
+          .text(messageUtil.getMessage("error.user-unknown"))
           .build();
     } catch (Exception e) {
       log.error("Error while processing update:", e);

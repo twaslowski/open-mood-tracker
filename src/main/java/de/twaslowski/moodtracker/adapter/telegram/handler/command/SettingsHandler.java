@@ -36,7 +36,7 @@ public class SettingsHandler extends AbstractCommandHandler {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .text("What would you like to edit?")
-        .content(settingsCallbackGenerator.createCallback())
+        .callbacks(settingsCallbackGenerator.createCallback())
         .build();
   }
 

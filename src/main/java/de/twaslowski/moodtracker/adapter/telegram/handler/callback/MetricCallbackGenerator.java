@@ -1,13 +1,12 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.callback;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.vdurmont.emoji.EmojiParser;
+import de.twaslowski.moodtracker.adapter.telegram.domain.callback.Callback;
 import de.twaslowski.moodtracker.domain.entity.Metric;
-import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import de.twaslowski.moodtracker.domain.entity.Metric.SortOrder;
+import java.util.List;
 import java.util.Map.Entry;
-import java.util.TreeMap;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import org.springframework.stereotype.Component;
@@ -19,25 +18,24 @@ public class MetricCallbackGenerator {
   private final ObjectMapper objectMapper;
 
   @SneakyThrows
-  public LinkedHashMap<String, String> createCallbacks(Metric metric) {
-    var orderedCallbacks = getCallbackMappingForMetric(metric);
+  public List<Callback> createCallbacks(Metric metric) {
+    return callbackForMetric(metric);
+  }
 
-    LinkedHashMap<String, String> callbacks = new LinkedHashMap<>();
-    for (var entry : orderedCallbacks.entrySet()) {
-      callbacks.put(entry.getValue(), objectMapper.writeValueAsString(entry.getKey()));
+  private List<Callback> callbackForMetric(Metric metric) {
+    var callbacks = metric.getLabels().entrySet().stream()
+        .sorted(Entry.comparingByKey())
+        .map(entry -> new Callback(entry.getValue(), unsafeWrite(metric, entry.getKey())))
+        .collect(Collectors.toList());
+
+    if (metric.getSortOrder() == SortOrder.DESC) {
+      return callbacks.reversed();
     }
     return callbacks;
   }
 
-  private Map<MetricDatapoint, String> getCallbackMappingForMetric(Metric metric) {
-    TreeMap<MetricDatapoint, String> sortedMap = new TreeMap<>(metric.getComparator());
-
-    for (Entry<Integer, String> entry : metric.getLabels().entrySet()) {
-      sortedMap.put(
-          metric.datapointWithValue(entry.getKey()),
-          EmojiParser.parseToUnicode(entry.getValue())
-      );
-    }
-    return sortedMap;
+  @SneakyThrows
+  private String unsafeWrite(Metric metric, Integer value) {
+    return objectMapper.writeValueAsString(metric.datapointWithValue(value));
   }
 }
