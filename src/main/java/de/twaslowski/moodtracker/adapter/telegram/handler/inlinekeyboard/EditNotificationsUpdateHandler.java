@@ -32,7 +32,7 @@ public class EditNotificationsUpdateHandler implements UpdateHandler {
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .text("Which notification would you like to edit?")
-        .content(notificationCallbackGenerator.createCallback(notifications))
+        .callbacks(notificationCallbackGenerator.createCallback(notifications))
         .build();
   }
 

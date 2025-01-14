@@ -9,13 +9,13 @@ import de.twaslowski.moodtracker.service.UserService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class ResetHandler extends AbstractCommandHandler {
+public class CancelHandler extends AbstractCommandHandler {
 
-  public static final String COMMAND = "/reset";
+  public static final String COMMAND = "/cancel";
   private final UserService userService;
   private final EditableMarkupMessageService editableMarkupMessageService;
 
-  public ResetHandler(MessageUtil messageUtil, UserService userService, EditableMarkupMessageService editableMarkupMessageService) {
+  public CancelHandler(MessageUtil messageUtil, UserService userService, EditableMarkupMessageService editableMarkupMessageService) {
     super(messageUtil);
     this.userService = userService;
     this.editableMarkupMessageService = editableMarkupMessageService;

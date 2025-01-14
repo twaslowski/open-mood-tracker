@@ -22,7 +22,11 @@ import lombok.NoArgsConstructor;
 public class User {
 
   public enum State {
-    IDLE, RECORDING, CONFIGURING
+    IDLE,
+    RECORDING,
+    CONFIGURING,
+    CONFIGURING_NOTIFICATIONS,
+    CONFIGURING_METRICS
   }
 
   @Id
