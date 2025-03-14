@@ -16,7 +16,7 @@ fullnameOverride: ""
 telegramToken: ""
 
 datasource:
-  url: ""
+  url: ""#
 
 metrics: []
 
