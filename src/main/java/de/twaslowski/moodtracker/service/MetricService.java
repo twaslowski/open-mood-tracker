@@ -10,9 +10,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class MetricService {
 
-  // This class looks like it could be deleted now; however, it will hold functionality
-  // for editing defaults when that feature becomes available.
-
   private final MetricRepository metricRepository;
 
   public Metric getMetricById(long id) {
@@ -20,7 +17,7 @@ public class MetricService {
         .orElseThrow(() -> new MetricNotFoundException("Could not find Metric with id: " + id));
   }
 
-  public String getMetricName(long id) {
-    return getMetricById(id).getName();
+  public Metric saveMetric(Metric metric) {
+    return metricRepository.save(metric);
   }
 }

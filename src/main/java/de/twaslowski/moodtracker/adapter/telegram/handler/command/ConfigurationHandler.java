@@ -1,42 +1,40 @@
 package de.twaslowski.moodtracker.adapter.telegram.handler.command;
 
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
-import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramInlineKeyboardResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
+import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
-import de.twaslowski.moodtracker.adapter.telegram.handler.callback.SettingsCallbackGenerator;
 import de.twaslowski.moodtracker.domain.entity.User.State;
+import de.twaslowski.moodtracker.service.ConfigurationSessionService;
 import de.twaslowski.moodtracker.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
 @Slf4j
-public class SettingsHandler extends AbstractCommandHandler {
+public class ConfigurationHandler extends AbstractCommandHandler {
 
-  public static final String COMMAND = "/settings";
+  public static final String COMMAND = "/configuration";
 
   private final UserService userService;
-  private final SettingsCallbackGenerator settingsCallbackGenerator;
+  private final ConfigurationSessionService configurationSessionService;
 
-  public SettingsHandler(MessageUtil messageUtil,
-                         UserService userService,
-                         SettingsCallbackGenerator settingsCallbackGenerator) {
+  public ConfigurationHandler(MessageUtil messageUtil,
+                              UserService userService,
+                              ConfigurationSessionService configurationSessionService) {
     super(messageUtil);
     this.userService = userService;
-    this.settingsCallbackGenerator = settingsCallbackGenerator;
+    this.configurationSessionService = configurationSessionService;
   }
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     var user = userService.findByTelegramId(update.getChatId());
-    requireIdleState(user);
-    userService.transitionUserState(user, State.CONFIGURING);
+    var configurationSession = configurationSessionService.createSessionFor(user);
 
-    return TelegramInlineKeyboardResponse.builder()
+    return TelegramTextResponse.builder()
         .chatId(update.getChatId())
         .text("What would you like to edit?")
-        .callbacks(settingsCallbackGenerator.createCallback())
         .build();
   }
 
