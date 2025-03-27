@@ -5,7 +5,6 @@ import de.twaslowski.moodtracker.domain.entity.Configuration;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.Notification;
 import de.twaslowski.moodtracker.domain.entity.User;
-import de.twaslowski.moodtracker.domain.entity.User.State;
 import de.twaslowski.moodtracker.repository.ConfigurationRepository;
 import de.twaslowski.moodtracker.repository.NotificationRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
@@ -31,7 +30,6 @@ public class UserInitializationService {
   @Transactional
   public boolean initializeUser(long telegramId) {
     var user = userRepository.save(User.builder()
-        .state(State.IDLE)
         .telegramId(telegramId)
         .build());
     log.info("Created user {}", telegramId);

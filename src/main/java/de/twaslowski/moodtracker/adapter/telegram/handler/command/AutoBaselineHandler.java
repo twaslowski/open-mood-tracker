@@ -26,7 +26,6 @@ public class AutoBaselineHandler extends AbstractCommandHandler {
   @Transactional
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     var user = userService.findByTelegramId(update.getChatId());
-    requireIdleState(user);
 
     var baselineConfiguration = userService.toggleAutoBaseline(user.getId());
     var status = baselineConfiguration ? "enabled" : "disabled";

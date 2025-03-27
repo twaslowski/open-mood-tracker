@@ -13,7 +13,6 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.callback.MetricCallbac
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.Record;
 import de.twaslowski.moodtracker.domain.entity.User;
-import de.twaslowski.moodtracker.domain.entity.User.State;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
@@ -62,7 +61,6 @@ public class MetricDatapointUpdateHandler implements UpdateHandler {
 
   private TelegramResponse completeRecord(TelegramInlineKeyboardUpdate update, Record record, User user) {
     log.info("Completing record for user with chatId {}", update.getChatId());
-    userService.transitionUserState(user, State.IDLE);
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
         .isTerminalAction(true)

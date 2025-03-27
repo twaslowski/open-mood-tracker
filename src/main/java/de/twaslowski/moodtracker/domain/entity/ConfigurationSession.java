@@ -25,7 +25,7 @@ public class ConfigurationSession {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
-  private String uuid;
+  private String id;
 
   @NotNull
   @JoinColumn(name = "user_id")

@@ -2,7 +2,6 @@ package de.twaslowski.moodtracker.service;
 
 import de.twaslowski.moodtracker.domain.entity.Configuration;
 import de.twaslowski.moodtracker.domain.entity.User;
-import de.twaslowski.moodtracker.domain.entity.User.State;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.exception.ConfigurationNotFoundException;
 import de.twaslowski.moodtracker.exception.UserNotFoundException;
@@ -36,23 +35,6 @@ public class UserService {
     return configurationRepository.findByUserId(userId)
         .map(Configuration::getBaselineMetrics)
         .orElseThrow(() -> new ConfigurationNotFoundException(userId));
-  }
-
-  public void transitionUserState(User user, State state) {
-    user.setState(state);
-    userRepository.save(user);
-  }
-
-  public void resetUserState(long chatId) {
-    var user = findByTelegramId(chatId);
-    user.setState(State.IDLE);
-    userRepository.save(user);
-  }
-
-  public long getTelegramId(long telegramId) {
-    return userRepository.findById(telegramId)
-        .map(User::getTelegramId)
-        .orElseThrow(() -> new UserNotFoundException(telegramId));
   }
 
   public User findByTelegramId(long telegramId) {

@@ -23,7 +23,6 @@ public class CancelHandler extends AbstractCommandHandler {
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
-    userService.resetUserState(update.getChatId());
     editableMarkupMessageService.deleteMessageForChatId(update.getChatId());
 
     return TelegramTextResponse.builder()

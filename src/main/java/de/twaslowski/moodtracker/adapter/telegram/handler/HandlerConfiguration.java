@@ -6,7 +6,6 @@ import de.twaslowski.moodtracker.adapter.telegram.handler.command.CancelHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.HelpHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.StartHandler;
-import de.twaslowski.moodtracker.adapter.telegram.handler.inlinekeyboard.EditNotificationsUpdateHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.inlinekeyboard.MetricDatapointUpdateHandler;
 import java.util.Collection;
 import java.util.List;
@@ -24,7 +23,6 @@ public class HandlerConfiguration {
   private final MetricDatapointUpdateHandler metricDatapointUpdateHandler;
   private final BaselineHandler baselineHandler;
   private final AutoBaselineHandler autoBaselineHandler;
-  private final EditNotificationsUpdateHandler editNotificationsUpdateHandler;
   private final CancelHandler cancelHandler;
 
   @Bean
@@ -34,7 +32,6 @@ public class HandlerConfiguration {
         recordHandler,
         helpHandler,
         metricDatapointUpdateHandler,
-        editNotificationsUpdateHandler,
         baselineHandler,
         autoBaselineHandler,
         cancelHandler

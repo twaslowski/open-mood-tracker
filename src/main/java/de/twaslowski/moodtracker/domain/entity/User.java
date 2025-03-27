@@ -21,21 +21,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "user")
 public class User {
 
-  public enum State {
-    IDLE,
-    RECORDING,
-    CONFIGURING,
-    CONFIGURING_NOTIFICATIONS,
-    CONFIGURING_METRICS
-  }
-
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
   private long id;
 
   @NotNull
   private long telegramId;
-
-  @Enumerated(EnumType.STRING)
-  private State state;
 }

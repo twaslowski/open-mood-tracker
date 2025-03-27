@@ -8,7 +8,6 @@ import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramRespon
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.callback.MetricCallbackGenerator;
 import de.twaslowski.moodtracker.domain.entity.Record;
-import de.twaslowski.moodtracker.domain.entity.User.State;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,10 +46,8 @@ public class RecordHandler extends AbstractCommandHandler {
 
   private TelegramInlineKeyboardResponse createNewRecord(TelegramUpdate update) {
     var user = userService.findByTelegramId(update.getChatId());
-    requireIdleState(user);
 
     var record = recordService.initializeFrom(user);
-    userService.transitionUserState(user, State.RECORDING);
 
     var firstMetric = recordService.getNextIncompleteMetric(record)
         .orElseThrow(() -> new IllegalStateException("No empty defaults found for record after initialization."));

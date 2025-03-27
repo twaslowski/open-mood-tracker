@@ -22,6 +22,6 @@ public class ConfigurationSessionService {
     var session = configurationSessionRepository.save(ConfigurationSession.builder()
         .user(user)
         .build());
-    return format("%s/%s", configurationBaseUrl, session.getUuid());
+    return format("%s/%s", configurationBaseUrl, session.getId());
   }
 }
