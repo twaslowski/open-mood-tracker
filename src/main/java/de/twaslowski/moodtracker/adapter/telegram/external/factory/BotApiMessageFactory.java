@@ -40,6 +40,7 @@ public class BotApiMessageFactory {
     return EditMessageText.builder()
         .chatId(response.getChatId())
         .text(response.getText())
+        .parseMode("html")
         .messageId(message.getMessageId())
         .build();
   }

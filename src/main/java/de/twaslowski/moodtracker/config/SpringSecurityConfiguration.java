@@ -8,15 +8,17 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AuthorizeHttpRequestsConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 public class SpringSecurityConfiguration {
 
   @Bean
-  public SecurityFilterChain configureWebSecurity(HttpSecurity httpSecurity) throws Exception {
+  public SecurityFilterChain configureWebSecurity(HttpSecurity httpSecurity, RequestResponseLoggingFilter loggingFilter) throws Exception {
     return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
+        .addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class)
         .authorizeHttpRequests(this::configureRestAuthorizations)
         .sessionManagement(session -> session.sessionCreationPolicy(NEVER))
         .build();
@@ -25,6 +27,7 @@ public class SpringSecurityConfiguration {
   private void configureRestAuthorizations(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationRegistry) {
     authorizationRegistry
         .requestMatchers("/actuator/health").permitAll()
+        .requestMatchers("/api/v1/**").permitAll()
         .anyRequest().denyAll();
   }
 }

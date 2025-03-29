@@ -4,7 +4,7 @@ import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramUpdate;
-import de.twaslowski.moodtracker.service.ConfigurationSessionService;
+import de.twaslowski.moodtracker.service.SessionService;
 import de.twaslowski.moodtracker.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -13,27 +13,29 @@ import org.springframework.stereotype.Service;
 @Slf4j
 public class ConfigurationHandler extends AbstractCommandHandler {
 
-  public static final String COMMAND = "/configuration";
+  public static final String COMMAND = "/configure";
+  private static final String RESPONSE = "A <b>temporary session</b> has been created for you. "
+      + "You can configure your mood tracker <a href=\"%s\">here</a>.";
 
   private final UserService userService;
-  private final ConfigurationSessionService configurationSessionService;
+  private final SessionService sessionService;
 
   public ConfigurationHandler(MessageUtil messageUtil,
                               UserService userService,
-                              ConfigurationSessionService configurationSessionService) {
+                              SessionService sessionService) {
     super(messageUtil);
     this.userService = userService;
-    this.configurationSessionService = configurationSessionService;
+    this.sessionService = sessionService;
   }
 
   @Override
   public TelegramResponse handleUpdate(TelegramUpdate update) {
     var user = userService.findByTelegramId(update.getChatId());
-    var configurationSessionUrl = configurationSessionService.createSessionFor(user);
+    var configurationSessionUrl = sessionService.createSessionFor(user);
 
     return TelegramTextResponse.builder()
         .chatId(update.getChatId())
-        .text("Please configure your mood tracker here: " + configurationSessionUrl)
+        .text(RESPONSE.formatted(configurationSessionUrl))
         .build();
   }
 

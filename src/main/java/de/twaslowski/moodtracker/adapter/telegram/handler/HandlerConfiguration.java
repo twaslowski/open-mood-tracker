@@ -3,6 +3,7 @@ package de.twaslowski.moodtracker.adapter.telegram.handler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.AutoBaselineHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.BaselineHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.CancelHandler;
+import de.twaslowski.moodtracker.adapter.telegram.handler.command.ConfigurationHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.HelpHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.RecordHandler;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.StartHandler;
@@ -21,6 +22,7 @@ public class HandlerConfiguration {
   private final RecordHandler recordHandler;
   private final HelpHandler helpHandler;
   private final MetricDatapointUpdateHandler metricDatapointUpdateHandler;
+  private final ConfigurationHandler configurationHandler;
   private final BaselineHandler baselineHandler;
   private final AutoBaselineHandler autoBaselineHandler;
   private final CancelHandler cancelHandler;
@@ -31,6 +33,7 @@ public class HandlerConfiguration {
         startHandler,
         recordHandler,
         helpHandler,
+        configurationHandler,
         metricDatapointUpdateHandler,
         baselineHandler,
         autoBaselineHandler,

@@ -52,7 +52,7 @@ public class TelegramMessageSender {
         telegramClient.execute(BotApiMessageFactory.createTextResponse(
             TelegramTextResponse.builder()
                 .chatId(response.getChatId())
-                .text(messageUtil.getMessage("error.internal"))
+                .text(messageUtil.getMessage("error.generic"))
                 .build()
         ));
       }

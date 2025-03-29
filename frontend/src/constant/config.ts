@@ -4,4 +4,5 @@ export const siteConfig = {
     'Your highly configurable personal mood tracker',
   /** Without additional '/' on the end, e.g. https://theodorusclarence.com */
   url: 'https://moody.twaslowski.com',
+  telegramBotName: process.env.TELEGRAM_BOT_NAME
 };

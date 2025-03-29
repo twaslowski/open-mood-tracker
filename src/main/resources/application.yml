@@ -37,8 +37,10 @@ mood-tracker:
         recording-reminder:
           cron: 0 0 18 * * *
           text: "It's time to record your mood! Just press /record"
-  ui:
-    host: "http://localhost:3000"
+  configuration:
+    host: "https://moody-dev.twaslowski.com/configure"
+    session:
+      expiry: 3600
 
 management:
   endpoints:

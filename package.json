@@ -1,0 +1,5 @@
+{
+	"dependencies": {
+		"@telegram-auth/react": "^1.0.4"
+	}
+}

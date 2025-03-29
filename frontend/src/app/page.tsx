@@ -1,9 +1,13 @@
+'use client'
+
 import React from 'react';
 import Image from "next/image";
+import {siteConfig} from "@/constant/config";
 
 const MoodTrackerCover = () => {
   return (
-      <div className="flex-grow min-h-screen bg-gradient-to-b from-white to-blue-100 flex flex-col items-center justify-center p-4">
+      <div
+          className="flex-grow min-h-screen bg-gradient-to-b from-white to-blue-100 flex flex-col items-center justify-center p-4">
 
         <Image src="/images/moody_logo.png"
                alt="mood tracker logo"
@@ -11,19 +15,27 @@ const MoodTrackerCover = () => {
                height={100}
         />
 
-        {/* Title */}
         <h1 className="text-6xl font-bold text-primary-500 mb-4">moody</h1>
 
-        {/* Subtitle */}
-        <p className="text-xl text-primary-400 mb-8">Track your mood, understand your patterns</p>
+        <div className="text-xl text-primary-400 mb-8 text-center">
+          <p>Track your mood. Understand your patterns.</p>
+          <p>Understand <b>yourself</b>.</p>
+        </div>
 
-        {/* Get Started Button */}
-        <a href="https://t.me/open_mood_tracker_bot">
-        <button
-            className="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105">
-          Get Started
-        </button>
+        <div className='justify-center flex space-x-2'>
+        <a href={`https://t.me/${siteConfig.telegramBotName}`}>
+          <button
+              className="bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105">
+            Get Started
+          </button>
         </a>
+        <a href={`https://t.me/${siteConfig.telegramBotName}`}>
+          <button
+              className="bg-white text-primary-500 font-semibold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105">
+            Learn More
+          </button>
+        </a>
+        </div>
       </div>
   );
 };
