@@ -8,7 +8,7 @@ public class MoodMetric extends Metric {
   public static final String NAME = "Mood";
   private static final String PROMPT = "How do you feel today?";
 
-  private static final Integer DEFAULT_OWNER = 1;
+  private static final String DEFAULT_OWNER = "1";
   private static final Integer MIN_VALUE = -3;
   private static final Integer MAX_VALUE = 3;
   private static final Integer DEFAULT = 0;

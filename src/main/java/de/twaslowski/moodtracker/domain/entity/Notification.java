@@ -25,7 +25,7 @@ public class Notification {
   private long id;
 
   @NotNull
-  private long userId;
+  private String userId;
 
   @NotNull
   private String message;

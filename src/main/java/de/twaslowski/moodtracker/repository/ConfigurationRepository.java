@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ConfigurationRepository extends JpaRepository<Configuration, Long> {
 
-  Optional<Configuration> findByUserId(long userId);
+  Optional<Configuration> findByUserId(String userId);
 }

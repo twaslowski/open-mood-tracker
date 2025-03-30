@@ -9,6 +9,7 @@ import de.twaslowski.moodtracker.entity.SleepMetric;
 import de.twaslowski.moodtracker.repository.RecordRepository;
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -35,7 +36,7 @@ public class RecordServiceTest {
     // given
     var record = Record.builder()
         .values(List.of(MoodMetric.INSTANCE.emptyDatapoint()))
-        .userId(1)
+        .userId("some-id")
         .build();
 
     when(metricService.getMetricById(1L)).thenReturn(MoodMetric.INSTANCE);
@@ -52,7 +53,7 @@ public class RecordServiceTest {
   void shouldReturnEmptyOptionalIfAllMetricsComplete() {
     // given
     var record = Record.builder()
-        .userId(1L)
+        .userId("some-id")
         .values(List.of(MoodMetric.INSTANCE.datapointWithValue(2)))
         .build();
 
@@ -64,23 +65,23 @@ public class RecordServiceTest {
 
   @Test
   void shouldReturnNewerRecordIfMultipleIncompleteRecordsExist() {
-    // given
+    String userId = UUID.randomUUID().toString();
     var record1 = Record.builder()
-        .userId(1)
+        .userId(userId)
         .creationTimestamp(ZonedDateTime.now().minusHours(1))
         .values(List.of(MoodMetric.INSTANCE.emptyDatapoint()))
         .build();
 
     var record2 = Record.builder()
-        .userId(1)
+        .userId(userId)
         .creationTimestamp(ZonedDateTime.now())
         .values(List.of(SleepMetric.INSTANCE.emptyDatapoint()))
         .build();
 
-    when(recordRepository.findByUserId(1)).thenReturn(List.of(record1, record2));
+    when(recordRepository.findByUserId(userId)).thenReturn(List.of(record1, record2));
 
     // when
-    var incompleteRecord = recordService.findIncompleteRecordsForUser(1);
+    var incompleteRecord = recordService.findIncompleteRecordsForUser(userId);
 
     // then
     assertThat(incompleteRecord).isPresent();
@@ -91,7 +92,7 @@ public class RecordServiceTest {
   void shouldStringifyRecord() {
     // given
     var record = Record.builder()
-        .userId(1)
+        .userId(UUID.randomUUID().toString())
         .values(List.of(
             SleepMetric.INSTANCE.datapointWithValue(5)
         ))

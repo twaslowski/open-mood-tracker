@@ -27,7 +27,7 @@ public class Configuration {
   private long id;
 
   @NotNull
-  private long userId;
+  private String userId;
 
   private boolean autoBaselineEnabled;
 

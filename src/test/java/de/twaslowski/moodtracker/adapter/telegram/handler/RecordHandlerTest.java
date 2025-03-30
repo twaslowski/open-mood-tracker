@@ -54,7 +54,7 @@ class RecordHandlerTest {
         .build();
 
     when(userService.findByTelegramId(1L)).thenReturn(user);
-    when(recordService.findIncompleteRecordsForUser(1L)).thenReturn(Optional.empty());
+    when(recordService.findIncompleteRecordsForUser(user.getId())).thenReturn(Optional.empty());
     when(recordService.initializeFrom(user)).thenReturn(record);
     when(recordService.getNextIncompleteMetric(any())).thenReturn(Optional.of(MoodMetric.INSTANCE));
 
@@ -72,7 +72,7 @@ class RecordHandlerTest {
     var record = Record.builder().id(1L).build();
 
     when(userService.findByTelegramId(1L)).thenReturn(user);
-    when(recordService.findIncompleteRecordsForUser(1L)).thenReturn(Optional.of(record));
+    when(recordService.findIncompleteRecordsForUser(user.getId())).thenReturn(Optional.of(record));
     when(recordService.getNextIncompleteMetric(record)).thenReturn(Optional.of(MoodMetric.INSTANCE));
 
     recordHandler.handleUpdate(update);

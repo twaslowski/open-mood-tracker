@@ -30,10 +30,6 @@ public class NotificationService {
     return notificationRepository.findAllByActiveIsTrue();
   }
 
-  public List<Notification> getUserNotifications(long userId) {
-    return notificationRepository.findAllByUserId(userId);
-  }
-
   private TelegramResponse createMessage(Notification notification) {
     return userRepository.findById(notification.getUserId())
         .map(user -> createResponse(user.getTelegramId(), notification))

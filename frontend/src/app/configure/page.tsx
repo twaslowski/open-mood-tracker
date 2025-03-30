@@ -1,79 +1,129 @@
 'use client';
 
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useSearchParams} from 'next/navigation'
-import Head from 'next/head';
 import {siteConfig} from "@/constant/config";
+import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {BellIcon, ChartAreaIcon} from "lucide-react";
 
 export default function ConfigurePage() {
   const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState('');
   const [error, setError] = useState('');
 
   const validateToken = async (token: string) => {
-    const result = await fetch(`/api/v1/session/${token}`);
+    const result = await fetch(`/api/v1/session/validate`, {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer ' + token
+      }
+    });
     if (!result.ok) {
       throw new Error('Invalid token');
     }
+    return result;
   }
 
   useEffect(() => {
     const urlToken = searchParams.get('token');
     if (!urlToken) {
-      setError('No session token provided. Please head back to the bot and create a session using the /configure command.');
+      setError('No valid session token provided. Please head back to the bot and create a session using the /configure command.');
     }
-      validateToken(urlToken!).then(() => {
-        sessionStorage.setItem('configToken', urlToken!);
-        setToken(urlToken!);
-      }).catch((error) => {
-        setError(error.message);
-        sessionStorage.removeItem('configToken');
-        setToken('');
-      });
+    validateToken(urlToken!).then(() => {
+      localStorage.setItem('authToken', urlToken!);
+      setToken(urlToken!);
+      setIsLoading(false)
+    }).catch((error) => {
+      setError(error.message);
+      localStorage.removeItem('authToken');
+      setToken('');
+      setIsLoading(false)
+    });
   }, [validateToken]);
 
   return (
-      <div className="container mx-auto p-4">
-        <Head>
-          <title>Bot Configuration</title>
-          <meta name="description" content="Configure your Telegram bot"/>
-        </Head>
+      <div
+          className="min-h-screen bg-gradient-to-b from-white to-indigo-100 flex items-center justify-center p-6">
+        <Card
+            className="w-full max-w-xl shadow-xl border rounded-lg bg-white transition-all duration-300 hover:shadow-2xl">
+          <CardHeader className="border-b border-gray-100">
+            <CardTitle className="flex items-center text-xl font-bold text-gray-800">
+              <span className="mr-2 text-2xl">⚙</span> Bot Configuration
+            </CardTitle>
+            <p className="text-gray-500 text-sm mt-1">Manage your bot settings and preferences</p>
+          </CardHeader>
 
-        <main className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-md">
-          <h1 className="text-2xl font-bold mb-6">Bot Configuration</h1>
-
-          {!error ?  (
-              <div>
-                <div className="mb-4 p-3 bg-green-100 text-green-800 rounded">
-                  Configuration token successfully loaded!
+          <CardContent className="p-6">
+            {isLoading && (
+                <div
+                    className="mb-6 p-4 bg-blue-50 text-blue-800 rounded-lg border border-blue-100 flex items-center">
+                  <div
+                      className="animate-spin mr-3 h-4 w-4 border-2 border-blue-600 border-t-transparent rounded-full"></div>
+                  <span>Loading your configuration...</span>
                 </div>
+            )}
 
-                <p className="mb-4">Your token: {token}</p>
-
-                {/* Here you would add your configuration form */}
-                <div className="mt-6">
-                  <h2 className="text-xl font-semibold mb-3">Bot Settings</h2>
-                  <p className="text-gray-600 mb-4">
-                    Configure your bot preferences below. All changes will be saved automatically.
+            {!error && !isLoading && (
+                <div>
+                  <p className="text-gray-600 mb-6 leading-relaxed">
+                    Configure your bot preferences below to customize your experience.
                   </p>
 
-                  {/* Example form placeholder */}
-                  <div className="space-y-4">
-                    <p>Configuration form would go here...</p>
+                  <div className="flex flex-col space-y-4">
+                    <Button
+                        className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white py-3 flex items-center justify-center transition-all duration-200 shadow-md hover:shadow-lg">
+                      <ChartAreaIcon/>
+                      Metrics
+                    </Button>
+
+                    <Button
+                        className="bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white py-3 flex items-center justify-center transition-all duration-200 shadow-md hover:shadow-lg">
+                      <BellIcon/>
+                      Notification Settings
+                    </Button>
+
+                    <div className="mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100">
+                      <h3 className="text-sm font-medium text-gray-700 mb-2">Advanced Settings</h3>
+                      <p className="text-xs text-gray-500">Configure advanced options and
+                        integrations for your bot</p>
+                      <Button variant="outline"
+                              className="mt-3 w-full text-gray-700 border-gray-300 hover:bg-gray-100">
+                        Open Advanced Settings
+                      </Button>
+                    </div>
                   </div>
                 </div>
-              </div>
-          ) : (
-              <div className="mb-4 p-3 bg-red-100 text-red-500 rounded">
-                <p >No configuration token found!</p>
-                <p className="mt-2 text-red-500">
-                  Please use the /configure command in your
-                  <a className='underline' href={`https://t.me/${siteConfig.telegramBotName}`}> Telegram Bot </a>
-                  to get a valid configuration link.
-                </p>
-              </div>
-          )}
-        </main>
+            )}
+
+            {error && (
+                <div className="mb-6 p-5 bg-red-50 text-red-600 rounded-lg border border-red-100">
+                  <div className="flex items-center mb-3">
+                    <svg className="w-5 h-5 mr-2 text-red-500" fill="none" stroke="currentColor"
+                         viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                    </svg>
+                    <span className="font-medium">No configuration token found!</span>
+                  </div>
+                  <p className="mt-2 text-red-600 text-sm">
+                    Please use the <code
+                      className="bg-red-100 px-1 py-0.5 rounded text-red-700">/configure</code> command
+                    in your
+                    <a className="text-red-700 font-medium underline ml-1 hover:text-red-800 transition-colors"
+                       href={`https://t.me/${siteConfig.telegramBotName}`}>Telegram Bot </a>
+                    to get a valid configuration link.
+                  </p>
+                </div>
+            )}
+
+            <div className="mt-6 pt-4 border-t border-gray-100 text-center text-xs text-gray-400">
+              Need help? Visit our <a href="#" className="text-primary-500 hover:underline">support
+              page</a>
+            </div>
+          </CardContent>
+        </Card>
       </div>
   );
 }

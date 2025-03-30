@@ -46,7 +46,7 @@ public class RecordService {
     );
   }
 
-  public Optional<Record> findIncompleteRecordsForUser(long userId) {
+  public Optional<Record> findIncompleteRecordsForUser(String userId) {
     var incompleteRecords = recordRepository.findByUserId(userId).stream()
         .filter(Record::hasIncompleteMetric)
         .collect(Collectors.toSet());

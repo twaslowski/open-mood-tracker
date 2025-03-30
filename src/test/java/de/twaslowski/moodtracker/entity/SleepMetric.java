@@ -11,7 +11,7 @@ public class SleepMetric extends Metric {
   public static final String NAME = "Sleep";
   private static final String PROMPT = "How much did you sleep today?";
 
-  private static final Integer DEFAULT_OWNER = 1;
+  private static final String DEFAULT_OWNER = "1";
   private static final int MIN_VALUE = 4;
   private static final int MAX_VALUE = 12;
   private static final int DEFAULT_VALUE = 8;

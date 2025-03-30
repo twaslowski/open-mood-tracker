@@ -2,6 +2,7 @@ package de.twaslowski.moodtracker.config;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.NEVER;
 
+import de.twaslowski.moodtracker.config.security.JwtFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -14,11 +15,15 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SpringSecurityConfiguration {
 
   @Bean
-  public SecurityFilterChain configureWebSecurity(HttpSecurity httpSecurity, RequestResponseLoggingFilter loggingFilter) throws Exception {
+  public SecurityFilterChain configureWebSecurity(HttpSecurity httpSecurity,
+                                                  RequestResponseLoggingFilter loggingFilter,
+                                                  JwtFilter jwtFilter
+  ) throws Exception {
     return httpSecurity
         .csrf(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
-        .addFilterBefore(loggingFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(loggingFilter, JwtFilter.class)
         .authorizeHttpRequests(this::configureRestAuthorizations)
         .sessionManagement(session -> session.sessionCreationPolicy(NEVER))
         .build();
@@ -27,7 +32,9 @@ public class SpringSecurityConfiguration {
   private void configureRestAuthorizations(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationRegistry) {
     authorizationRegistry
         .requestMatchers("/actuator/health").permitAll()
-        .requestMatchers("/api/v1/**").permitAll()
+        .requestMatchers("/api/v1/session/*").authenticated()
+        .requestMatchers("/api/v1/metrics").authenticated()
+        .requestMatchers("/api/v1/metric/*").authenticated()
         .anyRequest().denyAll();
   }
 }

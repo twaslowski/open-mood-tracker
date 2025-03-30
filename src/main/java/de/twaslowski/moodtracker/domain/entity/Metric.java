@@ -36,7 +36,7 @@ public class Metric {
   private long id;
 
   @NotNull
-  private long ownerId;
+  private String ownerId;
 
   @NotNull
   private String name;

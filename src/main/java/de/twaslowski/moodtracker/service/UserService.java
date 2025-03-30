@@ -31,7 +31,7 @@ public class UserService {
         .orElseThrow(() -> new ConfigurationNotFoundException(user.getId()));
   }
 
-  public List<MetricDatapoint> getBaselineConfiguration(long userId) {
+  public List<MetricDatapoint> getBaselineConfiguration(String userId) {
     return configurationRepository.findByUserId(userId)
         .map(Configuration::getBaselineMetrics)
         .orElseThrow(() -> new ConfigurationNotFoundException(userId));
@@ -42,7 +42,7 @@ public class UserService {
         .orElseThrow(() -> new UserNotFoundException(telegramId));
   }
 
-  public boolean toggleAutoBaseline(long userId) {
+  public boolean toggleAutoBaseline(String userId) {
     return configurationRepository.findByUserId(userId)
         .map(Configuration::toggleAutoBaseline)
         .orElseThrow(() -> new ConfigurationNotFoundException(userId));

@@ -31,7 +31,7 @@ public class Record {
   private long id;
 
   @NotNull
-  private long userId;
+  private String userId;
 
   @CreationTimestamp
   private ZonedDateTime creationTimestamp;
