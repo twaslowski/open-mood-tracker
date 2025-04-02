@@ -9,12 +9,18 @@ defaults:
     defaultValue: 0
     sortOrder: DESC
     labels:
-      2: Manic
-      1: Hypomanic
-      0: Neutral
-      -1: Mildly Depressed
-      -2: Depressed
-      -3: Severely Depressed
+      - value: 2
+        label: Manic
+      - value: 1
+        label: Hypomanic
+      - value: 0
+        label: Neutral
+      - value: -1
+        label: Mildly Depressed
+      - value: -2
+        label: Depressed
+      - value: -3
+        label: Severely Depressed
 
   - name: Sleep
     description: "How many hours did you sleep last night?"
@@ -34,11 +40,16 @@ defaults:
     maxValue: 4
     defaultValue: 2
     labels:
-      0: None
-      1: Low
-      2: Normal
-      3: High
-      4: Very High
+      - value: 0
+        label: None
+      - value: 1
+        label: Low
+      - value: 2
+        label: Normal
+      - value: 3
+        label: High
+      - value: 4
+        label: Ravenous
 
   - name: Stress
     description: "How stressed are you right now?"

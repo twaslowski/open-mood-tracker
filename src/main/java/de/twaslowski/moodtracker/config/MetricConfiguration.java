@@ -3,8 +3,11 @@ package de.twaslowski.moodtracker.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.repository.MetricRepository;
+import de.twaslowski.moodtracker.repository.UserRepository;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,10 +32,19 @@ public class MetricConfiguration {
   @Bean
   public List<Metric> defaultMetrics() {
     var configuredMetrics = loadMetricsFromConfiguration();
-    metricRepository.saveAll(configuredMetrics.defaults);
-    return configuredMetrics.defaults.stream()
-        .filter(metric -> configuredMetrics.tracked.contains(metric.getName()))
-        .toList();
+
+    List<Metric> savedMetrics = new ArrayList<>();
+    for (Metric metric : configuredMetrics.defaults()) {
+      metric.setDefaultMetric(true);
+      Optional<Metric> existingMetric = metricRepository.findMetricsByDefaultMetricIsTrueAndNameEquals(metric.getName());
+      if (existingMetric.isPresent()) {
+        existingMetric.get().updateWith(metric);
+        savedMetrics.add(metricRepository.save(existingMetric.get()));
+      } else {
+        savedMetrics.add(metricRepository.save(metric));
+      }
+    }
+    return savedMetrics;
   }
 
   @SneakyThrows

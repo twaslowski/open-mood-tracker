@@ -1,7 +1,8 @@
 import { Github } from 'lucide-react';
 import Link from 'next/link';
 import React from 'react';
-import {siteConfig} from "@/constant/config";
+
+import { siteConfig } from '@/constant/config';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -12,9 +13,7 @@ const Footer = () => {
         <div className='grid grid-cols-1 md:grid-cols-3 gap-16'>
           <div className='flex-shrink-0'>
             <p className='font-medium'>Tobias Waslowski</p>
-            <p className='text-gray-600 text-sm'>
-              © {currentYear} All Rights Reserved
-            </p>
+            <p className='text-gray-600 text-sm'>© {currentYear} All Rights Reserved</p>
           </div>
 
           {/* Quick links in a horizontal layout */}
@@ -26,26 +25,17 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link
-                  href='/about'
-                  className='text-gray-600 hover:text-blue-600'
-                >
+                <Link href='/about' className='text-gray-600 hover:text-blue-600'>
                   About
                 </Link>
               </li>
               <li>
-                <Link
-                  href='https://twaslowski.com/'
-                  className='text-gray-600 hover:text-blue-600'
-                >
+                <Link href='https://twaslowski.com/' className='text-gray-600 hover:text-blue-600'>
                   Blog
                 </Link>
               </li>
               <li>
-                <Link
-                  href='/contact'
-                  className='text-gray-600 hover:text-blue-600'
-                >
+                <Link href='/contact' className='text-gray-600 hover:text-blue-600'>
                   Contact
                 </Link>
               </li>

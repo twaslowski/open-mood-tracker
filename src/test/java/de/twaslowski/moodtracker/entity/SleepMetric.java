@@ -1,10 +1,6 @@
 package de.twaslowski.moodtracker.entity;
 
 import de.twaslowski.moodtracker.domain.entity.Metric;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class SleepMetric extends Metric {
 
@@ -17,10 +13,6 @@ public class SleepMetric extends Metric {
   private static final int DEFAULT_VALUE = 8;
   private static final SortOrder SORT_ORDER = SortOrder.ASC;
 
-  private static final Map<Integer, String> LABELS = IntStream.range(MIN_VALUE, MAX_VALUE + 1)
-      .boxed()
-      .collect(Collectors.toMap(Function.identity(), Object::toString));
-
   public static final Metric INSTANCE = Metric.builder()
       .id(2)
       .name(NAME)
@@ -29,7 +21,6 @@ public class SleepMetric extends Metric {
       .minValue(MIN_VALUE)
       .maxValue(MAX_VALUE)
       .defaultValue(DEFAULT_VALUE)
-      .labels(LABELS)
       .sortOrder(SORT_ORDER)
       .build();
 }

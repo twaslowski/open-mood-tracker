@@ -10,12 +10,18 @@ defaults:
     defaultValue: 0
     sortOrder: DESC
     labels:
-      2: Manic
-      1: Hypomanic
-      0: Neutral
-      -1: Mildly Depressed
-      -2: Depressed
-      -3: Severely Depressed
+      - value: 2
+        label: Manic
+      - value: 1
+        label: Hypomanic
+      - value: 0
+        label: Neutral
+      - value: -1
+        label: Mildly Depressed
+      - value: -2
+        label: Depressed
+      - value: -3
+        label: Severely Depressed
 
   - name: Sleep
     id: 2

@@ -4,8 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.adapter.telegram.domain.callback.Callback;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.Metric.SortOrder;
+import de.twaslowski.moodtracker.domain.value.LabelComparator;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
@@ -23,9 +23,9 @@ public class MetricCallbackGenerator {
   }
 
   private List<Callback> callbackForMetric(Metric metric) {
-    var callbacks = metric.getLabels().entrySet().stream()
-        .sorted(Entry.comparingByKey())
-        .map(entry -> new Callback(entry.getValue(), unsafeWrite(metric, entry.getKey())))
+    var callbacks = metric.getLabels().stream()
+        .sorted(new LabelComparator())
+        .map(label -> new Callback(label.label(), unsafeWrite(metric, label.value())))
         .collect(Collectors.toList());
 
     if (metric.getSortOrder() == SortOrder.DESC) {

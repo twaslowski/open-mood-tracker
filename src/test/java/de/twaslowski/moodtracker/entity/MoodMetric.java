@@ -1,7 +1,8 @@
 package de.twaslowski.moodtracker.entity;
 
 import de.twaslowski.moodtracker.domain.entity.Metric;
-import java.util.Map;
+import de.twaslowski.moodtracker.domain.value.Label;
+import java.util.List;
 
 public class MoodMetric extends Metric {
 
@@ -15,14 +16,14 @@ public class MoodMetric extends Metric {
 
   private static final SortOrder SORT_ORDER = SortOrder.DESC;
 
-  private static final Map<Integer, String> LABELS = Map.of(
-      3, "Strongly Manic",
-      2, "Manic",
-      1, "Hypomanic",
-      0, "Neutral",
-      -1, "Mildly Depressed",
-      -2, "Depressed",
-      -3, "Strongly Depressed"
+  private static final List<Label> LABELS = List.of(
+      Label.of(3, "Strongly Manic"),
+      Label.of(2, "Manic"),
+      Label.of(1, "Hypomanic"),
+      Label.of(0, "Neutral"),
+      Label.of(-1, "Mildly Depressed"),
+      Label.of(-2, "Depressed"),
+      Label.of(-3, "Strongly Depressed")
   );
 
   public static final Metric INSTANCE = Metric.builder()

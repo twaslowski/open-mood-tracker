@@ -99,9 +99,6 @@ public class IntegrationBase {
   @Autowired
   protected NotificationScheduler notificationScheduler;
 
-  @Autowired
-  protected ConfigurationSessionRepository configurationSessionRepository;
-
   protected Metric MOOD;
   protected Metric SLEEP;
 

@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.domain.entity;
 
+import de.twaslowski.moodtracker.domain.value.Label;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,9 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.function.Function;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import lombok.AllArgsConstructor;
@@ -35,8 +34,10 @@ public class Metric {
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metric_id_seq")
   private long id;
 
-  @NotNull
   private String ownerId;
+
+  @NotNull
+  private boolean defaultMetric;
 
   @NotNull
   private String name;
@@ -51,7 +52,7 @@ public class Metric {
   private Integer maxValue;
 
   @JdbcTypeCode(SqlTypes.JSON)
-  private Map<Integer, String> labels;
+  private List<Label> labels;
 
   @CreationTimestamp
   @Column(updatable = false)
@@ -71,17 +72,25 @@ public class Metric {
     DESC
   }
 
-  public Map<Integer, String> getLabels() {
+  public List<Label> getLabels() {
     if (labels == null || labels.isEmpty()) {
       return generateLabels();
     }
     return labels;
   }
 
-  private Map<Integer, String> generateLabels() {
+  public Label getLabelFor(int value) {
+    return getLabels().stream()
+        .filter(label -> label.value() == value)
+        .findFirst()
+        .orElseThrow();
+  }
+
+  private List<Label> generateLabels() {
     return IntStream.range(minValue, maxValue + 1)
         .boxed()
-        .collect(Collectors.toMap(Function.identity(), Object::toString));
+        .map(Label::ofInt)
+        .collect(Collectors.toList());
   }
 
   public MetricDatapoint emptyDatapoint() {
@@ -94,5 +103,14 @@ public class Metric {
 
   public MetricDatapoint datapointWithValue(Integer value) {
     return new MetricDatapoint(id, value);
+  }
+
+  public void updateWith(Metric metric) {
+    this.description = metric.description;
+    this.minValue = metric.minValue;
+    this.maxValue = metric.maxValue;
+    this.labels = metric.labels;
+    this.sortOrder = metric.sortOrder;
+    this.defaultValue = metric.defaultValue;
   }
 }

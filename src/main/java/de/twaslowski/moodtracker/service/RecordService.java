@@ -71,7 +71,7 @@ public class RecordService {
       var metric = metricService.getMetricById(datapoint.metricId());
       result.append(metric.getName());
       result.append(": ");
-      result.append(metric.getLabels().get(datapoint.value()));
+      result.append(metric.getLabelFor(datapoint.value()).label());
       result.append("\n");
     }
     return result.toString();

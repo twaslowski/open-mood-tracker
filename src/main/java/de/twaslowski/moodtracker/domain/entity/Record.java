@@ -27,7 +27,7 @@ import org.hibernate.type.SqlTypes;
 public class Record {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "user_id_seq")
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "record_id_seq")
   private long id;
 
   @NotNull

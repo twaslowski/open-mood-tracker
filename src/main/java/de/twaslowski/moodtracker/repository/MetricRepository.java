@@ -10,4 +10,8 @@ public interface MetricRepository extends JpaRepository<Metric, Long> {
   Optional<Metric> findByName(String name);
 
   List<Metric> findMetricsByOwnerId(String ownerId);
+
+  List<Metric> findMetricsByDefaultMetricIsTrue();
+
+  Optional<Metric> findMetricsByDefaultMetricIsTrueAndNameEquals(String name);
 }

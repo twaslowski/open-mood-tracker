@@ -23,6 +23,6 @@ public class MetricService {
   }
 
   public List<Metric> findDefaultMetrics() {
-    return findUserMetrics("1");
+    return metricRepository.findMetricsByDefaultMetricIsTrue();
   }
 }
