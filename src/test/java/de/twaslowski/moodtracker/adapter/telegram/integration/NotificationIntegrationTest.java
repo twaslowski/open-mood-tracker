@@ -19,7 +19,7 @@ public class NotificationIntegrationTest extends IntegrationBase {
     var triggerTime = LocalDateTime.now().plusSeconds(2);
     var cron = buildCron(triggerTime);
 
-    var user = saveUserWithDefaultConfiguration(UserSpec.valid().build());
+    var user = initializeUser(UserSpec.valid().build());
 
     var notification = NotificationSpec.valid()
         .userId(user.getId())

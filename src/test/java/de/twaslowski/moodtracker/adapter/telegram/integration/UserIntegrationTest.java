@@ -8,7 +8,6 @@ import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpda
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.StartHandler;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import java.util.concurrent.TimeUnit;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -32,7 +31,6 @@ public class UserIntegrationTest extends IntegrationBase {
 
           var userId = user.orElseThrow().getId();
 
-          assertThat(configurationRepository.findByUserId(userId)).isPresent();
           assertThat(notificationRepository.findAllByUserId(userId).size()).isEqualTo(1);
 
           var message = outgoingMessageQueue.remove();
@@ -43,7 +41,7 @@ public class UserIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldGreetUserIfAlreadyExists() {
-    saveUserWithDefaultConfiguration(UserSpec.valid().build());
+    initializeUser(UserSpec.valid().build());
     var update = TelegramTextUpdate.builder()
         .chatId(1L)
         .text(StartHandler.COMMAND)

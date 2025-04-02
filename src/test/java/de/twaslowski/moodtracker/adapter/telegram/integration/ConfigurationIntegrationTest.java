@@ -14,7 +14,7 @@ public class ConfigurationIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldCreateConfigurationSession() {
-    var user = saveUserWithDefaultConfiguration(UserSpec.valid().build());
+    var user = initializeUser(UserSpec.valid().build());
 
     incomingMessageQueue.add(TelegramTextUpdate.builder()
         .chatId(1)

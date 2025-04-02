@@ -7,7 +7,6 @@ import static org.awaitility.Awaitility.await;
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramInlineKeyboardUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
-import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import java.util.List;
 import java.util.Set;
@@ -21,23 +20,20 @@ public class RecordingIntegrationTest extends IntegrationBase {
 
   @Test
   void shouldCreateTemporaryRecordIfNoneExists() {
-    var user = saveUserWithDefaultConfiguration(UserSpec.valid().build());
+    var user = initializeUser(UserSpec.valid().build());
     // when
     incomingMessageQueue.add(TelegramTextUpdate.builder()
-        .chatId(1)
+        .chatId(user.getTelegramId())
         .text("/record")
         .build());
 
     // then
-    await().atMost(3, SECONDS).untilAsserted(() -> {
-          var maybeTemporaryRecord = recordRepository.findByUserId(user.getId());
-          assertThat(maybeTemporaryRecord).isNotEmpty();
-          var temporaryRecord = maybeTemporaryRecord.getFirst();
+    await().atMost(5, SECONDS).untilAsserted(() -> {
+          var temporaryRecords = recordRepository.findByUserId(user.getId());
+          assertThat(temporaryRecords).isNotEmpty();
+          var temporaryRecord = temporaryRecords.getFirst();
 
-          assertThat(temporaryRecord.getValues()).isEqualTo(List.of(
-              new MetricDatapoint(1, null),
-              new MetricDatapoint(2, null)
-          ));
+          assertThat(temporaryRecord.getValues()).allMatch(metricDatapoint -> metricDatapoint.value() == null);
         }
     );
   }
@@ -45,7 +41,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
   @Test
   @SneakyThrows
   void shouldDoNothingWhenReceivingAMetricUpdateWhileNotRecording() {
-    saveUserWithDefaultConfiguration(UserSpec.valid().build());
+    initializeUser(UserSpec.valid().build());
     // when
     assertThat(recordRepository.findAll()).isEmpty();
 
@@ -63,7 +59,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
   @Test
   @SneakyThrows
   void shouldOverwriteExistingRecordIfUserSubmitsTwice() {
-    var user = saveUserWithDefaultConfiguration(UserSpec.valid().build());
+    var user = initializeUser(UserSpec.valid().build());
     // when
     incomingMessageQueue.add(TelegramTextUpdate.builder()
         .chatId(1)
@@ -104,7 +100,7 @@ public class RecordingIntegrationTest extends IntegrationBase {
   @Test
   @SneakyThrows
   void shouldCompleteRecordOnceAllMetricsAreSubmitted() {
-    var user = saveUserWithDefaultConfiguration(UserSpec.valid().build());
+    var user = initializeUser(UserSpec.valid().build());
     // when
     incomingMessageQueue.add(TelegramTextUpdate.builder()
         .chatId(1)

@@ -52,7 +52,7 @@ public class RecordHandler extends AbstractCommandHandler {
     var firstMetric = recordService.getNextIncompleteMetric(record)
         .orElseThrow(() -> new IllegalStateException("No empty defaults found for record after initialization."));
 
-    log.info("Created new record {}", record.getId());
+    log.info("Created new record {} for user {}", record.getId(), user.getId());
     return TelegramInlineKeyboardResponse.builder()
         .chatId(update.getChatId())
         .callbacks(metricCallbackGenerator.createCallbacks(firstMetric))

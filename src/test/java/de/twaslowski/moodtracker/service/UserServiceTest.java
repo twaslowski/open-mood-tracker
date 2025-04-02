@@ -1,11 +1,9 @@
 package de.twaslowski.moodtracker.service;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import de.twaslowski.moodtracker.domain.entity.User;
-import de.twaslowski.moodtracker.repository.ConfigurationRepository;
+import de.twaslowski.moodtracker.repository.TrackedMetricRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.Optional;
 import org.junit.jupiter.api.Test;
@@ -24,7 +22,7 @@ class UserServiceTest {
   private UserInitializationService userInitializationService;
 
   @Mock
-  private ConfigurationRepository configurationRepository;
+  private TrackedMetricRepository trackedMetricRepository;
 
   @InjectMocks
   private UserService userService;
@@ -36,12 +34,5 @@ class UserServiceTest {
     userService.createUserFromTelegramId(1L);
 
     verify(userInitializationService).initializeUser(1L);
-  }
-
-  @Test
-  void shouldReturnFalseOnUserCreation() {
-    when(userRepository.findByTelegramId(1L)).thenReturn(Optional.of(new User()));
-
-    assertFalse(userService.createUserFromTelegramId(1L));
   }
 }

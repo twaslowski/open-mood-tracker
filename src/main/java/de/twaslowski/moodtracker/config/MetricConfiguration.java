@@ -3,7 +3,6 @@ package de.twaslowski.moodtracker.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.repository.MetricRepository;
-import de.twaslowski.moodtracker.repository.UserRepository;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,7 @@ public class MetricConfiguration {
   private final String configPath;
   private final ObjectMapper metricMapper;
   private final MetricRepository metricRepository;
+  private final ParsedMetricConfiguration parsedMetricConfiguration;
 
   public MetricConfiguration(@Value("${mood-tracker.metrics.config-path}") String configPath,
                              @Qualifier("metricMapper") ObjectMapper metricMapper,
@@ -27,14 +27,13 @@ public class MetricConfiguration {
     this.configPath = configPath;
     this.metricRepository = metricRepository;
     this.metricMapper = metricMapper;
+    this.parsedMetricConfiguration = loadMetricsFromConfiguration();
   }
 
   @Bean
   public List<Metric> defaultMetrics() {
-    var configuredMetrics = loadMetricsFromConfiguration();
-
     List<Metric> savedMetrics = new ArrayList<>();
-    for (Metric metric : configuredMetrics.defaults()) {
+    for (Metric metric : parsedMetricConfiguration.defaults()) {
       metric.setDefaultMetric(true);
       Optional<Metric> existingMetric = metricRepository.findMetricsByDefaultMetricIsTrueAndNameEquals(metric.getName());
       if (existingMetric.isPresent()) {
@@ -45,6 +44,13 @@ public class MetricConfiguration {
       }
     }
     return savedMetrics;
+  }
+
+  @Bean
+  public List<Metric> defaultTrackedMetrics(List<Metric> defaultMetrics) {
+    return defaultMetrics.stream()
+        .filter(metric -> parsedMetricConfiguration.tracked().contains(metric.getName()))
+        .toList();
   }
 
   @SneakyThrows

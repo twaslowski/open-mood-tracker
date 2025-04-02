@@ -25,4 +25,11 @@ public class User {
 
   @NotNull
   private long telegramId;
+
+  @NotNull
+  private boolean autoBaselineEnabled = false;
+
+  public void toggleAutoBaseline() {
+    autoBaselineEnabled = !autoBaselineEnabled;
+  }
 }

@@ -42,7 +42,7 @@ public class Record {
 
   public List<Long> getIncompleteMetricIds() {
     return values.stream()
-        .filter(metric -> metric.value() == null)
+        .filter(datapoint -> datapoint.value() == null)
         .map(MetricDatapoint::metricId)
         .toList();
   }
