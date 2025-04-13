@@ -87,7 +87,7 @@ jobs:
       - name: Deploy Postgres
         run: |
           helm upgrade --install \
-            --values ./environments/dev/values.postgres.yaml \
+            --values ./environments/dev/postgres.values.yaml \
             --namespace mood-tracker-dev --create-namespace \
             --wait --timeout 60s \
             postgres oci://registry-1.docker.io/bitnamicharts/postgresql

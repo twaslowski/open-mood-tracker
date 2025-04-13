@@ -10,39 +10,35 @@ You can find my personal instance of the bot running at:
 
 https://t.me/open_mood_tracker_bot
 
+This section is a rough user guide to show you how to use the bot.
+
+### Commands
+
 The available commands are:
 
 - `/start`: Start the bot and register yourself.
 - `/record`: Record your current mood
 - `/baseline`: Create a [baseline record](#baselines)
-- `/auto-baseline`: Toggle creation of automatic baseline records.
-- `/settings`: Configure the bot [in progress].
+- `/autobaseline`: Toggle creation of automatic baseline records.
+- `/configure`: Configure the bot.
+- `/help`: Show the available commands.
 
 ### Baselines
 
-You can define baselines, which corresponds to your personal feeling of "normal". For me personally,
-this is eight hours of sleep and a neutral mood (as opposed to depressed or manic). You can record
-an average day by sending `/baseline` to the bot. Further, for extended periods of normalcy, you can
-configure a automatic baseline records to be created at a certain point throughout the day by sending
-`/auto-baseline`.
+_Baselines_ are an essential concept to the bot. They represent your personal feeling of "normal".
 
-## Roadmap
+For example, this could mean eight hours of sleep and a neutral mood
+(as opposed to depressed or manic). You can record an average day by sending `/baseline` to the bot. 
+Further, for extended periods of normalcy, you can configure an automatic baseline records to be
+created at a certain point throughout the day by triggering `/autobaseline`.
 
-**Features**
+### Configuring the bot
 
-- [ ] Allow users to fully configure the bot to their needs
-- [ ] Statistics and visualization
-
-**Tech Debt**
-
-- [ ] Ensure scheduled tasks can be canceled
-
-## Configuring the bot
-
-As of now, the bot is primarily configurable via a Configmap that is injected into the application.
-You can find the Configmap with the configuration for the demo bot [here](https://github.com/twaslowski/open-mood-tracker/blob/main/charts/values/application-values.yaml).
-
-I'm working on making Notifications and tracked Metrics as well as Baselines configurable right now.
+There is a frontend to configure the bot to your needs. This is helpful for more complex
+configuration, such as which metrics to track, which baselines to set, and to even create
+custom metrics! You can access the (admittedly very rough) configuration frontend by sending
+`/configure` to the bot. That will generate a temporary session, in which you can configure
+the bot to your liking.
 
 ## Running
 
