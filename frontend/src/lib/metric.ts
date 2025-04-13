@@ -54,7 +54,7 @@ export const submitMetric = async (metric: MetricCreation): Promise<Metric> => {
 
 export const setBaseline = async (metric: Metric, newBaseline: number): Promise<Metric> => {
   const authToken = getToken();
-  metric.defaultValue = newBaseline;
+  metric.baseline = newBaseline;
   return fetch(`/api/v1/metric`, {
     method: 'PUT',
     body: JSON.stringify(metric),

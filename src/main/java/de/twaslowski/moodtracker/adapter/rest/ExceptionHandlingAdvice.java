@@ -19,7 +19,7 @@ public class ExceptionHandlingAdvice {
 
   @ExceptionHandler({SessionNotFoundException.class, SessionExpiredException.class})
   public final ResponseEntity<ErrorResponse> handleInvalidUrl(Exception ex) {
-    return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
   @ExceptionHandler(MetricNotFoundException.class)

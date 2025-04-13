@@ -1,8 +1,10 @@
+import React from "react";
+
+import {setBaseline} from "@/lib/metric";
+
 import TrackingButton from "@/components/metric/TrackingButton";
 
 import {Metric} from '@/types/metric';
-import React from "react";
-import {setBaseline} from "@/lib/metric";
 
 type MetricCardProps = {
   metric: Metric;
@@ -12,18 +14,15 @@ type MetricCardProps = {
 const MetricCard: React.FC<MetricCardProps> = ({metric, onMetricUpdate}) => {
   const [currentMetric, setCurrentMetric] = React.useState<Metric>(metric);
 
-  React.useEffect(() => {
-}, [currentMetric]);
-
-  const isDefaultValue = (value: number) => {
-    return value === metric.defaultValue;
+  const isBaseline = (value: number) => {
+    return value === metric.baseline;
   };
 
   const deriveBaselineClassName = (value: number) => {
     const nonBaseline = 'bg-gray-100 text-gray-800';
     const baselineTracked = 'bg-blue-100 text-blue-800';
     const baselineUntracked = 'bg-blue-50 text-gray-800';
-    if (isDefaultValue(value)) {
+    if (isBaseline(value)) {
       if (metric.tracked) {
         return 'px-2 py-1 rounded-lg text-s ' + baselineTracked;
       } else {

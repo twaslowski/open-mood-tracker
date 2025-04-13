@@ -14,17 +14,6 @@ export function storeToken(token: string): void {
 /**
  * Written as an async function to allow for promise chaining in the calling function
  */
-export const getToken = (): string => {
-  const token = getFromLocalStorage('authToken');
-  if (!token) {
-    throw new Error('No token found in local storage');
-  }
-  return token;
+export const getToken = (): string | null => {
+  return getFromLocalStorage('authToken');
 };
-
-export function getFromSessionStorage(key: string): string | null {
-  if (typeof sessionStorage !== 'undefined') {
-    return sessionStorage.getItem(key);
-  }
-  return null;
-}

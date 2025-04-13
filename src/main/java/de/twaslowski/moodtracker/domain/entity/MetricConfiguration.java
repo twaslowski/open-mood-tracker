@@ -2,7 +2,9 @@ package de.twaslowski.moodtracker.domain.entity;
 
 import static jakarta.persistence.GenerationType.UUID;
 
+import de.twaslowski.moodtracker.domain.dto.MetricDTO;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
+import de.twaslowski.moodtracker.exception.MetricOwnerMismatchException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -74,5 +76,28 @@ public class MetricConfiguration {
         .metricId(metric.getId())
         .value(null)
         .build();
+  }
+
+  public MetricConfiguration validateOwnership(User user) {
+    if (!user.getId().equals(this.user.getId())) {
+      throw new MetricOwnerMismatchException(user.getId(), metric.getId());
+    }
+    return this;
+  }
+
+  public MetricConfiguration track() {
+    this.tracked = true;
+    return this;
+  }
+
+  public MetricConfiguration untrack() {
+    this.tracked = false;
+    return this;
+  }
+
+  public MetricConfiguration updateWith(MetricDTO metricDTO) {
+    this.baselineValue = metricDTO.baseline();
+    this.tracked = metricDTO.tracked();
+    return this;
   }
 }

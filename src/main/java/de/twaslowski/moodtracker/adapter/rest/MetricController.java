@@ -1,7 +1,6 @@
 package de.twaslowski.moodtracker.adapter.rest;
 
 import de.twaslowski.moodtracker.domain.dto.MetricDTO;
-import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.service.MetricService;
@@ -39,8 +38,8 @@ public class MetricController {
   public ResponseEntity<MetricDTO> updateMetric(@AuthenticationPrincipal User user,
                                                 @RequestBody MetricDTO metricDTO) {
     log.info("Updating metric {} for user {}", metricDTO.id(), user.getId());
-    Metric updatedMetric = metricService.updateMetric(user, metricDTO);
-    return ResponseEntity.ok(MetricDTO.from(updatedMetric));
+    MetricConfiguration updatedMetricConfiguration = metricService.updateMetric(user, metricDTO);
+    return ResponseEntity.ok(MetricDTO.from(updatedMetricConfiguration));
   }
 
   @GetMapping("/metric")
@@ -59,7 +58,7 @@ public class MetricController {
   @DeleteMapping("/metric/tracking/{trackedMetricId}")
   public ResponseEntity<MetricConfiguration> untrackMetric(@PathVariable String trackedMetricId, @AuthenticationPrincipal User user) {
     log.info("Removing metric tracking {} for user {}", trackedMetricId, user.getId());
-    metricService.removeMetricTracking(trackedMetricId, user);
+    metricService.untrackMetric(trackedMetricId, user);
     return ResponseEntity.status(204).build();
   }
 }

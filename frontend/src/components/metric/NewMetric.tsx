@@ -2,18 +2,17 @@
 
 import React, {FormEvent, useState} from 'react';
 
+import {submitMetric} from "@/lib/metric";
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {Checkbox} from "@/components/ui/checkbox";
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-
-import {submitMetric} from "@/lib/metric";
-import {Checkbox} from "@/components/ui/checkbox";
 
 
 export default function NewMetric() {
   const [useLabels, setUseLabels] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [newMetric, setNewMetric] = useState({
     name: '',
     description: '',
@@ -38,8 +37,7 @@ export default function NewMetric() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    submitMetric(newMetric)
-        .then(response => console.log(response));
+    submitMetric(newMetric);
   };
 
   return (
