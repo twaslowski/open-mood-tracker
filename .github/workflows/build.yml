@@ -89,7 +89,7 @@ jobs:
           helm upgrade --install \
             --values ./environments/dev/postgres.values.yaml \
             --namespace mood-tracker-dev --create-namespace \
-            --wait --timeout 60s \
+            --wait --timeout 150s \
             postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
       - name: Deploy mood-tracker
@@ -103,5 +103,5 @@ jobs:
           --set telegramToken="$TELEGRAM_TOKEN" \
           --values ./charts/values/mood-tracker.values.yaml \
           --namespace mood-tracker-dev \
-          --wait --timeout 120s \
+          --wait --timeout 150s \
           mood-tracker ./charts/open-mood-tracker
