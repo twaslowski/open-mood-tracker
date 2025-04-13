@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,9 +10,9 @@ import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.domain.dto.MetricDTO;
 import de.twaslowski.moodtracker.domain.entity.Metric;
+import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import de.twaslowski.moodtracker.exception.MetricNotFoundException;
-import de.twaslowski.moodtracker.exception.MetricOwnerMismatchException;
 import de.twaslowski.moodtracker.repository.MetricRepository;
 import de.twaslowski.moodtracker.repository.MetricConfigurationRepository;
 import java.util.Optional;
@@ -40,52 +41,45 @@ class MetricServiceTest {
 
     var dto = MetricDTO.builder().id(1L).build();
 
-    assertThatThrownBy(() -> metricService.updateMetric(user, dto))
+    assertThatThrownBy(() -> metricService.updateMetricConfiguration(user, dto))
         .isInstanceOf(MetricNotFoundException.class);
   }
 
   @Test
-  void shouldCloneDefaultMetricWhenUpdatingDefaultMetric() {
+  void shouldCreateMetricConfigurationIfNotExists() {
     var user = UserSpec.valid().build();
-    var existingMetric = Metric.builder().id(1L).defaultMetric(true).build();
-    var dto = MetricDTO.builder().id(1L).build();
+    var existingMetric = Metric.builder().id(1L).defaultValue(1).build();
+    var dto = MetricDTO.builder().id(1L).baseline(2).build();
 
     when(metricRepository.findById(1L)).thenReturn(Optional.of(existingMetric));
-    when(metricRepository.save(any(Metric.class))).thenAnswer(invocation -> invocation.getArgument(0));
+    when(metricConfigurationRepository.findByUserIdAndMetricId(user.getId(), existingMetric.getId()))
+        .thenReturn(Optional.empty());
+    when(metricConfigurationRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-    var result = metricService.updateMetric(user, dto);
+    var result = metricService.updateMetricConfiguration(user, dto);
 
-    assertNotNull(result);
-    assertEquals(user.getId(), result.getOwnerId());
+    assertThat(result.getMetric()).isEqualTo(existingMetric);
+    assertThat(result.getUser()).isEqualTo(user);
+    assertThat(result.getBaselineValue()).isEqualTo(2);
   }
 
   @Test
-  void shouldThrowExceptionWhenUserDoesNotOwnMetric() {
+  void shouldUpdateMetricConfiguration() {
     var user = UserSpec.valid().build();
-    var existingMetric = Metric.builder().id(1L).defaultMetric(false).ownerId("otherUserId").build();
-    var dto = MetricDTO.builder().id(1L).build();
+    var existingMetric = Metric.builder().id(1L).defaultValue(1).build();
+    var metricConfiguration = MetricConfiguration.from(existingMetric, user);
+    var dto = MetricDTO.builder().id(1L).baseline(2).build();
 
     when(metricRepository.findById(1L)).thenReturn(Optional.of(existingMetric));
+    when(metricConfigurationRepository.findByUserIdAndMetricId(user.getId(), existingMetric.getId()))
+        .thenReturn(Optional.of(metricConfiguration));
+    when(metricConfigurationRepository.save(any())).thenAnswer(invocation -> invocation.getArgument(0));
 
-    assertThatThrownBy(() -> metricService.updateMetric(user, dto))
-        .isInstanceOf(MetricOwnerMismatchException.class);
+    var result = metricService.updateMetricConfiguration(user, dto);
+
+    assertThat(result.getMetric()).isEqualTo(existingMetric);
+    assertThat(result.getUser()).isEqualTo(user);
+    assertThat(result.getBaselineValue()).isEqualTo(2);
   }
 
-  @Test
-  void shouldUpdateNonDefaultMetricSuccessfully() {
-    var user = UserSpec.valid().build();
-    var existingMetric = Metric.builder().id(1L).defaultMetric(false).ownerId(user.getId()).build();
-    var dto = mock(MetricDTO.class);
-
-    when(dto.id()).thenReturn(existingMetric.getId());
-    when(dto.validateLabels()).thenReturn(true);
-
-    when(metricRepository.findById(1L)).thenReturn(Optional.of(existingMetric));
-    when(metricRepository.save(any(Metric.class))).thenAnswer(invocation -> invocation.getArgument(0));
-
-    var result = metricService.updateMetric(user, dto);
-
-    assertNotNull(result);
-    assertEquals(existingMetric.getId(), result.getId());
-  }
 }

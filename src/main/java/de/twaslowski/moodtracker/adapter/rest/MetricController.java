@@ -38,7 +38,7 @@ public class MetricController {
   public ResponseEntity<MetricDTO> updateMetric(@AuthenticationPrincipal User user,
                                                 @RequestBody MetricDTO metricDTO) {
     log.info("Updating metric {} for user {}", metricDTO.id(), user.getId());
-    MetricConfiguration updatedMetricConfiguration = metricService.updateMetric(user, metricDTO);
+    MetricConfiguration updatedMetricConfiguration = metricService.updateMetricConfiguration(user, metricDTO);
     return ResponseEntity.ok(MetricDTO.from(updatedMetricConfiguration));
   }
 

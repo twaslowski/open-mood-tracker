@@ -4,6 +4,7 @@ import static jakarta.persistence.GenerationType.UUID;
 
 import de.twaslowski.moodtracker.domain.dto.MetricDTO;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
+import de.twaslowski.moodtracker.exception.MetricAlreadyTrackedException;
 import de.twaslowski.moodtracker.exception.MetricOwnerMismatchException;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -60,7 +61,7 @@ public class MetricConfiguration {
         .metric(metric)
         .user(user)
         .baselineValue(metric.getDefaultValue())
-        .tracked(true)
+        .tracked(false)
         .build();
   }
 
@@ -86,6 +87,9 @@ public class MetricConfiguration {
   }
 
   public MetricConfiguration track() {
+    if (this.tracked) {
+      throw new MetricAlreadyTrackedException(user.getId(), metric.getId());
+    }
     this.tracked = true;
     return this;
   }

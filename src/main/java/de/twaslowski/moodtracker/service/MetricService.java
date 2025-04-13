@@ -4,7 +4,6 @@ import de.twaslowski.moodtracker.domain.dto.MetricDTO;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.domain.entity.User;
-import de.twaslowski.moodtracker.exception.MetricAlreadyTrackedException;
 import de.twaslowski.moodtracker.exception.MetricNotFoundException;
 import de.twaslowski.moodtracker.exception.MetricNotTrackedException;
 import de.twaslowski.moodtracker.repository.MetricConfigurationRepository;
@@ -53,7 +52,7 @@ public class MetricService {
         .map(m -> m.validateOwnership(user))
         .map(MetricConfiguration::track)
         .map(metricConfigurationRepository::save)
-        .orElseGet(() -> MetricConfiguration.from(metric, user).track());
+        .orElseGet(() -> metricConfigurationRepository.save(MetricConfiguration.from(metric, user).track()));
   }
 
   public void untrackMetric(String trackedMetricId, User user) {
@@ -67,7 +66,7 @@ public class MetricService {
     metricConfigurationRepository.save(trackedMetric);
   }
 
-  public MetricConfiguration updateMetric(User user, MetricDTO metricDTO) {
+  public MetricConfiguration updateMetricConfiguration(User user, MetricDTO metricDTO) {
     var existingMetric = getMetricById(metricDTO.id());
     return metricConfigurationRepository.findByUserIdAndMetricId(user.getId(), metricDTO.id())
         .map(m -> m.validateOwnership(user))
