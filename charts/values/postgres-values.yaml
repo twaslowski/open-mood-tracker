@@ -1,7 +1,0 @@
-auth:
-  username: mood-tracker
-  database: mood-tracker
-nameOverride: "postgres"
-
-service:
-  port: 5432

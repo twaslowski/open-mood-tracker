@@ -77,15 +77,31 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  deploy:
+  deploy-dev:
     runs-on: self-hosted
     needs: build_docker_image
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: deploy
+      - name: Deploy Postgres
+        run: |
+          helm upgrade --install \
+            --values ./environments/dev/values.postgres.yaml \
+            --namespace mood-tracker-dev --create-namespace \
+            --wait --timeout 60s \
+            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
+
+      - name: Deploy mood-tracker
         env:
           TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
         run: |
-          ./lifecycle/deploy.sh
+          export TAG="sha-$(git rev-parse --short HEAD)"
+        
+          helm upgrade --install \
+          --set image.tag="$TAG" \
+          --set telegramToken="$TELEGRAM_TOKEN" \
+          --values ./charts/values/mood-tracker.values.yaml \
+          --namespace mood-tracker-dev \
+          --wait --timeout 120s \
+          mood-tracker ./charts/open-mood-tracker
