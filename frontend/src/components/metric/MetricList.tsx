@@ -1,7 +1,7 @@
 'use client';
 
-import { Check, Filter, Plus, Search } from 'lucide-react';
-import { useState } from 'react';
+import { Filter, Search } from 'lucide-react';
+import {useEffect, useState} from 'react';
 
 import MetricCard from '@/components/metric/MetricCard';
 import { Card, CardContent } from '@/components/ui/card';
@@ -9,33 +9,36 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 
 import { Metric } from '@/types/metric';
+import {getToken} from "@/lib/helper";
+import {fetchAllMetrics} from "@/lib/metric";
 
-interface MetricListProps {
-  metrics: Metric[];
-  activeMetrics: number[];
-  toggleActiveMetric: (metricId: number) => void;
-  loading: boolean;
-  error: string;
-}
-
-export default function MetricList({
-  metrics,
-  activeMetrics,
-  toggleActiveMetric,
-  loading,
-  error,
-}: MetricListProps) {
+export default function MetricList() {
+  const [metrics, setMetrics] = useState<Metric[]>([]);
+  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [showDefault, setShowDefault] = useState(true);
   const [showCustom, setShowCustom] = useState(true);
 
-  // Filter metrics based on search and filters
+  useEffect(() => {
+    const token = getToken()
+    if (token) {
+      fetchAllMetrics(token)
+          .then((data) => {
+            setMetrics(data);
+          })
+          .catch((error) => setError(error.message))
+          .finally(() => setLoading(false));
+    }
+  }, []);
+
+
   const filteredMetrics = metrics.filter((metric) => {
     const matchesSearch =
       metric.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       metric.description.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesFilter =
-      (metric.defaultMetric && showDefault) || (!metric.defaultMetric && showCustom);
+      (metric.isDefault && showDefault) || (!metric.isDefault && showCustom);
     return matchesSearch && matchesFilter;
   });
 
@@ -99,30 +102,19 @@ export default function MetricList({
           <p className='text-center py-8'>No metrics found matching your criteria.</p>
         )}
 
+        {/* Metrics list */}
         {!loading && !error && filteredMetrics.length > 0 && (
           <div className='grid grid-cols-1 md:grid-cols-2 gap-6'>
-            {filteredMetrics.map((metric: Metric) => (
+            {metrics.map((metric: Metric) => (
               <div key={metric.id} className='relative'>
-                <MetricCard metric={metric} />
-                <button
-                  onClick={() => toggleActiveMetric(metric.id)}
-                  className={`absolute top-4 right-4 p-1 rounded-full ${
-                    activeMetrics.includes(metric.id)
-                      ? 'bg-green-100 text-green-600'
-                      : 'bg-gray-100 text-gray-400'
-                  }`}
-                  title={
-                    activeMetrics.includes(metric.id)
-                      ? 'Active - Click to remove'
-                      : 'Inactive - Click to add'
-                  }
-                >
-                  {activeMetrics.includes(metric.id) ? (
-                    <Check className='h-6 w-6' />
-                  ) : (
-                    <Plus className='h-6 w-6' />
-                  )}
-                </button>
+                <MetricCard metric={metric} onMetricUpdate={(updatedMetric) => {
+                  console.log('Updated metric:', updatedMetric)
+                  setMetrics((prevMetrics) =>
+                      prevMetrics.map((m) => (m.id === updatedMetric.id ? updatedMetric : m))
+                  )
+                  console.log('new metrics', metrics)
+                }
+                }/>
               </div>
             ))}
           </div>

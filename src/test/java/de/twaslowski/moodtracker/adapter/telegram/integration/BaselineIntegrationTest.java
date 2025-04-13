@@ -3,6 +3,7 @@ package de.twaslowski.moodtracker.adapter.telegram.integration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
+import de.twaslowski.moodtracker.IntegrationTestBase;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.AutoBaselineHandler;
 import de.twaslowski.moodtracker.entity.UserSpec;
@@ -12,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @IntegrationTest
-public class BaselineIntegrationTest extends IntegrationBase {
+public class BaselineIntegrationTest extends IntegrationTestBase {
 
   @Autowired private AutoBaselineHandler autoBaselineHandler;
 

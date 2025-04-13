@@ -1,40 +1,42 @@
 package de.twaslowski.moodtracker.service;
 
-import de.twaslowski.moodtracker.domain.entity.TrackedMetric;
+import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.exception.UserNotFoundException;
-import de.twaslowski.moodtracker.repository.TrackedMetricRepository;
+import de.twaslowski.moodtracker.repository.MetricConfigurationRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
   private final UserRepository userRepository;
-  private final TrackedMetricRepository trackedMetricRepository;
+  private final MetricConfigurationRepository metricConfigurationRepository;
 
   private final UserInitializationService userInitializationService;
 
-  public Optional<User> createUserFromTelegramId(long telegramId) {
+  public User createUserFromTelegramId(long telegramId) {
     var existentUser = userRepository.findByTelegramId(telegramId);
-    if (existentUser.isPresent()) {
-      return Optional.empty();
-    }
-    return Optional.of(userInitializationService.initializeUser(telegramId));
+    return existentUser.orElseGet(() -> {
+      log.info("Creating user from telegramId {}", telegramId);
+      var user = userInitializationService.initializeUser(telegramId);
+      return userRepository.save(user);
+    });
   }
 
-  public List<TrackedMetric> getTrackedMetrics(User user) {
-    return trackedMetricRepository.findByUserId(user.getId());
+  public List<MetricConfiguration> getTrackedMetrics(User user) {
+    return metricConfigurationRepository.findByUserId(user.getId());
   }
 
   public List<MetricDatapoint> getBaselineConfiguration(String userId) {
-    return trackedMetricRepository.findByUserId(userId).stream()
-        .map(TrackedMetric::defaultDatapoint)
+    return metricConfigurationRepository.findByUserId(userId).stream()
+        .map(MetricConfiguration::defaultDatapoint)
         .toList();
   }
 

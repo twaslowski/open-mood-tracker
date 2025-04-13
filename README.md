@@ -52,7 +52,7 @@ microk8s or k3s) as well as Helm installed. You can then run the following comma
 ```
 git clone git@github.com:twaslowski/open-mood-tracker.git
 cd open-mood-tracker
-./scripts/deploy.sh
+./lifecycle/deploy.sh
 ```
 
 For setting an initial postgres password (recommended), export a DATASOURCE_PASSWORD variable.

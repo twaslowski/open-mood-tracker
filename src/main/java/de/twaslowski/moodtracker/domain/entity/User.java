@@ -6,10 +6,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
 @Data
@@ -17,7 +21,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Table(name = "user")
-public class User {
+public class User implements UserDetails {
 
   @Id
   @GeneratedValue(strategy = GenerationType.UUID)
@@ -31,5 +35,24 @@ public class User {
 
   public void toggleAutoBaseline() {
     autoBaselineEnabled = !autoBaselineEnabled;
+  }
+
+  // todo: It makes sense to extend this user entity in the future to improve interoperability
+  // with technologies beyond Telegram. For now, this is required for Spring Security integration
+  // tests to work.
+
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return List.of();
+  }
+
+  @Override
+  public String getPassword() {
+    return "";
+  }
+
+  @Override
+  public String getUsername() {
+    return "";
   }
 }

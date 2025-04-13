@@ -1,67 +1,45 @@
 'use client';
 
-import { PlusCircle, X } from 'lucide-react';
-import { useState } from 'react';
+import React, {FormEvent, useState} from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 
-interface NewMetricProps {
-  onCreateMetric: (metricData: any) => Promise<boolean>;
-}
+import {submitMetric} from "@/lib/metric";
+import {Checkbox} from "@/components/ui/checkbox";
 
-export default function NewMetric({ onCreateMetric }: NewMetricProps) {
+
+export default function NewMetric() {
+  const [useLabels, setUseLabels] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [newMetric, setNewMetric] = useState({
     name: '',
     description: '',
-    labels: [''],
+    labels: [] as Array<{ label: string; value: number }>,
     minValue: 1,
-    maxValue: 10,
-    defaultValue: 5,
+    maxValue: 3,
+    defaultValue: 2,
+    tracked: false,
   });
 
-  const handleAddLabel = () => {
-    setNewMetric({
-      ...newMetric,
-      labels: [...newMetric.labels, ''],
-    });
-  };
-
-  const handleLabelChange = (index: number, value: string) => {
+  const handleLabelChange = (value: number, label: string) => {
     const updatedLabels = [...newMetric.labels];
-    updatedLabels[index] = value;
+    updatedLabels[value] = {
+      "label": label,
+      "value": value,
+    };
     setNewMetric({
       ...newMetric,
       labels: updatedLabels,
     });
   };
 
-  const handleRemoveLabel = (index: number) => {
-    const updatedLabels = newMetric.labels.filter((_, i) => i !== index);
-    setNewMetric({
-      ...newMetric,
-      labels: updatedLabels,
-    });
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-
-    const success = await onCreateMetric(newMetric);
-
-    if (success) {
-      // Reset form on success
-      setNewMetric({
-        name: '',
-        description: '',
-        labels: [''],
-        minValue: 1,
-        maxValue: 10,
-        defaultValue: 5,
-      });
-    }
+    submitMetric(newMetric)
+        .then(response => console.log(response));
   };
 
   return (
@@ -147,50 +125,34 @@ export default function NewMetric({ onCreateMetric }: NewMetricProps) {
           </div>
 
           <div>
-            <label className='block text-sm font-medium text-gray-700 mb-2'>
-              Labels (Optional)
-            </label>
+            <div className='flex mb-2 space-x-2'>
+              <p className='text-md font-medium text-black'>Labels</p>
+              <Checkbox className='mt-1'
+                        checked={useLabels}
+                        onCheckedChange={(checked) => setUseLabels(!!checked)} />
+            </div>
             <p className='text-xs text-gray-500 mb-3'>
               Add labels for each value point (e.g., "1: Very Low", "10: Very High")
             </p>
 
-            {newMetric.labels.map((label, index) => (
-              <div key={index} className='flex items-center mb-2'>
-                <div className='w-10 text-right mr-2 text-sm text-gray-500'>
-                  {newMetric.minValue + index}:
-                </div>
-                <Input
-                  type='text'
-                  value={label}
-                  onChange={(e) => handleLabelChange(index, e.target.value)}
-                  className='flex-grow'
-                  placeholder={`Label for value ${newMetric.minValue + index}`}
-                />
-                {newMetric.labels.length > 1 && (
-                  <Button
-                    type='button'
-                    variant='ghost'
-                    size='icon'
-                    onClick={() => handleRemoveLabel(index)}
-                    className='ml-2 text-red-500 hover:text-red-700 h-8 w-8'
-                  >
-                    <X className='h-4 w-4' />
-                  </Button>
-                )}
-              </div>
-            ))}
-
-            {newMetric.labels.length < newMetric.maxValue - newMetric.minValue + 1 && (
-              <Button
-                type='button'
-                variant='ghost'
-                onClick={handleAddLabel}
-                className='inline-flex items-center mt-2 text-sm p-0 h-auto'
-              >
-                <PlusCircle className='h-4 w-4 mr-1' />
-                Add another label
-              </Button>
-            )}
+            {useLabels && Array.from({ length: newMetric.maxValue - newMetric.minValue + 1 }, (_, index) => {
+                const value = newMetric.minValue + index;
+                const label = newMetric.labels.find((l) => l.value === value)?.label || '';
+                return (
+                    <div key={value} className='flex items-center mb-2'>
+                      <div className='w-10 text-right mr-2 text-sm text-gray-500'>
+                        {value}:
+                      </div>
+                      <Input
+                          type='text'
+                          value={label}
+                          onChange={(e) => handleLabelChange(value, e.target.value)}
+                          className='flex-grow'
+                          placeholder={`Label for value ${value}`}
+                      />
+                    </div>
+                );
+              })}
           </div>
 
           <div className='pt-4'>

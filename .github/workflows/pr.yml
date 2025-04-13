@@ -19,4 +19,4 @@ jobs:
           cache: maven
 
       - name: Unit tests
-        run: ./scripts/qa.sh
+        run: ./lifecycle/qa.sh

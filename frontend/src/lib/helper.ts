@@ -14,7 +14,7 @@ export function storeToken(token: string): void {
 /**
  * Written as an async function to allow for promise chaining in the calling function
  */
-export const getToken = async (): Promise<string> => {
+export const getToken = (): string => {
   const token = getFromLocalStorage('authToken');
   if (!token) {
     throw new Error('No token found in local storage');

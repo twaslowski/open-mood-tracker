@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
+import de.twaslowski.moodtracker.IntegrationTestBase;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramInlineKeyboardUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.entity.UserSpec;
@@ -16,7 +17,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @IntegrationTest
-public class RecordingIntegrationTest extends IntegrationBase {
+public class RecordingIntegrationTest extends IntegrationTestBase {
 
   @Test
   void shouldCreateTemporaryRecordIfNoneExists() {

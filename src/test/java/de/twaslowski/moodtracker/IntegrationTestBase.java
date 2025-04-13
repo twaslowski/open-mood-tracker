@@ -1,4 +1,4 @@
-package de.twaslowski.moodtracker.adapter.telegram.integration;
+package de.twaslowski.moodtracker;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,6 +17,7 @@ import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.repository.MetricRepository;
 import de.twaslowski.moodtracker.repository.NotificationRepository;
 import de.twaslowski.moodtracker.repository.RecordRepository;
+import de.twaslowski.moodtracker.repository.MetricConfigurationRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
@@ -27,13 +28,14 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @IntegrationTest
-public class IntegrationBase {
+public class IntegrationTestBase {
 
   @BeforeEach
   void setUp() {
     userRepository.deleteAll();
     recordRepository.deleteAll();
     notificationRepository.deleteAll();
+    metricConfigurationRepository.deleteAll();
 
     MOOD = metricRepository.findByName("Mood").orElseThrow();
     SLEEP = metricRepository.findByName("Sleep").orElseThrow();
@@ -87,12 +89,14 @@ public class IntegrationBase {
   @Autowired
   protected NotificationScheduler notificationScheduler;
 
+  @Autowired
+  protected MetricConfigurationRepository metricConfigurationRepository;
+
   protected Metric MOOD;
   protected Metric SLEEP;
 
   protected User initializeUser(User user) {
-    return userService.createUserFromTelegramId(user.getTelegramId())
-        .orElseThrow();
+    return userService.createUserFromTelegramId(user.getTelegramId());
   }
 
   protected void assertMessageWithExactTextSent(String message) {

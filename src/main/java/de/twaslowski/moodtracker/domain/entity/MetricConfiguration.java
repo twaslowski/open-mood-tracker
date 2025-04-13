@@ -25,8 +25,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "tracked_metric")
-public class TrackedMetric {
+@Table(name = "metric_configuration")
+public class MetricConfiguration {
 
   @Id
   @GeneratedValue(strategy = UUID)
@@ -43,6 +43,9 @@ public class TrackedMetric {
   @NotNull
   private int baselineValue;
 
+  @NotNull
+  private boolean tracked;
+
   @CreationTimestamp
   @Column(updatable = false)
   private ZonedDateTime createdAt;
@@ -50,10 +53,12 @@ public class TrackedMetric {
   @UpdateTimestamp
   private ZonedDateTime updatedAt;
 
-  public static TrackedMetric from(Metric metric, User user) {
-    return TrackedMetric.builder()
+  public static MetricConfiguration from(Metric metric, User user) {
+    return MetricConfiguration.builder()
         .metric(metric)
-        .user(user).baselineValue(metric.getDefaultValue())
+        .user(user)
+        .baselineValue(metric.getDefaultValue())
+        .tracked(true)
         .build();
   }
 

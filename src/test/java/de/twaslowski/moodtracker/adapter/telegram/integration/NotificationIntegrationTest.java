@@ -4,6 +4,7 @@ import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
+import de.twaslowski.moodtracker.IntegrationTestBase;
 import de.twaslowski.moodtracker.entity.NotificationSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ import org.awaitility.Awaitility;
 import org.junit.jupiter.api.Test;
 
 @IntegrationTest
-public class NotificationIntegrationTest extends IntegrationBase {
+public class NotificationIntegrationTest extends IntegrationTestBase {
 
   @Test
   void shouldScheduleAndSendNotification() {

@@ -11,3 +11,4 @@ mood-tracker:
     host: "http://localhost:3000/configure"
     jwt:
       key: a-string-secret-at-least-256-bits-long
+      expiry: 86400

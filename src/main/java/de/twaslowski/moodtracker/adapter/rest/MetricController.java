@@ -1,6 +1,8 @@
 package de.twaslowski.moodtracker.adapter.rest;
 
+import de.twaslowski.moodtracker.domain.dto.MetricDTO;
 import de.twaslowski.moodtracker.domain.entity.Metric;
+import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.service.MetricService;
 import java.util.List;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -24,27 +27,39 @@ public class MetricController {
 
   private final MetricService metricService;
 
-  @GetMapping("/metrics")
-  public List<Metric> getUserMetrics(@AuthenticationPrincipal User user) {
+//  @PostMapping("/metric")
+//  public ResponseEntity<MetricDTO> createMetric(@AuthenticationPrincipal User user,
+//                                                @RequestBody MetricDTO metricDTO) {
+//    log.info("Creating metric for user {}", user.getId());
+//    Metric metric = metricService.createMetric(user, metricDTO);
+//    return ResponseEntity.ok(MetricDTO.from(metric));
+//  }
+
+  @PutMapping("/metric")
+  public ResponseEntity<MetricDTO> updateMetric(@AuthenticationPrincipal User user,
+                                                @RequestBody MetricDTO metricDTO) {
+    log.info("Updating metric {} for user {}", metricDTO.id(), user.getId());
+    Metric updatedMetric = metricService.updateMetric(user, metricDTO);
+    return ResponseEntity.ok(MetricDTO.from(updatedMetric));
+  }
+
+  @GetMapping("/metric")
+  public ResponseEntity<List<MetricDTO>> getUserMetrics(@AuthenticationPrincipal User user) {
     log.info("Retrieving metrics for user {}", user.getId());
-    var customMetrics = metricService.findUserMetrics(user.getId());
-    var defaultMetrics = metricService.findDefaultMetrics();
-    customMetrics.addAll(defaultMetrics);
-    return customMetrics;
+    return ResponseEntity.ok(metricService.findUserMetrics(user.getId()));
   }
 
-  @PostMapping("/metric")
-  public ResponseEntity<Metric> createMetric(Metric metric) {
-    return ResponseEntity.ok().build();
+  @PostMapping("/metric/tracking/{metricId}")
+  public ResponseEntity<MetricDTO> trackMetric(@PathVariable long metricId, @AuthenticationPrincipal User user) {
+    log.info("Tracking metric {} for user {}", metricId, user.getId());
+    var trackedMetric = metricService.trackMetric(metricId, user);
+    return ResponseEntity.ok(MetricDTO.from(trackedMetric));
   }
 
-  @PutMapping("/metric/{id}")
-  public ResponseEntity<Metric> updateMetric(@PathVariable Long id, Metric metric) {
-    return ResponseEntity.ok().build();
-  }
-
-  @DeleteMapping("/metric/{id}")
-  public ResponseEntity<?> deleteAllMetrics(@PathVariable Long id) {
+  @DeleteMapping("/metric/tracking/{trackedMetricId}")
+  public ResponseEntity<MetricConfiguration> untrackMetric(@PathVariable String trackedMetricId, @AuthenticationPrincipal User user) {
+    log.info("Removing metric tracking {} for user {}", trackedMetricId, user.getId());
+    metricService.removeMetricTracking(trackedMetricId, user);
     return ResponseEntity.status(204).build();
   }
 }

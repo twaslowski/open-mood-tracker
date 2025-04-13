@@ -2,10 +2,13 @@ package de.twaslowski.moodtracker.adapter.rest;
 
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.service.SessionService;
+import de.twaslowski.moodtracker.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SessionController {
 
   private final SessionService sessionService;
+  private final UserService userService;
 
   @PostMapping("/validate")
   public ResponseEntity<?> getSession(@AuthenticationPrincipal User user) {
@@ -32,5 +36,12 @@ public class SessionController {
   public ResponseEntity<String> initiate(@RequestBody User user) {
     String jwt = sessionService.createSessionFor(user);
     return ResponseEntity.ok(jwt);
+  }
+
+  @GetMapping("/create/{userId}")
+  public ResponseEntity<String> create(@PathVariable long userId) {
+    log.info("Creating user: {}", userId);
+    var user = userService.createUserFromTelegramId(userId);
+    return ResponseEntity.ok(user.getId());
   }
 }

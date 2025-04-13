@@ -1,8 +1,8 @@
 package de.twaslowski.moodtracker.service;
 
 import de.twaslowski.moodtracker.domain.entity.Metric;
+import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.domain.entity.Record;
-import de.twaslowski.moodtracker.domain.entity.TrackedMetric;
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.RecordRepository;
@@ -24,13 +24,13 @@ public class RecordService {
   private final UserService userService;
 
   public Record initializeFrom(User user) {
-    List<TrackedMetric> trackedMetrics = userService.getTrackedMetrics(user);
-    if (trackedMetrics.isEmpty()) {
+    List<MetricConfiguration> metricConfigurations = userService.getTrackedMetrics(user);
+    if (metricConfigurations.isEmpty()) {
       log.warn("No tracked metrics found for user: {}", user.getId());
     }
 
-    List<MetricDatapoint> initialDatapoints = trackedMetrics.stream()
-        .map(TrackedMetric::emptyDatapoint)
+    List<MetricDatapoint> initialDatapoints = metricConfigurations.stream()
+        .map(MetricConfiguration::emptyDatapoint)
         .collect(Collectors.toList());
 
     var record = Record.builder()

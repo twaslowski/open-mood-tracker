@@ -32,9 +32,9 @@ public class SpringSecurityConfiguration {
   private void configureRestAuthorizations(AuthorizeHttpRequestsConfigurer<HttpSecurity>.AuthorizationManagerRequestMatcherRegistry authorizationRegistry) {
     authorizationRegistry
         .requestMatchers("/actuator/health").permitAll()
-        .requestMatchers("/api/v1/session/*").authenticated()
-        .requestMatchers("/api/v1/metrics").authenticated()
-        .requestMatchers("/api/v1/metric/*").authenticated()
+        .requestMatchers("/api/v1/session/**").permitAll()
+        .requestMatchers("/api/v1/metric").authenticated()
+        .requestMatchers("/api/v1/metric/**").authenticated()
         .anyRequest().denyAll();
   }
 }

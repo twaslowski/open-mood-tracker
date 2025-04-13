@@ -1,8 +1,8 @@
-trackedMetrics:
+tracked:
   - Mood
   - Sleep
 
-defaultsMetrics:
+defaults:
   - name: Mood
     description: "How are you feeling right now?"
     minValue: -3

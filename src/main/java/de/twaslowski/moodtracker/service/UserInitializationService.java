@@ -2,11 +2,11 @@ package de.twaslowski.moodtracker.service;
 
 import de.twaslowski.moodtracker.adapter.telegram.scheduled.NotificationScheduler;
 import de.twaslowski.moodtracker.domain.entity.Metric;
+import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.domain.entity.Notification;
-import de.twaslowski.moodtracker.domain.entity.TrackedMetric;
 import de.twaslowski.moodtracker.domain.entity.User;
+import de.twaslowski.moodtracker.repository.MetricConfigurationRepository;
 import de.twaslowski.moodtracker.repository.NotificationRepository;
-import de.twaslowski.moodtracker.repository.TrackedMetricRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.List;
 import java.util.Set;
@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserInitializationService {
 
   private final UserRepository userRepository;
-  private final TrackedMetricRepository trackedMetricRepository;
+  private final MetricConfigurationRepository metricConfigurationRepository;
   private final NotificationRepository notificationRepository;
 
   private final List<Metric> defaultTrackedMetrics;
@@ -34,17 +34,16 @@ public class UserInitializationService {
     var user = userRepository.save(User.builder()
         .telegramId(telegramId)
         .build());
-    log.info("Created user {}", telegramId);
     trackDefaultMetricsForUser(user);
     initializeDefaultNotification(user);
-    log.info("Fully initialized user {}", telegramId);
+    log.info("Fully initialized user with id {}", user.getId());
     return user;
   }
 
-  private Set<TrackedMetric> trackDefaultMetricsForUser(User user) {
+  private Set<MetricConfiguration> trackDefaultMetricsForUser(User user) {
     return defaultTrackedMetrics.stream()
-        .map(metric -> TrackedMetric.from(metric, user))
-        .map(trackedMetricRepository::save)
+        .map(metric -> MetricConfiguration.from(metric, user))
+        .map(metricConfigurationRepository::save)
         .collect(Collectors.toSet());
   }
 
@@ -54,7 +53,6 @@ public class UserInitializationService {
             .userId(user.getId())
             .build()
     );
-    log.info("Created default notification {}", notification);
     notificationScheduler.scheduleNotification(notification);
   }
 }

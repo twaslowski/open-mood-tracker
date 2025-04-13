@@ -1,5 +1,6 @@
 package de.twaslowski.moodtracker.domain.entity;
 
+import de.twaslowski.moodtracker.domain.dto.MetricDTO;
 import de.twaslowski.moodtracker.domain.value.Label;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import jakarta.persistence.Column;
@@ -37,9 +38,6 @@ public class Metric {
   private String ownerId;
 
   @NotNull
-  private boolean defaultMetric;
-
-  @NotNull
   private String name;
 
   @NotNull
@@ -64,6 +62,9 @@ public class Metric {
   // For sorting labels when creating Callbacks. Defaults to ASC.
   @Enumerated(EnumType.STRING)
   private SortOrder sortOrder = SortOrder.ASC;
+
+  @NotNull
+  private boolean defaultMetric;
 
   private Integer defaultValue;
 
@@ -112,5 +113,28 @@ public class Metric {
     this.labels = metric.labels;
     this.sortOrder = metric.sortOrder;
     this.defaultValue = metric.defaultValue;
+  }
+
+  public Metric updateWith(MetricDTO metricDTO) {
+    this.description = metricDTO.description();
+    this.minValue = metricDTO.minValue();
+    this.maxValue = metricDTO.maxValue();
+    this.labels = metricDTO.labels();
+    this.defaultValue = metricDTO.baseline();
+    return this;
+  }
+
+  public static Metric from(MetricDTO metricDTO, User user) {
+    return Metric.builder()
+        .name(metricDTO.name())
+        .description(metricDTO.description())
+        .minValue(metricDTO.minValue())
+        .maxValue(metricDTO.maxValue())
+        .defaultValue(metricDTO.baseline())
+        .defaultMetric(false)
+        .ownerId(user.getId())
+        .labels(metricDTO.labels())
+        .sortOrder(SortOrder.ASC)
+        .build();
   }
 }

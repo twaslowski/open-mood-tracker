@@ -41,7 +41,7 @@ mood-tracker:
     host: "https://moody-dev.twaslowski.com/configure"
     jwt:
       key: ${JWT_SECRET}
-      expiry: 3600000
+      expiry: 600
 
 
 management:

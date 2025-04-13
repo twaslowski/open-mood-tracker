@@ -5,12 +5,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
 
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
+import de.twaslowski.moodtracker.IntegrationTestBase;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import org.junit.jupiter.api.Test;
 
 @IntegrationTest
-public class ConfigurationIntegrationTest extends IntegrationBase {
+public class ConfigurationIntegrationTest extends IntegrationTestBase {
 
   @Test
   void shouldCreateConfigurationSession() {

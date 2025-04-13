@@ -7,10 +7,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Backend (Java/Spring Boot)
 
 - Build: `./mvnw package -DskipTests`
-- Run: `./scripts/run.sh` or `SPRING_PROFILES_ACTIVE=local ./mvnw spring-boot:run`
-- Unit Tests: `./mvnw test` or `./scripts/unit-test.sh`
+- Run: `./lifecycle/run.sh` or `SPRING_PROFILES_ACTIVE=local ./mvnw spring-boot:run`
+- Unit Tests: `./mvnw test` or `./lifecycle/unit-test.sh`
 - Single Test: `./mvnw test -Dtest=ClassName#methodName`
-- Integration Tests: `./mvnw test -P integration` or `./scripts/integration-test.sh`
+- Integration Tests: `./mvnw test -P integration` or `./lifecycle/integration-test.sh`
 - Code Style: `./mvnw checkstyle:check`
 
 ### Frontend (Next.js/TypeScript)

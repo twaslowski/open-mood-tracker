@@ -6,11 +6,23 @@ export interface MetricType {
   minValue: number;
   maxValue: number;
   defaultValue: number;
-  defaultMetric: boolean;
+  isDefault: boolean;
   ownerId: number;
   sortOrder: string; // ASC | DESC
+  tracked: boolean;
+  trackedMetricId: string | null;
 
   getDefaultValueAsString(): string;
+}
+
+export interface MetricCreation {
+  name: string;
+  description: string;
+  labels: Label[] | null;
+  minValue: number;
+  maxValue: number;
+  defaultValue: number;
+  tracked: boolean;
 }
 
 interface Label {
@@ -26,21 +38,25 @@ export class Metric implements MetricType {
   minValue: number;
   maxValue: number;
   defaultValue: number;
-  defaultMetric: boolean;
+  isDefault: boolean;
   ownerId: number;
   sortOrder: 'ASC' | 'DESC';
+  tracked: boolean;
+  trackedMetricId: string | null;
 
   constructor(
-    id: number,
-    name: string,
-    description: string,
-    labels: Label[],
-    minValue: number,
-    maxValue: number,
-    defaultValue: number,
-    defaultMetric: boolean,
-    ownerId: number,
-    sortOrder: 'ASC' | 'DESC'
+      id: number,
+      name: string,
+      description: string,
+      labels: Label[],
+      minValue: number,
+      maxValue: number,
+      defaultValue: number,
+      isDefault: boolean,
+      ownerId: number,
+      sortOrder: 'ASC' | 'DESC',
+      tracked = false,
+      trackedMetricId: string | null = null
   ) {
     this.id = id;
     this.name = name;
@@ -49,15 +65,17 @@ export class Metric implements MetricType {
     this.minValue = minValue;
     this.maxValue = maxValue;
     this.defaultValue = defaultValue;
-    this.defaultMetric = defaultMetric;
+    this.isDefault = isDefault;
     this.ownerId = ownerId;
     this.sortOrder = sortOrder;
+    this.tracked = tracked;
+    this.trackedMetricId = trackedMetricId;
   }
 
   getDefaultValueAsString = (): string => {
     return (
-      this.labels.find((label) => label.value === this.defaultValue)?.label ||
-      this.defaultValue.toString()
+        this.labels.find((label) => label.value === this.defaultValue)?.label ||
+        this.defaultValue.toString()
     );
   };
 }
