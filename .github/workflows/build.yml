@@ -101,7 +101,7 @@ jobs:
           helm upgrade --install \
           --set image.tag="$TAG" \
           --set telegramToken="$TELEGRAM_TOKEN" \
-          --values ./charts/values/mood-tracker.values.yaml \
+          --values ./environments/dev/mood-tracker.values.yaml \
           --namespace mood-tracker-dev \
           --wait --timeout 150s \
           mood-tracker ./charts/open-mood-tracker
