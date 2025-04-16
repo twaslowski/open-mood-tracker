@@ -99,7 +99,7 @@ autoscaling:
 volumes:
   - name: config-volume
     configMap:
-      name: config
+      name: mood-tracker-config
       items:
         - key: metrics.yml
           path: metrics.yml
