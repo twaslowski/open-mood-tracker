@@ -14,9 +14,10 @@ nameOverride: ""
 fullnameOverride: ""
 
 telegramToken: ""
+environment: ""
 
 datasource:
-  url: ""#
+  url: ""
 
 metrics: []
 

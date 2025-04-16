@@ -3,3 +3,7 @@ spring:
     url: ${DATASOURCE_URL}
     username: mood-tracker
     password: ${DATASOURCE_PASSWORD}
+
+mood-tracker:
+  configuration:
+    host: "https://moody-dev.twaslowski.com/configure"

@@ -38,7 +38,6 @@ mood-tracker:
           cron: 0 0 18 * * *
           text: "It's time to record your mood! Just press /record"
   configuration:
-    host: "https://moody-dev.twaslowski.com/configure"
     jwt:
       key: ${JWT_SECRET}
       expiry: 600

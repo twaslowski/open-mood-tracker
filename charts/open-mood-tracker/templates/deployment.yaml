@@ -37,11 +37,18 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+          - name: SPRING_PROFILES_ACTIVE
+            value: {{ .Values.environment }}
           - name: DATASOURCE_PASSWORD
             valueFrom:
               secretKeyRef:
                 name: postgres
                 key: password
+          - name: JWT_SECRET
+            valueFrom:
+              secretKeyRef:
+                name: ${{ .Release.Name }}-secrets
+                key: jwt-secret
           - name: DATASOURCE_URL
             value: {{ .Values.datasource.url }}
           - name: TELEGRAM_TOKEN
