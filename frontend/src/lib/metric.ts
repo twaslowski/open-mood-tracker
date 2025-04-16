@@ -40,7 +40,7 @@ export const untrackMetric = async (trackedMetricId: string): Promise<void> => {
   });
 };
 
-export const submitMetric = async (metric: MetricCreation): Promise<Metric> => {
+export const submitMetric = async (metric: Metric): Promise<Metric> => {
   const authToken = getToken();
   return fetch('/api/v1/metric', {
     method: 'POST',

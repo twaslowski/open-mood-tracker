@@ -14,12 +14,13 @@ import { Textarea } from '@/components/ui/textarea';
 export default function NewMetric() {
   const [useLabels, setUseLabels] = useState(false);
   const [newMetric, setNewMetric] = useState({
+    id: 0,
     name: '',
     description: '',
     labels: [] as Array<{ label: string; value: number }>,
     minValue: 1,
     maxValue: 3,
-    defaultValue: 2,
+    baseline: 2,
     tracked: false,
   });
 
@@ -37,7 +38,6 @@ export default function NewMetric() {
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    submitMetric(newMetric);
   };
 
   return (
@@ -113,9 +113,9 @@ export default function NewMetric() {
               <Input
                 type='number'
                 id='defaultValue'
-                value={newMetric.defaultValue}
+                value={newMetric.baseline}
                 onChange={(e) =>
-                  setNewMetric({ ...newMetric, defaultValue: parseInt(e.target.value) })
+                  setNewMetric({ ...newMetric, baseline: parseInt(e.target.value) })
                 }
                 className='w-full'
               />
