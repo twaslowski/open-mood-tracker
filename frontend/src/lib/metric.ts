@@ -1,6 +1,6 @@
 import {getToken} from "@/lib/helper";
 
-import {Metric, MetricCreation} from '@/types/metric';
+import {Metric} from '@/types/metric';
 
 export const fetchAllMetrics = async (authToken: string): Promise<Metric[]> => {
   return fetch('/api/v1/metric', {
@@ -40,17 +40,17 @@ export const untrackMetric = async (trackedMetricId: string): Promise<void> => {
   });
 };
 
-export const submitMetric = async (metric: Metric): Promise<Metric> => {
-  const authToken = getToken();
-  return fetch('/api/v1/metric', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: 'Bearer ' + authToken,
-    },
-    body: JSON.stringify(metric),
-  }).then(response => response.json() as Promise<Metric>);
-}
+// export const submitMetric = async (metric: Metric): Promise<Metric> => {
+//   const authToken = getToken();
+//   return fetch('/api/v1/metric', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json',
+//       Authorization: 'Bearer ' + authToken,
+//     },
+//     body: JSON.stringify(metric),
+//   }).then(response => response.json() as Promise<Metric>);
+// }
 
 export const setBaseline = async (metric: Metric, newBaseline: number): Promise<Metric> => {
   const authToken = getToken();

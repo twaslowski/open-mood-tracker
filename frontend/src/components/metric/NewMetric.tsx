@@ -2,8 +2,6 @@
 
 import React, {FormEvent, useState} from 'react';
 
-import {submitMetric} from "@/lib/metric";
-
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import {Checkbox} from "@/components/ui/checkbox";
