@@ -32,7 +32,7 @@ export default function MetricList() {
           .catch((error) => setError(error.message))
           .finally(() => setLoading(false));
     }
-  }, [metrics]);
+  }, []);
 
 
   const filteredMetrics = metrics.filter((metric) => {
