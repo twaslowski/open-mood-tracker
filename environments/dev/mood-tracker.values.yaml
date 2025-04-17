@@ -6,7 +6,7 @@ ingress:
   enabled: true
   className: "cloudflare-tunnel"
   hosts:
-    - host: "moody-dev.twaslowski.com"
+    - host: "moody-dev-server.twaslowski.com"
       paths:
         - path: /api/
           pathType: Prefix

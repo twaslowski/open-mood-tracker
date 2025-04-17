@@ -6,4 +6,4 @@ spring:
 
 mood-tracker:
   configuration:
-    host: "https://moody.twaslowski.com/configure"
+    host: "https://moody-dev-server.twaslowski.com/configure"
