@@ -48,7 +48,7 @@ securityContext: {}
   # runAsUser: 1000
 
 service:
-  enabled: false
+  enabled: true
   type: ClusterIP
   port: 8080
 
