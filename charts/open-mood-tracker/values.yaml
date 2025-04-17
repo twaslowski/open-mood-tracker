@@ -19,7 +19,9 @@ environment: ""
 datasource:
   url: ""
 
-metrics: []
+metrics:
+  tracked: []
+  defaults: []
 
 serviceAccount:
   # Specifies whether a service account should be created
