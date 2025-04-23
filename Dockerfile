@@ -1,4 +1,4 @@
-FROM amazoncorretto:21-alpine
+FROM ibm-semeru-runtimes:open-21.0.6_7-jre
 
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD wget --no-verbose -q --tries=1 --no-check-certificate https://localhost:8443/actuator/health || exit 1
