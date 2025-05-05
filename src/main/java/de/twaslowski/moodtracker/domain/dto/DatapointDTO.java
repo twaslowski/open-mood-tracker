@@ -1,8 +1,8 @@
 package de.twaslowski.moodtracker.domain.dto;
 
 import de.twaslowski.moodtracker.domain.value.Label;
-import lombok.Builder;
 import java.util.List;
+import lombok.Builder;
 
 @Builder
 public record DatapointDTO(
