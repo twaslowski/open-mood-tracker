@@ -106,4 +106,24 @@ public class RecordServiceTest {
     // then
     assertThat(stringifiedRecord).isEqualToIgnoringCase("Sleep: 5\n");
   }
+
+  @Test
+  void shouldNotReturnIncompleteRecordsOnRetrieval() {
+    // given
+    var record = Record.builder()
+        .userId(UUID.randomUUID().toString())
+        .creationTimestamp(ZonedDateTime.now())
+        .values(List.of(
+            SleepMetric.INSTANCE.datapointWithValue(null)
+        ))
+        .build();
+
+    when(recordRepository.findByUserId(record.getUserId())).thenReturn(List.of(record));
+
+    // when
+    var records = recordService.getRecords(record.getUserId());
+
+    // then
+    assertThat(records).isEmpty();
+  }
 }

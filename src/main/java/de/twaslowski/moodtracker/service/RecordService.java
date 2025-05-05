@@ -1,5 +1,7 @@
 package de.twaslowski.moodtracker.service;
 
+import de.twaslowski.moodtracker.domain.dto.DatapointDTO;
+import de.twaslowski.moodtracker.domain.dto.RecordDTO;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.domain.entity.Record;
@@ -39,6 +41,35 @@ public class RecordService {
         .build();
 
     return recordRepository.save(record);
+  }
+
+  public List<RecordDTO> getRecords(String userId) {
+    return recordRepository.findByUserId(userId).stream()
+        .filter(record -> !record.hasIncompleteMetric())
+        .map(this::toDTO)
+        .collect(Collectors.toList());
+  }
+
+  public RecordDTO toDTO(Record record) {
+    return RecordDTO.builder()
+        .timestamp(record.getCreationTimestamp())
+        .datapoints(record.getValues().stream()
+            .map(this::toDatapointDTO)
+            .collect(Collectors.toList()))
+        .build();
+  }
+
+  public DatapointDTO toDatapointDTO(MetricDatapoint metricDatapoint) {
+    var metric = metricService.getMetricById(metricDatapoint.metricId());
+    return DatapointDTO.builder()
+        .metricId(metric.getId())
+        .metricName(metric.getName())
+        .metricDescription(metric.getDescription())
+        .minValue(metric.getMinValue())
+        .maxValue(metric.getMaxValue())
+        .datapointValue(metricDatapoint.value())
+        .labels(metric.getLabels())
+        .build();
   }
 
   public void recordFromBaseline(User user) {

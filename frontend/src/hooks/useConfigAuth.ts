@@ -21,11 +21,11 @@ export function useConfigAuth() {
     }
 
     validateToken(token)
-    .then((validToken) => {
-      storeToken(validToken);
-      setIsAuthenticated(true);
-      setIsLoading(false);
-    })
+      .then((validToken) => {
+        storeToken(validToken);
+        setIsAuthenticated(true);
+        setIsLoading(false);
+      })
     .catch(() => {
       setError(NO_TOKEN_ERROR);
       localStorage.removeItem('authToken');
