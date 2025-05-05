@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
   compile_and_test:
@@ -112,6 +113,7 @@ jobs:
   deploy-prod:
     runs-on: self-hosted
     needs: deploy-dev
+    if: github.ref == 'refs/heads/main'
     name: Deploy to Production
     steps:
       - name: Checkout
