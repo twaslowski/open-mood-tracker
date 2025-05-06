@@ -1,4 +1,4 @@
-import {jwtDecode, JwtPayload} from "jwt-decode";
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 
 export const retrieveNonExpiredToken = (): string | null => {
   const token = localStorage.getItem('authToken');
@@ -23,7 +23,8 @@ export const validateToken = async (token: string): Promise<string> => {
       throw new Error(response.statusText);
     }
     return token;
-  });};
+  });
+};
 
 function isExpired(jwt: JwtPayload): boolean {
   if (!jwt || !jwt.exp) {

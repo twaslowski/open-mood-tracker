@@ -1,6 +1,6 @@
-import {getToken} from "@/lib/helper";
+import { getToken } from '@/lib/helper';
 
-import {Metric} from '@/types/metric';
+import { Metric } from '@/types/metric';
 
 export const fetchAllMetrics = async (authToken: string): Promise<Metric[]> => {
   return fetch('/api/v1/metric', {
@@ -8,10 +8,10 @@ export const fetchAllMetrics = async (authToken: string): Promise<Metric[]> => {
       Authorization: 'Bearer ' + authToken,
     },
   })
-  .then((response) => response.json() as Promise<Metric[]>)
-  .catch((error) => {
-    throw new Error(error.message);
-  });
+    .then((response) => response.json() as Promise<Metric[]>)
+    .catch((error) => {
+      throw new Error(error.message);
+    });
 };
 
 export const trackMetric = async (metricId: number): Promise<Metric> => {
@@ -21,8 +21,7 @@ export const trackMetric = async (metricId: number): Promise<Metric> => {
     headers: {
       Authorization: 'Bearer ' + authToken,
     },
-  })
-  .then((response) => {
+  }).then((response) => {
     if (!response.ok) {
       throw new Error('Failed to track metric');
     }
@@ -62,6 +61,7 @@ export const setBaseline = async (metric: Metric, newBaseline: number): Promise<
       'Content-Type': 'application/json',
       Authorization: 'Bearer ' + authToken,
     },
-  }).then((response) => response.json() as Promise<Metric>)
-  .catch((error) => error.message);
-}
+  })
+    .then((response) => response.json() as Promise<Metric>)
+    .catch((error) => error.message);
+};

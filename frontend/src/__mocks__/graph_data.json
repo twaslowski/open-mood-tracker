@@ -1,0 +1,37 @@
+[
+  {
+    "timestamp": "2025-04-01T00:00:00.000Z",
+    "datapoints": [
+      {
+        "metricId": 1,
+        "metricName": "Mood",
+        "metricDescription": "Daily mood score",
+        "minValue": -3,
+        "maxValue": 3,
+        "baselineValue": 0,
+        "datapointValue": 1,
+        "labels": []
+      },
+      {
+        "metricId": 2,
+        "metricName": "Stress",
+        "metricDescription": "Daily stress level",
+        "minValue": 0,
+        "maxValue": 5,
+        "baselineValue": 1,
+        "datapointValue": 1,
+        "labels": []
+      },
+      {
+        "metricId": 3,
+        "metricName": "Sleep",
+        "metricDescription": "Hours of sleep",
+        "minValue": 4,
+        "maxValue": 12,
+        "baselineValue": 8,
+        "datapointValue": 8,
+        "labels": []
+      }
+    ]
+  }
+]

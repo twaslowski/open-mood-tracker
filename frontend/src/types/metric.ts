@@ -1,3 +1,5 @@
+import { Label } from '@/types/label';
+
 export interface MetricType {
   id: number;
   name: string;
@@ -23,11 +25,6 @@ export interface MetricCreation {
   tracked: boolean;
 }
 
-interface Label {
-  label: string;
-  value: number;
-}
-
 export class Metric implements MetricType {
   id: number;
   name: string;
@@ -43,18 +40,18 @@ export class Metric implements MetricType {
   trackedMetricId: string | null;
 
   constructor(
-      id: number,
-      name: string,
-      description: string,
-      labels: Label[],
-      minValue: number,
-      maxValue: number,
-      baseline: number,
-      isDefault: boolean,
-      ownerId: number,
-      sortOrder: 'ASC' | 'DESC',
-      tracked = false,
-      trackedMetricId: string | null = null
+    id: number,
+    name: string,
+    description: string,
+    labels: Label[],
+    minValue: number,
+    maxValue: number,
+    baseline: number,
+    isDefault: boolean,
+    ownerId: number,
+    sortOrder: 'ASC' | 'DESC',
+    tracked = false,
+    trackedMetricId: string | null = null,
   ) {
     this.id = id;
     this.name = name;

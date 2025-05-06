@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react';
 
-import {setBaseline} from "@/lib/metric";
+import { setBaseline } from '@/lib/metric';
 
-import TrackingButton from "@/components/metric/TrackingButton";
+import TrackingButton from '@/components/metric/TrackingButton';
 
-import {Metric} from '@/types/metric';
+import { Metric } from '@/types/metric';
 
 type MetricCardProps = {
   metric: Metric;
   onMetricUpdate: (metric: Metric) => void;
 };
 
-const MetricCard: React.FC<MetricCardProps> = ({metric, onMetricUpdate}) => {
+const MetricCard: React.FC<MetricCardProps> = ({ metric, onMetricUpdate }) => {
   const [currentMetric, setCurrentMetric] = React.useState<Metric>(metric);
 
   const isBaseline = (value: number) => {
@@ -30,43 +30,44 @@ const MetricCard: React.FC<MetricCardProps> = ({metric, onMetricUpdate}) => {
       }
     }
     return 'px-2 py-1 rounded-lg text-s ' + nonBaseline;
-  }
+  };
 
   const renderLabels = (metric: Metric) => {
     return (
-        <div className='flex flex-wrap gap-2 mb-2'>
-          {metric.labels.map((label) => (
-              <button
-                  key={label.value}
-                  onClick={() => {
-                    setBaseline(metric, label.value).then((metric) => {
-                      setCurrentMetric(metric)
-                      onMetricUpdate(metric);
-                    });
-                  }}
-                  className={deriveBaselineClassName(label.value)}>
+      <div className='flex flex-wrap gap-2 mb-2'>
+        {metric.labels.map((label) => (
+          <button
+            key={label.value}
+            onClick={() => {
+              setBaseline(metric, label.value).then((metric) => {
+                setCurrentMetric(metric);
+                onMetricUpdate(metric);
+              });
+            }}
+            className={deriveBaselineClassName(label.value)}
+          >
             {label.label}
           </button>
-          ))}
-        </div>
+        ))}
+      </div>
     );
   };
 
   return (
-      <div
-          key={currentMetric.id}
-          className='border border-gray-200 rounded-lg p-6 bg-white shadow hover:shadow-md transition-all hover:-translate-y-1'
-      >
-        <div className='flex items-center justify-between'>
-          <h2 className='text-xl font-semibold mb-2 text-gray-800'>{currentMetric.name}</h2>
-          <TrackingButton metric={currentMetric} />
-        </div>
-        <p className='text-gray-600 mb-4 text-sm'>{currentMetric.description}</p>
-        <div className='mb-4 text-sm'>{renderLabels(currentMetric)}</div>
-        <p className='text-xs text-gray-500 pt-3 border-t border-gray-100'>
-          {currentMetric.isDefault ? 'Default Metric' : 'Custom Metric'}
-        </p>
+    <div
+      key={currentMetric.id}
+      className='border border-gray-200 rounded-lg p-6 bg-white shadow hover:shadow-md transition-all hover:-translate-y-1'
+    >
+      <div className='flex items-center justify-between'>
+        <h2 className='text-xl font-semibold mb-2 text-gray-800'>{currentMetric.name}</h2>
+        <TrackingButton metric={currentMetric} />
       </div>
+      <p className='text-gray-600 mb-4 text-sm'>{currentMetric.description}</p>
+      <div className='mb-4 text-sm'>{renderLabels(currentMetric)}</div>
+      <p className='text-xs text-gray-500 pt-3 border-t border-gray-100'>
+        {currentMetric.isDefault ? 'Default Metric' : 'Custom Metric'}
+      </p>
+    </div>
   );
 };
 
