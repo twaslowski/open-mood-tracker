@@ -31,7 +31,9 @@ public class UserService {
   }
 
   public List<MetricConfiguration> getTrackedMetrics(User user) {
-    return metricConfigurationRepository.findByUserId(user.getId());
+    return metricConfigurationRepository.findByUserId(user.getId()).stream()
+        .filter(MetricConfiguration::isTracked)
+        .toList();
   }
 
   public List<MetricDatapoint> getBaselineConfiguration(String userId) {

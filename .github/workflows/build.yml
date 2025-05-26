@@ -4,6 +4,11 @@ on:
     branches:
       - main
       - develop
+    paths:
+      - 'src/**'
+      - 'charts/**'
+      - 'environments/**'
+      - '.github/workflows/build.yml'
 
 jobs:
   compile_and_test:
@@ -88,13 +93,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy Postgres
-        run: |
-          helm upgrade --install \
-            --values ./environments/dev/postgres.values.yaml \
-            --namespace mood-tracker-dev --create-namespace \
-            --wait --timeout 150s \
-            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
+#      - name: Deploy Postgres
+#        run: |
+#          helm upgrade --install \
+#            --values ./environments/dev/postgres.values.yaml \
+#            --namespace mood-tracker-dev --create-namespace \
+#            --wait --timeout 150s \
+#            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
       - name: Deploy mood-tracker
         env:
@@ -107,7 +112,7 @@ jobs:
           --set telegramToken="$TELEGRAM_TOKEN" \
           --values ./environments/dev/mood-tracker.values.yaml \
           --namespace mood-tracker-dev \
-          --wait --timeout 300s \
+          --wait --timeout 600s \
           mood-tracker ./charts/open-mood-tracker
 
   deploy-prod:
@@ -119,13 +124,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy Postgres
-        run: |
-          helm upgrade --install \
-            --values ./environments/prod/postgres.values.yaml \
-            --namespace mood-tracker --create-namespace \
-            --wait --timeout 150s \
-            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
+#      - name: Deploy Postgres
+#        run: |
+#          helm upgrade --install \
+#            --values ./environments/prod/postgres.values.yaml \
+#            --namespace mood-tracker --create-namespace \
+#            --wait --timeout 150s \
+#            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
 
       - name: Deploy mood-tracker
         env:
@@ -138,5 +143,5 @@ jobs:
           --set telegramToken="$TELEGRAM_TOKEN" \
           --values ./environments/prod/mood-tracker.values.yaml \
           --namespace mood-tracker \
-          --wait --timeout 300s \
+          --wait --timeout 600s \
           mood-tracker ./charts/open-mood-tracker
