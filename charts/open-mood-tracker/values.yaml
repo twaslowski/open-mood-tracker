@@ -86,16 +86,16 @@ livenessProbe:
   httpGet:
     path: /actuator/health
     port: 8080
-    timeoutSeconds: 5
-    periodSeconds: 30
-  initialDelaySeconds: 60
+  initialDelaySeconds: 90
+  timeoutSeconds: 5
+  periodSeconds: 30
 readinessProbe:
   httpGet:
     path: /actuator/health
     port: 8080
-    timeoutSeconds: 5
-    periodSeconds: 30
-  initialDelaySeconds: 60
+  initialDelaySeconds: 90
+  timeoutSeconds: 5
+  periodSeconds: 30
 
 autoscaling:
   enabled: false

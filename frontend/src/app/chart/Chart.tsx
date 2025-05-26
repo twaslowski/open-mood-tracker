@@ -33,8 +33,8 @@ export default function MentalHealthChart({ data }: Props) {
         record.datapoints.forEach((dp) => {
           result[dp.metricName] = dp.datapointValue;
         });
-      return result;
-    });
+        return result;
+      });
   }, [data, selectedMonth]);
 
   const allMetrics = useMemo(() => {
@@ -88,7 +88,13 @@ export default function MentalHealthChart({ data }: Props) {
           {allMetrics.map(([id, name], idx) =>
             activeMetric === id ? (
               <>
-                <Line key={id} type='monotone' dataKey={name} stroke={`${COLORS[idx]}`} dot={false} />
+                <Line
+                  key={id}
+                  type='monotone'
+                  dataKey={name}
+                  stroke={`${COLORS[idx]}`}
+                  dot={false}
+                />
                 <Line
                   key={`${id}-baseline`}
                   type='monotone'
