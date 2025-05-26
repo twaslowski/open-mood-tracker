@@ -9,6 +9,7 @@ import de.twaslowski.moodtracker.domain.entity.Record.Status;
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.RecordRepository;
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
@@ -19,8 +20,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
+@Transactional
+@RequiredArgsConstructor
 public class RecordService {
 
   private final RecordRepository recordRepository;
@@ -51,6 +53,10 @@ public class RecordService {
         .filter(Record::completed)
         .map(this::toDTO)
         .collect(Collectors.toList());
+  }
+
+  public void cancelOngoingRecord(User user) {
+    recordRepository.deleteByStatusAndUserId(Status.IN_PROGRESS, user.getId());
   }
 
   public RecordDTO toDTO(Record record) {

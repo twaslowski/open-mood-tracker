@@ -1,6 +1,7 @@
 package de.twaslowski.moodtracker.repository;
 
 import de.twaslowski.moodtracker.domain.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.Record.Status;
 import java.time.LocalDate;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,4 +17,10 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
       AND creation_timestamp::date = :date
       AND status = 'COMPLETE'""", nativeQuery = true)
   List<Record> findCompleteRecordByUserAndDate(String userId, @Param("date") LocalDate date);
+
+  List<Record> findByStatus(Status status);
+
+  Iterable<Object> deleteByStatus(Status status);
+
+  void deleteByStatusAndUserId(Status status, String userId);
 }
