@@ -3,6 +3,7 @@ package de.twaslowski.moodtracker.adapter.telegram.scheduled;
 import de.twaslowski.moodtracker.adapter.telegram.MessageUtil;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramResponse;
 import de.twaslowski.moodtracker.adapter.telegram.domain.response.TelegramTextResponse;
+import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.service.RecordService;
 import de.twaslowski.moodtracker.service.UserService;
 import java.util.concurrent.BlockingQueue;
@@ -23,14 +24,22 @@ public class AutoBaselineService {
 
   @Scheduled(cron = "${mood-tracker.telegram.scheduled.auto-baseline.cron}")
   public void createAutoBaselines() {
-    userService.findAutoBaselineEligibleUsers().forEach(user -> {
-      recordService.recordFromBaseline(user);
-      outgoingMessageQueue.add(TelegramTextResponse.builder()
-          .text(messageUtil.getMessage("notification.baseline.created"))
-          .chatId(user.getTelegramId())
-          .build()
-      );
-      log.info("Baseline record created for user {}", user.getId());
-    });
+    userService.findAutoBaselineEligibleUsers().stream()
+        .filter(this::shouldCreateBaseline)
+        .forEach(this::createBaselineRecord);
+  }
+
+  private boolean shouldCreateBaseline(User user) {
+    return !recordService.userRecordedToday(user);
+  }
+
+  private void createBaselineRecord(User user) {
+    recordService.recordFromBaseline(user);
+    outgoingMessageQueue.add(TelegramTextResponse.builder()
+        .text(messageUtil.getMessage("notification.baseline.created"))
+        .chatId(user.getTelegramId())
+        .build()
+    );
+    log.info("Baseline record created for user {}", user.getId());
   }
 }

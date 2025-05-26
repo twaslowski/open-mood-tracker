@@ -7,7 +7,6 @@ import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.IntegrationTestBase;
 import de.twaslowski.moodtracker.adapter.telegram.domain.update.TelegramTextUpdate;
 import de.twaslowski.moodtracker.adapter.telegram.handler.command.StartHandler;
-import de.twaslowski.moodtracker.entity.UserSpec;
 import java.util.concurrent.TimeUnit;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

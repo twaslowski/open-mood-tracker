@@ -1,9 +1,9 @@
 'use client';
 
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import { useEffect, useState } from 'react';
 
-import {getToken} from "@/lib/helper";
+import { getToken } from '@/lib/helper';
 
 interface JWTPayload {
   exp: number;
@@ -18,9 +18,7 @@ function getRemainingTime(exp: number) {
   const minutes = Math.floor(diff / 60);
   const seconds = diff % 60;
 
-  return `${minutes.toString().padStart(2, '0')}:${seconds
-      .toString()
-      .padStart(2, '0')}`;
+  return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
 
 export default function SessionCountdown() {
@@ -61,15 +59,16 @@ export default function SessionCountdown() {
   }, []);
 
   return (
-      <div className="fixed top-4 right-4 z-50">
-        <div
-            className={`text-sm font-semibold px-4 py-2 rounded-xl shadow-lg transition-colors duration-300 ${
-                expired || invalid
-                    ? 'bg-red-100 text-red-600 border border-red-300'
-                    : 'bg-gray-100 text-gray-700 border border-black'
-            }`}
-        >
-          Session: {countdown}
-        </div>
+    <div className='fixed top-4 right-4 z-50'>
+      <div
+        className={`text-sm font-semibold px-4 py-2 rounded-xl shadow-lg transition-colors duration-300 ${
+          expired || invalid
+            ? 'bg-red-100 text-red-600 border border-red-300'
+            : 'bg-gray-100 text-gray-700 border border-black'
+        }`}
+      >
+        Session: {countdown}
       </div>
-  );}
+    </div>
+  );
+}

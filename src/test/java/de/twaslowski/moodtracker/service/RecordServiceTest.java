@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
 import de.twaslowski.moodtracker.domain.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.Record.Status;
 import de.twaslowski.moodtracker.entity.MoodMetric;
 import de.twaslowski.moodtracker.entity.SleepMetric;
 import de.twaslowski.moodtracker.repository.RecordRepository;
@@ -54,6 +55,7 @@ public class RecordServiceTest {
     // given
     var record = Record.builder()
         .userId("some-id")
+        .status(Status.IN_PROGRESS)
         .values(List.of(MoodMetric.INSTANCE.datapointWithValue(2)))
         .build();
 
@@ -68,12 +70,14 @@ public class RecordServiceTest {
     String userId = UUID.randomUUID().toString();
     var record1 = Record.builder()
         .userId(userId)
+        .status(Status.IN_PROGRESS)
         .creationTimestamp(ZonedDateTime.now().minusHours(1))
         .values(List.of(MoodMetric.INSTANCE.emptyDatapoint()))
         .build();
 
     var record2 = Record.builder()
         .userId(userId)
+        .status(Status.IN_PROGRESS)
         .creationTimestamp(ZonedDateTime.now())
         .values(List.of(SleepMetric.INSTANCE.emptyDatapoint()))
         .build();
@@ -93,6 +97,7 @@ public class RecordServiceTest {
     // given
     var record = Record.builder()
         .userId(UUID.randomUUID().toString())
+        .status(Status.COMPLETED)
         .values(List.of(
             SleepMetric.INSTANCE.datapointWithValue(5)
         ))
@@ -105,5 +110,26 @@ public class RecordServiceTest {
 
     // then
     assertThat(stringifiedRecord).isEqualToIgnoringCase("Sleep: 5\n");
+  }
+
+  @Test
+  void shouldNotReturnIncompleteRecordsOnRetrieval() {
+    // given
+    var record = Record.builder()
+        .userId(UUID.randomUUID().toString())
+        .status(Status.IN_PROGRESS)
+        .creationTimestamp(ZonedDateTime.now())
+        .values(List.of(
+            SleepMetric.INSTANCE.datapointWithValue(null)
+        ))
+        .build();
+
+    when(recordRepository.findByUserId(record.getUserId())).thenReturn(List.of(record));
+
+    // when
+    var records = recordService.getRecords(record.getUserId());
+
+    // then
+    assertThat(records).isEmpty();
   }
 }

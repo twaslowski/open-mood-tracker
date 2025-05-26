@@ -1,13 +1,12 @@
 'use client';
 
-import React, {FormEvent, useState} from 'react';
+import React, { FormEvent, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import {Checkbox} from "@/components/ui/checkbox";
+import { Checkbox } from '@/components/ui/checkbox';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-
 
 export default function NewMetric() {
   const [useLabels, setUseLabels] = useState(false);
@@ -25,8 +24,8 @@ export default function NewMetric() {
   const handleLabelChange = (value: number, label: string) => {
     const updatedLabels = [...newMetric.labels];
     updatedLabels[value] = {
-      "label": label,
-      "value": value,
+      label: label,
+      value: value,
     };
     setNewMetric({
       ...newMetric,
@@ -112,9 +111,7 @@ export default function NewMetric() {
                 type='number'
                 id='defaultValue'
                 value={newMetric.baseline}
-                onChange={(e) =>
-                  setNewMetric({ ...newMetric, baseline: parseInt(e.target.value) })
-                }
+                onChange={(e) => setNewMetric({ ...newMetric, baseline: parseInt(e.target.value) })}
                 className='w-full'
               />
             </div>
@@ -123,30 +120,31 @@ export default function NewMetric() {
           <div>
             <div className='flex mb-2 space-x-2'>
               <p className='text-md font-medium text-black'>Labels</p>
-              <Checkbox className='mt-1'
-                        checked={useLabels}
-                        onCheckedChange={(checked) => setUseLabels(!!checked)} />
+              <Checkbox
+                className='mt-1'
+                checked={useLabels}
+                onCheckedChange={(checked) => setUseLabels(!!checked)}
+              />
             </div>
             <p className='text-xs text-gray-500 mb-3'>
               Add labels for each value point (e.g., "1: Very Low", "10: Very High")
             </p>
 
-            {useLabels && Array.from({ length: newMetric.maxValue - newMetric.minValue + 1 }, (_, index) => {
+            {useLabels &&
+              Array.from({ length: newMetric.maxValue - newMetric.minValue + 1 }, (_, index) => {
                 const value = newMetric.minValue + index;
                 const label = newMetric.labels.find((l) => l.value === value)?.label || '';
                 return (
-                    <div key={value} className='flex items-center mb-2'>
-                      <div className='w-10 text-right mr-2 text-sm text-gray-500'>
-                        {value}:
-                      </div>
-                      <Input
-                          type='text'
-                          value={label}
-                          onChange={(e) => handleLabelChange(value, e.target.value)}
-                          className='flex-grow'
-                          placeholder={`Label for value ${value}`}
-                      />
-                    </div>
+                  <div key={value} className='flex items-center mb-2'>
+                    <div className='w-10 text-right mr-2 text-sm text-gray-500'>{value}:</div>
+                    <Input
+                      type='text'
+                      value={label}
+                      onChange={(e) => handleLabelChange(value, e.target.value)}
+                      className='flex-grow'
+                      placeholder={`Label for value ${value}`}
+                    />
+                  </div>
                 );
               })}
           </div>

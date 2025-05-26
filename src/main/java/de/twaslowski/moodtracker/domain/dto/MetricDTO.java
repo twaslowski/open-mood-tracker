@@ -19,7 +19,7 @@ public record MetricDTO(
     int baseline,
     List<Label> labels,
     boolean tracked,
-    String trackedMetricId
+    String trackedMetricId // metricConfigurationId
 ) {
 
   public static MetricDTO from(Metric metric) {
