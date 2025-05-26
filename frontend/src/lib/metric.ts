@@ -29,9 +29,9 @@ export const trackMetric = async (metricId: number): Promise<Metric> => {
   });
 };
 
-export const untrackMetric = async (trackedMetricId: string): Promise<void> => {
+export const untrackMetric = async (metricId: number): Promise<void> => {
   const authToken = getToken();
-  await fetch(`/api/v1/metric/tracking/${trackedMetricId}`, {
+  await fetch(`/api/v1/metric/tracking/${metricId}`, {
     method: 'DELETE',
     headers: {
       Authorization: 'Bearer ' + authToken,

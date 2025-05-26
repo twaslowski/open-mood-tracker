@@ -55,14 +55,14 @@ public class MetricService {
         .orElseGet(() -> metricConfigurationRepository.save(MetricConfiguration.from(metric, user).track()));
   }
 
-  public void untrackMetric(String trackedMetricId, User user) {
-    var trackedMetric = metricConfigurationRepository.findById(trackedMetricId)
+  public void untrackMetric(long metricId, User user) {
+    var trackedMetric = metricConfigurationRepository.findByUserIdAndMetricId(user.getId(), metricId)
         .map(metricConfiguration -> metricConfiguration.validateOwnership(user))
         .map(metricConfiguration -> {
           metricConfiguration.setTracked(false);
           return metricConfiguration;
         })
-        .orElseThrow(() -> new MetricNotTrackedException(user.getId(), trackedMetricId));
+        .orElseThrow(() -> new MetricNotTrackedException(user.getId(), metricId));
     metricConfigurationRepository.save(trackedMetric);
   }
 

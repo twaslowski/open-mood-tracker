@@ -55,10 +55,10 @@ public class MetricController {
     return ResponseEntity.ok(MetricDTO.from(trackedMetric));
   }
 
-  @DeleteMapping("/metric/tracking/{trackedMetricId}")
-  public ResponseEntity<MetricConfiguration> untrackMetric(@PathVariable String trackedMetricId, @AuthenticationPrincipal User user) {
-    log.info("Removing metric tracking {} for user {}", trackedMetricId, user.getId());
-    metricService.untrackMetric(trackedMetricId, user);
+  @DeleteMapping("/metric/tracking/{metricId}")
+  public ResponseEntity<MetricConfiguration> untrackMetric(@PathVariable long metricId, @AuthenticationPrincipal User user) {
+    log.info("Removing metric tracking {} for user {}", metricId, user.getId());
+    metricService.untrackMetric(metricId, user);
     return ResponseEntity.status(204).build();
   }
 }

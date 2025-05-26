@@ -94,11 +94,6 @@ public class MetricConfiguration {
     return this;
   }
 
-  public MetricConfiguration untrack() {
-    this.tracked = false;
-    return this;
-  }
-
   public MetricConfiguration updateWith(MetricDTO metricDTO) {
     this.baselineValue = metricDTO.baseline();
     this.tracked = metricDTO.tracked();

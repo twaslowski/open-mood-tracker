@@ -62,17 +62,16 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldTrackAndUntrackMetric() {
     var user = initializeUser(UserSpec.valid().build());
-    assertThat(metricRepository.findById(1L)).isPresent();
+    var metricId = 1L;
+    assertThat(metricRepository.findById(metricId)).isPresent();
     metricConfigurationRepository.deleteAll();
-    MvcResult result = mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/1")
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/1")
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(200))
         .andReturn();
 
-    String trackedMetricId = JsonPath.read(result.getResponse().getContentAsString(), "$.trackedMetricId");
-
-    mockMvc.perform(MockMvcRequestBuilders.delete(format("/api/v1/metric/tracking/%s", trackedMetricId))
+    mockMvc.perform(MockMvcRequestBuilders.delete(format("/api/v1/metric/tracking/%d", metricId))
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(204))
@@ -99,10 +98,10 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
   void shouldReturnUnprocessableEntityOnMetricNotTracked() {
     var user = initializeUser(UserSpec.valid().build());
     metricConfigurationRepository.deleteAll();
-    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/metric/tracking/abc-def")
+    mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/metric/tracking/1")
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().is(422))
+        .andExpect(status().is(400))
         .andReturn();
   }
 }

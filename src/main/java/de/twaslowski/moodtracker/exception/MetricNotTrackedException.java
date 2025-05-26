@@ -4,7 +4,7 @@ import static java.lang.String.format;
 
 public class MetricNotTrackedException extends RuntimeException {
 
-  public MetricNotTrackedException(String userId, String trackedMetricId) {
+  public MetricNotTrackedException(String userId, long trackedMetricId) {
     super(format("Tracked metric %s does not exist for user %s", trackedMetricId, userId));
   }
 }

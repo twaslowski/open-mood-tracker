@@ -29,8 +29,8 @@ public class ExceptionHandlingAdvice {
 
   @ExceptionHandler(MetricNotTrackedException.class)
   public final ResponseEntity<ProblemDetail> handleMetricNotTracked(MetricNotTrackedException ex) {
-    ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
-    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(problemDetail);
+    ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
   }
 
   @ExceptionHandler(MetricAlreadyTrackedException.class)

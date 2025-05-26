@@ -24,7 +24,7 @@ const TrackingButton: React.FC<MetricProps> = ({ metric }) => {
         setIsLoading(false);
         throw new Error('trackedMetricId should be defined, but was not');
       }
-      untrackMetric(trackedMetricId).then(() => {
+      untrackMetric(metric.id).then(() => {
         setIsTracked(false);
         setTrackedMetricId('');
         setIsLoading(false);
