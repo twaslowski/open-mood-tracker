@@ -9,7 +9,6 @@ import de.twaslowski.moodtracker.repository.MetricConfigurationRepository;
 import de.twaslowski.moodtracker.repository.NotificationRepository;
 import de.twaslowski.moodtracker.repository.UserRepository;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,11 +39,10 @@ public class UserInitializationService {
     return user;
   }
 
-  private Set<MetricConfiguration> trackDefaultMetricsForUser(User user) {
-    return defaultTrackedMetrics.stream()
+  private void trackDefaultMetricsForUser(User user) {
+    defaultTrackedMetrics.stream()
         .map(metric -> MetricConfiguration.from(metric, user))
-        .map(metricConfigurationRepository::save)
-        .collect(Collectors.toSet());
+        .forEach(metricConfigurationRepository::save);
   }
 
   private void initializeDefaultNotification(User user) {

@@ -61,7 +61,7 @@ public class MetricConfiguration {
         .metric(metric)
         .user(user)
         .baselineValue(metric.getDefaultValue())
-        .tracked(false)
+        .tracked(true)
         .build();
   }
 

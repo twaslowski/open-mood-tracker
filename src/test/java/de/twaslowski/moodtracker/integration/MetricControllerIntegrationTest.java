@@ -32,7 +32,10 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
   void shouldTrackExistingMetric() {
     var user = initializeUser(UserSpec.valid().build());
     assertThat(metricRepository.findById(1L)).isPresent();
+
     metricConfigurationRepository.deleteAll();
+    assertThat(metricConfigurationRepository.findAll()).isEmpty();
+
     mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/1")
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))

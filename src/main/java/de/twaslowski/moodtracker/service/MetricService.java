@@ -52,7 +52,7 @@ public class MetricService {
         .map(m -> m.validateOwnership(user))
         .map(MetricConfiguration::track)
         .map(metricConfigurationRepository::save)
-        .orElseGet(() -> metricConfigurationRepository.save(MetricConfiguration.from(metric, user).track()));
+        .orElseGet(() -> metricConfigurationRepository.save(MetricConfiguration.from(metric, user)));
   }
 
   public void untrackMetric(long metricId, User user) {
