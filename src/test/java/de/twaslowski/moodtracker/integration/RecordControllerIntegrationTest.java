@@ -26,7 +26,7 @@ public class RecordControllerIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldReturnUnauthorizedIfUserNotAuthenticated() {
-    mockMvc.perform(get("/api/v1/record/123"))
+    mockMvc.perform(get("/api/v1/records"))
         .andExpect(status().isForbidden())
         .andReturn();
   }
@@ -35,7 +35,7 @@ public class RecordControllerIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldReturnOkIfUserAuthenticated() {
     var user = initializeUser(UserSpec.valid().build());
-    mockMvc.perform(get("/api/v1/record/" + user.getId())
+    mockMvc.perform(get("/api/v1/records")
             .with(user(user)))
         .andExpect(status().isOk())
         .andReturn();
@@ -47,7 +47,7 @@ public class RecordControllerIntegrationTest extends IntegrationTestBase {
     var user = initializeUser(UserSpec.valid().build());
     recordService.recordFromBaseline(user);
 
-    mockMvc.perform(get("/api/v1/record/" + user.getId())
+    mockMvc.perform(get("/api/v1/records/")
             .with(user(user)))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$[0].datapoints").isArray())

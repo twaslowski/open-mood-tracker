@@ -50,7 +50,7 @@ public class MetricDatapointUpdateHandler implements UpdateHandler {
   @SneakyThrows
   private TelegramResponse enrichExistingRecord(Record record, TelegramInlineKeyboardUpdate update, User user) {
     var receivedMetric = objectMapper.readValue(update.getCallbackData(), MetricDatapoint.class);
-    record.updateMetric(receivedMetric);
+    record.update(receivedMetric);
 
     log.info("Updated record {} with metric {}, value {}",
         record.getId(), receivedMetric.metricId(), receivedMetric.value());

@@ -20,7 +20,7 @@ class RecordTest {
     var newDatapoint = MoodMetric.INSTANCE.datapointWithValue(2);
 
     // when
-    record.updateMetric(newDatapoint);
+    record.update(newDatapoint);
 
     // then
     assertEquals(1, record.getValues().size());

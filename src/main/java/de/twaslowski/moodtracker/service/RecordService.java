@@ -5,9 +5,11 @@ import de.twaslowski.moodtracker.domain.dto.RecordDTO;
 import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.domain.entity.Record;
+import de.twaslowski.moodtracker.domain.entity.Record.Status;
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 import de.twaslowski.moodtracker.repository.RecordRepository;
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +38,7 @@ public class RecordService {
         .collect(Collectors.toList());
 
     var record = Record.builder()
+        .status(Status.IN_PROGRESS)
         .userId(user.getId())
         .values(initialDatapoints)
         .build();
@@ -45,7 +48,7 @@ public class RecordService {
 
   public List<RecordDTO> getRecords(String userId) {
     return recordRepository.findByUserId(userId).stream()
-        .filter(record -> !record.hasIncompleteMetric())
+        .filter(Record::completed)
         .map(this::toDTO)
         .collect(Collectors.toList());
   }
@@ -77,14 +80,19 @@ public class RecordService {
     recordRepository.save(
         Record.builder()
             .userId(user.getId())
+            .status(Status.COMPLETED)
             .values(baselineConfiguration)
             .build()
     );
   }
 
+  public boolean userRecordedToday(User user) {
+    return recordRepository.findCompleteRecordByUserAndDate(user.getId(), LocalDate.now()).isEmpty();
+  }
+
   public Optional<Record> findIncompleteRecordsForUser(String userId) {
     var incompleteRecords = recordRepository.findByUserId(userId).stream()
-        .filter(Record::hasIncompleteMetric)
+        .filter(Record::inProgress)
         .collect(Collectors.toSet());
 
     if (incompleteRecords.size() > 1) {

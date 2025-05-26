@@ -1,5 +1,7 @@
 package de.twaslowski.moodtracker.adapter.telegram.integration;
 
+import static de.twaslowski.moodtracker.domain.entity.Record.Status.COMPLETED;
+import static de.twaslowski.moodtracker.domain.entity.Record.Status.IN_PROGRESS;
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.awaitility.Awaitility.await;
@@ -34,6 +36,7 @@ public class RecordingIntegrationTest extends IntegrationTestBase {
           assertThat(temporaryRecords).isNotEmpty();
           var temporaryRecord = temporaryRecords.getFirst();
 
+          assertThat(temporaryRecord.getStatus()).isEqualTo(IN_PROGRESS);
           assertThat(temporaryRecord.getValues()).allMatch(metricDatapoint -> metricDatapoint.value() == null);
         }
     );
@@ -43,6 +46,7 @@ public class RecordingIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldDoNothingWhenReceivingAMetricUpdateWhileNotRecording() {
     initializeUser(UserSpec.valid().build());
+
     // when
     assertThat(recordRepository.findAll()).isEmpty();
 
@@ -134,6 +138,7 @@ public class RecordingIntegrationTest extends IntegrationTestBase {
                   SLEEP.defaultDatapoint()
               )
           );
+          assertThat(record.getStatus()).isEqualTo(COMPLETED);
           assertThat(recordService.findIncompleteRecordsForUser(user.getId())).isEmpty();
           assertMessageWithExactTextSent(messageUtil.getMessage("command.record.saved", recordService.stringifyRecord(record)));
         }

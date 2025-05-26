@@ -37,9 +37,12 @@ class AutoBaselineServiceTest {
 
   @Test
   void shouldCreateBaselineRecordAndSendMessage() {
-    var user = UserSpec.valid().build();
+    var user = UserSpec.valid()
+        .autoBaselineEnabled(true)
+        .build();
 
     when(userService.findAutoBaselineEligibleUsers()).thenReturn(List.of(user));
+    when(recordService.userRecordedToday(any())).thenReturn(false);
 
     autoBaselineService.createAutoBaselines();
 
