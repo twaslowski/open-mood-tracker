@@ -33,34 +33,25 @@ export default function ConfigurePage() {
               </Button>
 
               <Button
+                disabled={true}
                 className='bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white py-3 flex items-center justify-center transition-all duration-200 shadow-md hover:shadow-lg'
                 asChild
               >
                 <Link href='/configure/notifications'>
                   <BellIcon />
-                  Notification Settings
+                  Notification Settings (coming soon)
                 </Link>
               </Button>
-
-              <div className='mt-4 p-4 bg-gray-50 rounded-lg border border-gray-100'>
-                <h3 className='text-sm font-medium text-gray-700 mb-2'>Advanced Settings</h3>
-                <p className='text-xs text-gray-500'>
-                  Configure advanced options and integrations for your bot
-                </p>
-                <Button
-                  variant='outline'
-                  className='mt-3 w-full text-gray-700 border-gray-300 hover:bg-gray-100'
-                >
-                  Open Advanced Settings
-                </Button>
-              </div>
             </div>
           </div>
 
           <div className='mt-6 pt-4 border-t border-gray-100 text-center text-xs text-gray-400'>
             Need help? Visit our{' '}
-            <a href='#' className='text-primary-500 hover:underline'>
-              support page
+            <a
+              href='https://github.com/twaslowski/open-mood-tracker?tab=readme-ov-file#usage'
+              className='text-primary-500 hover:underline'
+            >
+              support page (to be expanded)
             </a>
           </div>
         </CardContent>
