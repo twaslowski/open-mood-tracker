@@ -1,0 +1,23 @@
+name: Setup Tailscale
+
+on:
+  workflow_dispatch:
+
+jobs:
+  setup-tailscale:
+    runs-on: self-hosted
+
+    steps:
+      - name: Install Tailscale
+        run: |
+          curl -fsSL https://tailscale.com/install.sh | sh
+
+      - name: Start Tailscale with Auth Key
+        env:
+          TAILSCALE_AUTHKEY: ${{ secrets.TAILSCALE_AUTHKEY }}
+        run: |
+          sudo tailscale up --authkey $TAILSCALE_AUTHKEY
+
+      - name: Show Tailscale Status
+        run: |
+          tailscale status
