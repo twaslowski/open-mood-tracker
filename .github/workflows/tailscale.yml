@@ -16,7 +16,7 @@ jobs:
         env:
           TAILSCALE_AUTHKEY: ${{ secrets.TAILSCALE_AUTHKEY }}
         run: |
-          sudo tailscale up --authkey $TAILSCALE_AUTHKEY
+          sudo tailscale up --auth-key $TAILSCALE_AUTHKEY
 
       - name: Show Tailscale Status
         run: |
