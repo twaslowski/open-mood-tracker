@@ -19,4 +19,7 @@ jobs:
           cache: maven
 
       - name: Unit tests
-        run: ./lifecycle/qa.sh
+        run: ./mvnw package test
+
+      - name: Integration tests
+        run: ./mvnw package test -P integration
