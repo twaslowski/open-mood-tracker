@@ -28,6 +28,9 @@ jobs:
       - name: Unit tests
         run: ./mvnw package test
 
+      - name: Set up local environment
+        run: docker compose -f local/docker-compose.yaml up -d --remove-orphans --wait
+
       - name: Integration tests
         run: ./mvnw package test -P integration
 
@@ -67,7 +70,7 @@ jobs:
         id: docker-metadata
         uses: docker/metadata-action@v5
         with:
-          images: tobiaswaslowski/open-mood-tracker
+          images: twaslowski/mood-tracker
           flavor: |
             latest=true
           tags: |
@@ -84,64 +87,3 @@ jobs:
           labels: ${{ steps.docker-metadata.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-
-  deploy-dev:
-    runs-on: self-hosted
-    needs: build_docker_image
-    name: Deploy to Dev
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-#      - name: Deploy Postgres
-#        run: |
-#          helm upgrade --install \
-#            --values ./environments/dev/postgres.values.yaml \
-#            --namespace mood-tracker-dev --create-namespace \
-#            --wait --timeout 150s \
-#            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
-
-      - name: Deploy mood-tracker
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN_DEV }}
-        run: |
-          export TAG="sha-$(git rev-parse --short HEAD)"
-        
-          helm upgrade --install \
-          --set image.tag="$TAG" \
-          --set telegramToken="$TELEGRAM_TOKEN" \
-          --values ./environments/dev/mood-tracker.values.yaml \
-          --namespace mood-tracker-dev \
-          --wait --timeout 600s \
-          mood-tracker ./charts/open-mood-tracker
-
-  deploy-prod:
-    runs-on: self-hosted
-    needs: deploy-dev
-    if: github.ref == 'refs/heads/main'
-    name: Deploy to Production
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-#      - name: Deploy Postgres
-#        run: |
-#          helm upgrade --install \
-#            --values ./environments/prod/postgres.values.yaml \
-#            --namespace mood-tracker --create-namespace \
-#            --wait --timeout 150s \
-#            postgres oci://registry-1.docker.io/bitnamicharts/postgresql
-
-      - name: Deploy mood-tracker
-        env:
-          TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        run: |
-          export TAG="sha-$(git rev-parse --short HEAD)"
-          
-          helm upgrade --install \
-          --set image.tag="$TAG" \
-          --set telegramToken="$TELEGRAM_TOKEN" \
-          --values ./environments/prod/mood-tracker.values.yaml \
-          --namespace mood-tracker \
-          --wait --timeout 600s \
-          mood-tracker ./charts/open-mood-tracker

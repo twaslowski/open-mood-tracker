@@ -8,11 +8,6 @@ import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessage
 import de.twaslowski.moodtracker.adapter.telegram.editable.EditableMarkupMessageService;
 import de.twaslowski.moodtracker.adapter.telegram.external.factory.BotApiMessageFactory;
 import jakarta.annotation.PostConstruct;
-import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +15,12 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.meta.api.objects.message.Message;
 import org.telegram.telegrambots.meta.generics.TelegramClient;
+
+import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -48,13 +49,17 @@ public class TelegramMessageSender {
       try {
         handleResponse(response);
       } catch (Exception e) {
-        log.error("Error processing response", e);
-        telegramClient.execute(BotApiMessageFactory.createTextResponse(
-            TelegramTextResponse.builder()
-                .chatId(response.getChatId())
-                .text(messageUtil.getMessage("error.generic"))
-                .build()
-        ));
+        log.error("Error processing response. Sending generic error response.", e);
+        try {
+          telegramClient.execute(BotApiMessageFactory.createTextResponse(
+              TelegramTextResponse.builder()
+                  .chatId(response.getChatId())
+                  .text(messageUtil.getMessage("error.generic"))
+                  .build()));
+        } catch (Exception ex) {
+          // This should result in user notifications being disabled due to potential 403s.
+          log.error("Fatal error sending error message.", e);
+        }
       }
     }
   }
@@ -62,8 +67,7 @@ public class TelegramMessageSender {
   private void handleResponse(TelegramResponse response) {
     switch (response.getResponseType()) {
       case TEXT -> handleTextResponse((TelegramTextResponse) response);
-      case INLINE_KEYBOARD ->
-          handleInlineKeyboardResponse((TelegramInlineKeyboardResponse) response);
+      case INLINE_KEYBOARD -> handleInlineKeyboardResponse((TelegramInlineKeyboardResponse) response);
       default -> throw new IllegalArgumentException("Unknown response type");
     }
   }

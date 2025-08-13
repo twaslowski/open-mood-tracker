@@ -5,7 +5,7 @@
 replicaCount: 1
 
 image:
-  repository: tobiaswaslowski/open-mood-tracker
+  repository: twaslowski/mood-tracker
   pullPolicy: IfNotPresent
   tag: "latest"
 
