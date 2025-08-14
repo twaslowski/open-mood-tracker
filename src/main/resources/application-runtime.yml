@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: ${DATASOURCE_URI}
+
+mood-tracker:
+  configuration:
+    url: ${CONFIGURATION_URL}

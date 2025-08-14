@@ -30,7 +30,7 @@ public class SessionService {
 
   private final UserRepository userRepository;
 
-  @Value("${mood-tracker.configuration.host}")
+  @Value("${mood-tracker.configuration.url}")
   private String configurationBaseUrl;
 
   @Value("${mood-tracker.configuration.jwt.expiry}")

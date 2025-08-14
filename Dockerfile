@@ -3,7 +3,7 @@ FROM eclipse-temurin:21-alpine
 HEALTHCHECK --interval=30s --timeout=3s \
   CMD wget --no-verbose -q --tries=1 --no-check-certificate https://localhost:8443/actuator/health || exit 1
 
-ENV SPRING_PROFILES_ACTIVE=prod
+ENV SPRING_PROFILES_ACTIVE=runtime
 ENV APP_DIR=/var/opt
 
 RUN mkdir -p $APP_DIR

@@ -2,8 +2,6 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 
-replicaCount: 1
-
 image:
   repository: twaslowski/mood-tracker
   pullPolicy: IfNotPresent
@@ -13,11 +11,17 @@ imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
 
-telegramToken: ""
-environment: ""
+telegramToken:
+  value: ""
+  existingSecret:
+    name: ""
+    key: ""
 
 datasource:
-  url: ""
+  uri: ""
+  existingSecret:
+    name: ""
+    key: ""
 
 metrics:
   tracked: []
@@ -96,13 +100,6 @@ readinessProbe:
   initialDelaySeconds: 90
   timeoutSeconds: 5
   periodSeconds: 30
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
 
 volumes:
   - name: config-volume

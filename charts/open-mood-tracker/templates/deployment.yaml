@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "mood-tracker.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
-  {{- end }}
+  replicas: 1
   selector:
     matchLabels:
       {{- include "mood-tracker.selectorLabels" . | nindent 6 }}
@@ -37,25 +35,37 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-          - name: SPRING_PROFILES_ACTIVE
-            value: {{ .Values.environment }}
-          - name: DATASOURCE_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgres
-                key: password
           - name: JWT_SECRET
             valueFrom:
               secretKeyRef:
-                name: {{ .Release.Name }}-secrets
+                name: {{ .Release.Name }}-jwt
                 key: jwt-secret
+          {{- if .Values.datasource.existingSecret.name }}
           - name: DATASOURCE_URL
-            value: {{ .Values.datasource.url }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Values.datasource.existingSecret.name }}
+                key: {{ .Values.datasource.existingSecret.key }}
+          {{- else if .Values.datasource.uri }}
+          - name: DATASOURCE_URL
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-datasource
+                key: datasource-uri
+          {{- end }}
+          {{- if .Values.telegramToken.existingSecret.name }}
           - name: TELEGRAM_TOKEN
             valueFrom:
               secretKeyRef:
-                name: {{ .Release.Name }}-secrets
+                name: {{ .Values.telegramToken.existingSecret.name }}
+                key: {{ .Values.telegramToken.existingSecret.key }}
+          {{- else if .Values.telegramToken.value }}
+          - name: TELEGRAM_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: {{ .Release.Name }}-telegram-token
                 key: telegram-token
+          {{- end }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}

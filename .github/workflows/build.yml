@@ -6,8 +6,6 @@ on:
       - develop
     paths:
       - 'src/**'
-      - 'charts/**'
-      - 'environments/**'
       - '.github/workflows/build.yml'
 
 jobs:

@@ -1,9 +1,0 @@
-spring:
-  datasource:
-    url: ${DATASOURCE_URL}
-    username: mood-tracker
-    password: ${DATASOURCE_PASSWORD}
-
-mood-tracker:
-  configuration:
-    host: "https://moody.twaslowski.com/configure"
