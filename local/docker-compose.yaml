@@ -1,14 +1,14 @@
 services:
   postgresql:
-    image: postgres:14.7
+    image: postgres:17
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: user
+      POSTGRES_USER: mood-tracker
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mood-tracker
+      POSTGRES_DB: mood_tracker
     healthcheck:
-      test: [ "CMD", "psql", "postgresql://user:password@localhost:5432/mood-tracker", "-c", "select 1;" ]
+      test: [ "CMD", "psql", "postgresql://mood-tracker:password@localhost:5432/mood_tracker", "-c", "select 1;" ]
       interval: 5s
       timeout: 5s
       retries: 3

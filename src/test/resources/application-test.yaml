@@ -3,8 +3,8 @@ server:
     enabled: false
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/mood-tracker?currentSchema=mood-tracker
-    username: user
+    url: jdbc:postgresql://localhost:5432/mood_tracker?currentSchema=mood-tracker
+    username: mood-tracker
     password: password
 
 mood-tracker:
@@ -14,6 +14,6 @@ mood-tracker:
   metrics:
     config-path: src/test/resources/metrics.yml
   configuration:
-    host: "http://localhost:3000"
+    url: "http://localhost:3000/configure"
     jwt:
       key: a-string-secret-at-least-256-bits-long

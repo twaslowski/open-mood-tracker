@@ -22,23 +22,8 @@ public class MetricService {
   private final MetricRepository metricRepository;
   private final MetricConfigurationRepository metricConfigurationRepository;
 
-  public List<MetricDTO> findUserMetrics(String userId) {
-    List<Metric> metrics = metricRepository.findMetricsByDefaultMetricIsTrueOrOwnerIdEquals(userId);
-    List<MetricConfiguration> metricConfigurations = metricConfigurationRepository.findTrackedMetricsByUserId(userId);
-    List<MetricDTO> trackedMetricDTOs = metricConfigurations.stream()
-        .map(MetricDTO::from)
-        .toList();
-
-    List<MetricDTO> untrackedMetricDTOs = metrics.stream()
-        .filter(metric -> metricConfigurations.stream()
-            .noneMatch(trackedMetric -> trackedMetric.getMetric().getId() == metric.getId()))
-        .map(MetricDTO::from)
-        .toList();
-
-    List<MetricDTO> consolidatedMetrics = new ArrayList<>();
-    consolidatedMetrics.addAll(trackedMetricDTOs);
-    consolidatedMetrics.addAll(untrackedMetricDTOs);
-    return consolidatedMetrics;
+  public List<MetricConfiguration> findUserMetrics(String userId) {
+    return metricConfigurationRepository.findByUserId(userId);
   }
 
   public Metric getMetricById(long id) {

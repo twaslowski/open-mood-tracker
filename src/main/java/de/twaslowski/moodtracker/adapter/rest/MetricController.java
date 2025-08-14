@@ -45,7 +45,9 @@ public class MetricController {
   @GetMapping("/metric")
   public ResponseEntity<List<MetricDTO>> getUserMetrics(@AuthenticationPrincipal User user) {
     log.info("Retrieving metrics for user {}", user.getId());
-    return ResponseEntity.ok(metricService.findUserMetrics(user.getId()));
+    return ResponseEntity.ok(metricService.findUserMetrics(user.getId()).stream()
+        .map(MetricDTO::from)
+        .toList());
   }
 
   @PostMapping("/metric/tracking/{metricId}")

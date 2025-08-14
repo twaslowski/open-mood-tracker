@@ -13,13 +13,13 @@ tasks:
   unit-test:
     desc: Run unit tests
     cmds:
-      - ./mvnw package test
+      - ./mvnw clean package test
 
   integration-test:
     desc: Run integration tests
     cmds:
       - task: start-env
-      - ./mvnw package test -P integration
+      - ./mvnw clean package test -P integration
 
   test:
     desc: Run unit tests, start environment, and run integration tests
@@ -35,7 +35,7 @@ tasks:
 
   lint:
     desc: Run linter
-    dir: grammr-ui
+    dir: frontend
     cmds:
       - pnpm lint:fix
       - pnpm lint:strict
@@ -46,6 +46,7 @@ tasks:
     desc: Start environment and run the application with local profile
     env:
       SPRING_PROFILES_ACTIVE: local
+      SERVER_HOST: http://localhost:8080
     cmds:
       - task: start-env
       - ./mvnw spring-boot:run &

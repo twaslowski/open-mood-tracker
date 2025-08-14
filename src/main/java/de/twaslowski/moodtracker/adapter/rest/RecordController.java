@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import static java.util.stream.Collectors.toList;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -27,7 +29,9 @@ public class RecordController {
                                                     @RequestParam(required = false) String to
   ) {
     log.info("Getting records for user {} from {} to {}", user.getId(), from, to);
-    List<RecordDTO> records = recordService.getRecords(user.getId());
+    List<RecordDTO> records = recordService.getRecords(user.getId()).stream()
+        .map(recordService::toDTO)
+        .toList();
     return ResponseEntity.ok(records);
   }
 }

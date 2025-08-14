@@ -48,10 +48,9 @@ public class RecordService {
     return recordRepository.save(record);
   }
 
-  public List<RecordDTO> getRecords(String userId) {
+  public List<Record> getRecords(String userId) {
     return recordRepository.findByUserId(userId).stream()
         .filter(Record::completed)
-        .map(this::toDTO)
         .collect(Collectors.toList());
   }
 
@@ -68,7 +67,7 @@ public class RecordService {
         .build();
   }
 
-  public DatapointDTO toDatapointDTO(MetricDatapoint metricDatapoint) {
+  private DatapointDTO toDatapointDTO(MetricDatapoint metricDatapoint) {
     var metric = metricService.getMetricById(metricDatapoint.metricId());
     return DatapointDTO.builder()
         .metricId(metric.getId())

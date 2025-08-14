@@ -1,8 +1,8 @@
-package de.twaslowski.moodtracker.config;
+package de.twaslowski.moodtracker.config.security;
 
 import static org.springframework.security.config.http.SessionCreationPolicy.NEVER;
 
-import de.twaslowski.moodtracker.config.security.JwtFilter;
+import de.twaslowski.moodtracker.config.RequestResponseLoggingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -37,6 +37,7 @@ public class SpringSecurityConfiguration {
         .requestMatchers("/api/v1/metric/**").authenticated()
         .requestMatchers("/api/v1/records").authenticated()
         .requestMatchers("/api/v1/record/**").authenticated()
+        .requestMatchers("/api/v2/records").authenticated()
         .anyRequest().denyAll();
   }
 }
