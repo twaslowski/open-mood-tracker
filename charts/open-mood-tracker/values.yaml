@@ -23,6 +23,8 @@ datasource:
     name: ""
     key: ""
 
+configurationUrl: ""
+
 metrics:
   tracked: []
   defaults: []

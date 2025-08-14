@@ -41,13 +41,13 @@ spec:
                 name: {{ .Release.Name }}-jwt
                 key: jwt-secret
           {{- if .Values.datasource.existingSecret.name }}
-          - name: DATASOURCE_URL
+          - name: DATASOURCE_URI
             valueFrom:
               secretKeyRef:
                 name: {{ .Values.datasource.existingSecret.name }}
                 key: {{ .Values.datasource.existingSecret.key }}
           {{- else if .Values.datasource.uri }}
-          - name: DATASOURCE_URL
+          - name: DATASOURCE_URI
             valueFrom:
               secretKeyRef:
                 name: {{ .Release.Name }}-datasource
@@ -66,6 +66,8 @@ spec:
                 name: {{ .Release.Name }}-telegram-token
                 key: telegram-token
           {{- end }}
+          - name: CONFIGURATION_URL
+            value: {{ .Values.configurationUrl | quote }}
           ports:
             - name: http
               containerPort: {{ .Values.service.port }}
