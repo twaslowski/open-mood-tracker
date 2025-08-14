@@ -11,6 +11,8 @@ import java.util.List;
 public record MetricSeries(
     long metricId,
     String name,
+    int minValue,
+    int maxValue,
     List<Label> labels,
     boolean tracked,
     List<Datapoint> trackingData
@@ -20,6 +22,8 @@ public record MetricSeries(
     return MetricSeries.builder()
         .metricId(metricConfiguration.getMetric().getId())
         .name(metricConfiguration.getMetric().getName())
+        .minValue(metricConfiguration.getMetric().getMinValue())
+        .maxValue(metricConfiguration.getMetric().getMaxValue())
         .labels(metricConfiguration.getMetric().getLabels())
         .tracked(metricConfiguration.isTracked())
         .trackingData(new ArrayList<>())
