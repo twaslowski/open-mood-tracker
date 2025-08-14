@@ -5,7 +5,7 @@ on:
       - main
 
 jobs:
-  test:
+  unit-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,6 +20,22 @@ jobs:
 
       - name: Unit tests
         run: ./mvnw package test
+
+  integration-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: corretto
+          cache: maven
+
+      - name: Set up local environment
+        run: docker compose -f local/docker-compose.yaml up -d --remove-orphans --wait
 
       - name: Integration tests
         run: ./mvnw package test -P integration
