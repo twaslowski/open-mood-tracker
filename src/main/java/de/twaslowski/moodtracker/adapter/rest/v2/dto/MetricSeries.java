@@ -13,6 +13,7 @@ public record MetricSeries(
     String name,
     int minValue,
     int maxValue,
+    int baseline,
     List<Label> labels,
     boolean tracked,
     List<Datapoint> trackingData
@@ -24,6 +25,7 @@ public record MetricSeries(
         .name(metricConfiguration.getMetric().getName())
         .minValue(metricConfiguration.getMetric().getMinValue())
         .maxValue(metricConfiguration.getMetric().getMaxValue())
+        .baseline(metricConfiguration.getBaselineValue())
         .labels(metricConfiguration.getMetric().getLabels())
         .tracked(metricConfiguration.isTracked())
         .trackingData(new ArrayList<>())
