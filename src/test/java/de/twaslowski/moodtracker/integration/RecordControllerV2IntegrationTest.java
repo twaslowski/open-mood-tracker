@@ -4,6 +4,7 @@ package de.twaslowski.moodtracker.integration;
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.IntegrationTestBase;
 import de.twaslowski.moodtracker.adapter.rest.v2.dto.MetricSeries;
+import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.entity.RecordSpec;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import lombok.SneakyThrows;
@@ -15,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Objects;
 
 import static java.time.ZonedDateTime.now;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -35,10 +37,15 @@ public class RecordControllerV2IntegrationTest extends IntegrationTestBase {
   void shouldReturnTimeSeries() {
     var user = initializeUser(UserSpec.valid().build());
 
-    assertThat(metricConfigurationRepository.findByUserId(user.getId())).hasSize(2);
+    var metrics = metricConfigurationRepository.findByUserId(user.getId());
+    assertThat(metrics).hasSize(2);
 
-    var record = RecordSpec.forUser(user.getId()).build();
-    var anotherRecord = RecordSpec.forUser(user.getId())
+    var metricsIds = metrics.stream()
+        .map(metricConfiguration ->  metricConfiguration.getMetric().getId())
+        .toList();
+
+    var record = RecordSpec.forUser(user.getId(), metricsIds).build();
+    var anotherRecord = RecordSpec.forUser(user.getId(), metricsIds)
         .creationTimestamp(now().minusDays(1))
         .build();
 
@@ -54,8 +61,14 @@ public class RecordControllerV2IntegrationTest extends IntegrationTestBase {
         objectMapper.getTypeFactory().constructCollectionType(List.class, MetricSeries.class));
 
     assertThat(timeSeries.size()).isEqualTo(2);
-    var moodSeries = timeSeries.stream().filter(series -> series.metricId() == 1).findFirst().orElseThrow();
-    var sleepSeries = timeSeries.stream().filter(series -> series.metricId() == 2).findFirst().orElseThrow();
+
+    var moodSeries = timeSeries.stream()
+        .filter(series -> "Mood".equals(series.name()))
+        .findFirst().orElseThrow();
+
+    var sleepSeries = timeSeries.stream()
+        .filter(series -> "Sleep".equals(series.name()))
+        .findFirst().orElseThrow();
 
     assertThat(moodSeries.trackingData()).hasSize(2);
     assertThat(sleepSeries.trackingData()).hasSize(2);

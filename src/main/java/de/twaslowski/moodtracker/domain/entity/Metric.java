@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -34,6 +35,10 @@ public class Metric {
   @Id
   @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "metric_id_seq")
   private long id;
+
+  @Version
+  @Builder.Default
+  private Long version = 0L;
 
   private String ownerId;
 

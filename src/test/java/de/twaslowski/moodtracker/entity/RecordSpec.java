@@ -5,17 +5,18 @@ import de.twaslowski.moodtracker.domain.value.MetricDatapoint;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RecordSpec {
 
-  public static Record.RecordBuilder forUser(String userId) {
+  public static Record.RecordBuilder forUser(String userId, List<Long> metricIds) {
     return Record.builder()
         .status(Record.Status.COMPLETED)
         .creationTimestamp(ZonedDateTime.now())
         .userId(userId)
-        .values(List.of(
-            new MetricDatapoint(1L, 1),
-            new MetricDatapoint(2L, 8))
+        .values(metricIds.stream()
+            .map(metricId -> new MetricDatapoint(metricId, 5))
+            .collect(Collectors.toList())
         );
   }
 }

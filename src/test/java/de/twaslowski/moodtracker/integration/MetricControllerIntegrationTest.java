@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.jayway.jsonpath.JsonPath;
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.IntegrationTestBase;
 import de.twaslowski.moodtracker.entity.UserSpec;
@@ -16,7 +15,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @SpringBootTest
@@ -31,12 +29,12 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldTrackExistingMetric() {
     var user = initializeUser(UserSpec.valid().build());
-    assertThat(metricRepository.findById(1L)).isPresent();
+    var mood = metricRepository.findMetricsByDefaultMetricIsTrueAndNameEquals("Mood").orElseThrow();
 
     metricConfigurationRepository.deleteAll();
     assertThat(metricConfigurationRepository.findAll()).isEmpty();
 
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/1")
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/%d".formatted(mood.getId()))
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(200))
@@ -47,14 +45,15 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldReturnConflictOnMetricAlreadyTracked() {
     var user = initializeUser(UserSpec.valid().build());
-    assertThat(metricRepository.findById(1L)).isPresent();
+    var mood = metricRepository.findMetricsByDefaultMetricIsTrueAndNameEquals("Mood").orElseThrow();
     metricConfigurationRepository.deleteAll();
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/1")
+
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/%d".formatted(mood.getId()))
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(200))
         .andReturn();
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/1")
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/%d".formatted(mood.getId()))
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(409))
@@ -65,16 +64,16 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
   @SneakyThrows
   void shouldTrackAndUntrackMetric() {
     var user = initializeUser(UserSpec.valid().build());
-    var metricId = 1L;
-    assertThat(metricRepository.findById(metricId)).isPresent();
+    var mood = metricRepository.findMetricsByDefaultMetricIsTrueAndNameEquals("Mood").orElseThrow();
+
     metricConfigurationRepository.deleteAll();
-    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/1")
+    mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/metric/tracking/%d".formatted(mood.getId()))
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(200))
         .andReturn();
 
-    mockMvc.perform(MockMvcRequestBuilders.delete(format("/api/v1/metric/tracking/%d", metricId))
+    mockMvc.perform(MockMvcRequestBuilders.delete(format("/api/v1/metric/tracking/%d", mood.getId()))
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().is(204))
@@ -85,9 +84,11 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
   @Test
   @SneakyThrows
   void shouldReturnBadRequestOnMetricNotFound() {
-    long nonexistentMetricId = 123L;
+    long nonexistentMetricId = 0L;
     var user = initializeUser(UserSpec.valid().build());
+
     assertThat(metricRepository.findById(nonexistentMetricId)).isEmpty();
+
     metricConfigurationRepository.deleteAll();
     mockMvc.perform(MockMvcRequestBuilders.post(format("/api/v1/metric/tracking/%d", nonexistentMetricId))
             .with(user(user))
@@ -101,6 +102,7 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
   void shouldReturnUnprocessableEntityOnMetricNotTracked() {
     var user = initializeUser(UserSpec.valid().build());
     metricConfigurationRepository.deleteAll();
+
     mockMvc.perform(MockMvcRequestBuilders.delete("/api/v1/metric/tracking/1")
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))

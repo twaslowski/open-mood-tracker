@@ -9,7 +9,5 @@ public interface MetricConfigurationRepository extends JpaRepository<MetricConfi
 
   List<MetricConfiguration> findByUserId(String id);
 
-  List<MetricConfiguration> findTrackedMetricsByUserId(String id);
-
   Optional<MetricConfiguration> findByUserIdAndMetricId(String userId, long metricId);
 }

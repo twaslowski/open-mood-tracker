@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
 
 @Configuration
 public class MetricConfiguration {
@@ -31,15 +32,20 @@ public class MetricConfiguration {
   }
 
   @Bean
+  @Transactional
   public List<Metric> defaultMetrics() {
     List<Metric> savedMetrics = new ArrayList<>();
     for (Metric metric : parsedMetricConfiguration.defaults()) {
       metric.setDefaultMetric(true);
+
       Optional<Metric> existingMetric = metricRepository.findMetricsByDefaultMetricIsTrueAndNameEquals(metric.getName());
+
       if (existingMetric.isPresent()) {
-        existingMetric.get().updateWith(metric);
-        savedMetrics.add(metricRepository.save(existingMetric.get()));
+        Metric existing = existingMetric.get();
+        existing.updateWith(metric);
+        savedMetrics.add(metricRepository.save(existing));
       } else {
+        metric.setVersion(1L);
         savedMetrics.add(metricRepository.save(metric));
       }
     }
@@ -65,3 +71,4 @@ public class MetricConfiguration {
 
   }
 }
+
