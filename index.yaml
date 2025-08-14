@@ -3,6 +3,16 @@ entries:
   mood-tracker:
   - apiVersion: v2
     appVersion: 0.1.0
+    created: "2025-08-14T15:13:02.657356515Z"
+    description: A telegram-based mood tracking application
+    digest: 536e6e977846d61e4947a11abfbd7b4268828c918cdbd62c1650b91cc81c3e5a
+    name: mood-tracker
+    type: application
+    urls:
+    - mood-tracker-0.2.1.tgz
+    version: 0.2.1
+  - apiVersion: v2
+    appVersion: 0.1.0
     created: "2025-08-14T07:33:44.267337199Z"
     description: A telegram-based mood tracking application
     digest: 77f93d6d5c5d7e24ba23d03a544b04c997ad514e36e1a4b5b1dd8f44daf08536
@@ -21,4 +31,4 @@ entries:
     urls:
     - mood-tracker-0.1.4.tgz
     version: 0.1.4
-generated: "2025-08-14T07:33:44.267341918Z"
+generated: "2025-08-14T15:13:02.657371052Z"
