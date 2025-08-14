@@ -56,9 +56,14 @@ public class RecordController {
 
     // Fetch all datapoints from each record and add them to their respective time series.
     for (Record record : records) {
-      record.getValues().forEach(value ->
-          seriesMap.get(value.metricId())
-              .add(Datapoint.of(record.getCreationTimestamp(), value.value()))
+      record.getValues().forEach(value -> {
+            var metricSeries = seriesMap.get(value.metricId());
+            if (metricSeries == null) {
+              log.warn("No metric series found for metric ID {} in record {}", value.metricId(), record.getId());
+              return;
+            }
+            metricSeries.add(Datapoint.of(record.getCreationTimestamp(), value.value()));
+          }
       );
     }
 
