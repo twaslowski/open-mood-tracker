@@ -45,7 +45,6 @@ public class MetricConfiguration {
         existing.updateWith(metric);
         savedMetrics.add(metricRepository.save(existing));
       } else {
-        metric.setVersion(1L);
         savedMetrics.add(metricRepository.save(metric));
       }
     }

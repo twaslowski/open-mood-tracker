@@ -3,7 +3,6 @@ tracked:
   - Sleep
 defaults:
   - name: Mood
-    id: 1
     description: "How are you feeling right now?"
     minValue: -3
     maxValue: 2
@@ -24,7 +23,6 @@ defaults:
         label: Severely Depressed
 
   - name: Sleep
-    id: 2
     description: "How many hours did you sleep last night?"
     minValue: 4
     maxValue: 12
