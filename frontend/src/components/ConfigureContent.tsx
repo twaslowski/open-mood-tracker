@@ -11,7 +11,7 @@ export default function ConfigureContent({
 }: {
   children: React.ReactNode;
 }): ReactElement {
-  const { isLoading, error, isAuthenticated } = useConfigAuth();
+  const { error, isAuthenticated } = useConfigAuth();
 
   // Show error state
   if (error || !isAuthenticated) {

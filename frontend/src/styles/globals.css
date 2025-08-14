@@ -175,3 +175,62 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  /* Gradient button styling */
+  .btn-gradient {
+    @apply bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white py-3 flex items-center justify-center transition-all duration-200 shadow-md hover:shadow-lg;
+  }
+
+  /* Base page gradient background - customizable with CSS variables */
+  .page-gradient-bg {
+    @apply min-h-screen flex items-center justify-center p-6;
+    background: linear-gradient(
+      to bottom,
+      var(--gradient-from, white),
+      var(--gradient-to, #e0e7ff)
+    );
+  }
+
+  /* Predefined gradient color schemes */
+  .gradient-blue {
+    --gradient-from: white;
+    --gradient-to: #e0e7ff; /* indigo-100 */
+  }
+
+  .gradient-purple {
+    --gradient-from: white;
+    --gradient-to: #f3e8ff; /* purple-100 */
+  }
+
+  .gradient-green {
+    --gradient-from: white;
+    --gradient-to: #dcfce7; /* green-100 */
+  }
+
+  .gradient-rose {
+    --gradient-from: white;
+    --gradient-to: #ffe4e6; /* rose-100 */
+  }
+
+  .gradient-amber {
+    --gradient-from: white;
+    --gradient-to: #fef3c7; /* amber-100 */
+  }
+
+  .gradient-cyan {
+    --gradient-from: white;
+    --gradient-to: #cffafe; /* cyan-100 */
+  }
+
+  /* Dark mode variants */
+  .gradient-dark {
+    --gradient-from: #1f2937; /* gray-800 */
+    --gradient-to: #111827; /* gray-900 */
+  }
+
+  .gradient-dark-blue {
+    --gradient-from: #1e3a8a; /* blue-900 */
+    --gradient-to: #1e1b4b; /* indigo-900 */
+  }
+}

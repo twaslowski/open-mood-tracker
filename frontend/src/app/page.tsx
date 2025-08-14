@@ -7,7 +7,7 @@ import { siteConfig } from '@/constant/config';
 
 const MoodTrackerCover = () => {
   return (
-    <div className='flex-grow min-h-screen bg-gradient-to-b from-white to-blue-100 flex flex-col items-center justify-center p-4'>
+    <div className='page-gradient-bg gradient-blue flex-col p-4'>
       <Image src='/images/moody_logo.png' alt='mood tracker logo' width={250} height={100} />
 
       <h1 className='text-6xl font-bold text-primary-500 mb-4'>moody</h1>
