@@ -21,8 +21,8 @@ services:
     ports:
       - "3000:3000"
     environment:
-      SERVER_HOST: "http://backend:8080"
-      TELEGRAM_BOT_NAME: open_mood_tracker_qa_bot
+      BACKEND_URL: "http://backend:8080"
+      TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
     networks:
       - mood-tracker-network
 
