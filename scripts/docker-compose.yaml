@@ -1,0 +1,47 @@
+services:
+  postgresql:
+    image: postgres:17
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: mood-tracker
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: mood_tracker
+    healthcheck:
+      test: [ "CMD", "psql", "postgresql://mood-tracker:password@localhost:5432/mood_tracker", "-c", "select 1;" ]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+    command: [ "postgres", "-c", "log_statement=all" ]
+    networks:
+      - mood-tracker-network
+
+  frontend:
+    image: twaslowski/mood-tracker-ui:latest
+    ports:
+      - "3000:3000"
+    environment:
+      SERVER_HOST: "http://backend:8080"
+      TELEGRAM_BOT_NAME: open_mood_tracker_qa_bot
+    networks:
+      - mood-tracker-network
+
+  backend:
+    depends_on:
+      - postgresql
+    image: twaslowski/mood-tracker:latest
+    environment:
+      DATASOURCE_URI: "jdbc:postgresql://postgresql:5432/mood_tracker?user=mood-tracker&password=password&currentSchema=mood-tracker"
+      TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
+      CONFIGURATION_URL: "http://localhost/configuration"
+      JWT_SECRET: 5621d8e4c15cee293751a99fc113943d
+    volumes:
+      - ../src/main/resources/metrics.yml:/app/config/metrics.yml
+    ports:
+      - "8080:8080"
+    networks:
+      - mood-tracker-network
+
+networks:
+  mood-tracker-network:
+    name: mood-tracker-network

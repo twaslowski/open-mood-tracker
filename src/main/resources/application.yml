@@ -21,6 +21,7 @@ spring:
     hikari:
       maximum-pool-size: 10
       max-lifetime: 1260000
+    url: ${DATASOURCE_URI}
   flyway:
     schemas: mood-tracker
 
@@ -41,6 +42,7 @@ mood-tracker:
     jwt:
       key: ${JWT_SECRET}
       expiry: 600
+    url: ${CONFIGURATION_URL}
 
 
 management:
