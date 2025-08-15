@@ -22,7 +22,7 @@ services:
       - "3000:3000"
     environment:
       BACKEND_URL: "http://backend:8080"
-      TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
+      TELEGRAM_BOT_NAME: open_mood_tracker_qa_bot
     networks:
       - mood-tracker-network
 

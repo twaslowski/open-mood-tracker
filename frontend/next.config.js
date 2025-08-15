@@ -47,12 +47,8 @@ const nextConfig = {
 
     return config;
   },
-  env: {
-    TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
-  },
 };
 
 module.exports = {
-  ...nextConfig,
-  output: 'standalone'
+  nextConfig,
 };
