@@ -46,7 +46,7 @@ tasks:
     desc: Start environment and run the application with local profile
     env:
       SPRING_PROFILES_ACTIVE: local
-      SERVER_HOST: http://localhost:8080
+      BACKEND_URL: http://localhost:8080
     cmds:
       - task: start-env
       - ./mvnw spring-boot:run &
