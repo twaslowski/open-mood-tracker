@@ -22,7 +22,7 @@ services:
       - "3000:3000"
     environment:
       BACKEND_URL: "http://backend:8080"
-      TELEGRAM_BOT_NAME: open_mood_tracker_qa_bot
+      TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
     networks:
       - mood-tracker-network
 
@@ -33,7 +33,7 @@ services:
     environment:
       DATASOURCE_URI: "jdbc:postgresql://postgresql:5432/mood_tracker?user=mood-tracker&password=password&currentSchema=mood-tracker"
       TELEGRAM_TOKEN: ${TELEGRAM_TOKEN}
-      CONFIGURATION_URL: "http://localhost/configuration"
+      CONFIGURATION_URL: "http://localhost:3000/configure"
       JWT_SECRET: 5621d8e4c15cee293751a99fc113943d
     volumes:
       - ../src/main/resources/metrics.yml:/app/config/metrics.yml

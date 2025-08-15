@@ -51,3 +51,8 @@ tasks:
       - task: start-env
       - ./mvnw spring-boot:run &
       - task: start-frontend
+
+  compose:
+    desc: Start the application using Docker Compose
+    cmds:
+      - docker compose -f scripts/docker-compose.yaml up -d -remove-orphans --wait
