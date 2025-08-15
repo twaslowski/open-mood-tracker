@@ -1,4 +1,7 @@
 /** @type {import('next').NextConfig} */
+
+const backendUrl = process.env.BACKEND_URL || 'http://localhost:8080';
+
 const nextConfig = {
   eslint: {
     dirs: ['src'],
@@ -6,7 +9,7 @@ const nextConfig = {
   rewrites: async () => [
     {
       source: '/api/:path*',
-      destination: `${process.env.SERVER_HOST}/api/:path*`,
+      destination: `${backendUrl}/api/:path*`,
     },
   ],
 
@@ -46,7 +49,6 @@ const nextConfig = {
   },
   env: {
     TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
-    SERVER_HOST: process.env.SERVER_HOST,
   },
 };
 
