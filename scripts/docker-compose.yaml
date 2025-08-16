@@ -17,16 +17,15 @@ services:
       - mood-tracker-network
 
   frontend:
-    image: localhost/mood-tracker-ui:latest
+    image: twaslowski/mood-tracker-ui:latest
     ports:
       - "3000:3000"
     environment:
-      BACKEND_HOST: "http://backend:8080"
-      TELEGRAM_BOT_NAME: ${TELEGRAM_BOT_NAME}
+      TELEGRAM_BOT_NAME: open_mood_tracker_qa_bot
     networks:
       - mood-tracker-network
 
-  backend:
+  mood-tracker:
     depends_on:
       - postgresql
     image: twaslowski/mood-tracker:latest

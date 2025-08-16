@@ -1,7 +1,5 @@
 import { ErrorBox } from '@/components/ui/error-box';
 
-import { siteConfig } from '@/constant/config';
-
 export default function InvalidToken() {
   return (
     <div className='page-gradient-bg gradient-rose'>
@@ -12,7 +10,7 @@ export default function InvalidToken() {
           your
           <a
             className='text-red-700 font-medium underline ml-1 hover:text-red-800 transition-colors'
-            href={`https://t.me/${siteConfig.telegramBotName}`}
+            href={`https://t.me/${process.env.TELEGRAM_BOT_NAME}`}
           >
             Telegram Bot{' '}
           </a>
