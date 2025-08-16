@@ -27,6 +27,18 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
+  void shouldReturnUserMetrics() {
+    var user = initializeUser(UserSpec.valid().build());
+
+    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/metric")
+            .with(user(user))
+            .contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andReturn();
+  }
+
+  @Test
+  @SneakyThrows
   void shouldTrackExistingMetric() {
     var user = initializeUser(UserSpec.valid().build());
     var mood = metricRepository.findMetricsByDefaultMetricIsTrueAndNameEquals("Mood").orElseThrow();
