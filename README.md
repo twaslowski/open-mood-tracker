@@ -1,9 +1,7 @@
-[![Build core](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml/badge.svg)](https://github.com/twaslowski/grammr/actions/workflows/build_core.yaml)
-[![core](https://img.shields.io/docker/v/grammrapp/grammr-core?sort=semver)](https://hub.docker.com/r/grammrapp/grammr-core)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=twaslowski_grammr&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=twaslowski_grammr)
-[![Documentation](https://img.shields.io/badge/docs-swagger-orange)](https://twaslowski.github.io/grammr)
-![License](https://img.shields.io/github/license/twaslowski/grammr)
-[![Vercel Deployment](https://deploy-badge.vercel.app/vercel/grammr)](https://vercel.com/tobias-waslowskis-projects/grammr/deployments)
+[![Build core](https://github.com/twaslowski/open-mood-tracker/actions/workflows/build.yml/badge.svg)](https://github.com/twaslowski/open-mood-tracker/actions/workflows/build.yml)
+[![Image](https://img.shields.io/docker/v/twaslowski/mood-tracker?sort=semver)](https://hub.docker.com/r/twaslowski/mood-tracker)
+![License](https://img.shields.io/github/license/twaslowski/open-mood-tracker)
+[![Vercel Deployment](https://deploy-badge.vercel.app/vercel/mood-tracker)](https://vercel.com/tobias-waslowskis-projects/open-mood-tracker)
 
 This is a Telegram-based Mood Tracking bot. 
 
