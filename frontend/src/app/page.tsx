@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import React from 'react';
+import {CogIcon, RocketIcon} from "lucide-react";
 
 const MoodTrackerCover = () => {
   return (
@@ -18,14 +19,16 @@ const MoodTrackerCover = () => {
       </div>
 
       <div className='justify-center flex space-x-2'>
-        <a href={`https://t.me/${process.env.TELEGRAM_BOT_NAME}`}>
-          <button className='bg-primary-500 hover:bg-primary-600 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105'>
-            Get Started
+        <a href={`https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME}`}>
+          <button className='btn-action-primary'>
+          <RocketIcon/>
+          <p>Get Started</p>
           </button>
         </a>
-        <a href={`https://t.me/${process.env.TELEGRAM_BOT_NAME}`}>
-          <button className='bg-white text-primary-500 font-semibold py-3 px-8 rounded-full shadow-lg transform transition duration-300 hover:scale-105'>
-            Learn More
+        <a href={`/configure`}>
+          <button className='btn-action-secondary'>
+              <CogIcon/>
+              <p>Configure Bot</p>
           </button>
         </a>
       </div>

@@ -41,7 +41,7 @@ mood-tracker:
   configuration:
     jwt:
       key: ${JWT_SECRET}
-      expiry: 600
+      expiry: 3600
     url: ${CONFIGURATION_URL}
 
 

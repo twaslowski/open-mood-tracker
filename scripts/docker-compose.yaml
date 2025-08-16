@@ -21,7 +21,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      TELEGRAM_BOT_NAME: open_mood_tracker_qa_bot
+      NEXT_PUBLIC_TELEGRAM_BOT_NAME: open_mood_tracker_qa_bot
     networks:
       - mood-tracker-network
 
