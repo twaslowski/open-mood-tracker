@@ -41,10 +41,6 @@ const nextConfig = {
 
     return config;
   },
-  env: {
-    TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
-    BACKEND_HOST: process.env.BACKEND_HOST,
-  },
 };
 
 module.exports = nextConfig;
