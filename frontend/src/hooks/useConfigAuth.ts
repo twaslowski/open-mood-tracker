@@ -7,7 +7,7 @@ import { retrieveNonExpiredToken, validateToken } from '@/lib/token';
 export function useConfigAuth() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const NO_TOKEN_ERROR =
