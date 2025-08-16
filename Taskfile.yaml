@@ -30,6 +30,8 @@ tasks:
   start-frontend:
     desc: Run the Next.js frontend
     dir: frontend
+    env:
+      BACKEND_HOST: http://localhost:8080
     cmds:
       - pnpm run dev
 
@@ -46,7 +48,6 @@ tasks:
     desc: Start environment and run the application with local profile
     env:
       SPRING_PROFILES_ACTIVE: local
-      BACKEND_URL: http://localhost:8080
     cmds:
       - task: start-env
       - ./mvnw spring-boot:run &

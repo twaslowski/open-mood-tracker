@@ -3,12 +3,9 @@ const nextConfig = {
   eslint: {
     dirs: ['src'],
   },
-  rewrites: async () => [
-    {
-      source: '/api/:path*',
-      destination: `${process.env.SERVER_HOST}/api/:path*`,
-    },
-  ],
+
+  // Enable standalone output for Docker optimization
+  output: 'standalone',
 
   reactStrictMode: true,
   swcMinify: true,
@@ -46,7 +43,7 @@ const nextConfig = {
   },
   env: {
     TELEGRAM_BOT_NAME: process.env.TELEGRAM_BOT_NAME,
-    SERVER_HOST: process.env.SERVER_HOST,
+    BACKEND_HOST: process.env.BACKEND_HOST,
   },
 };
 
