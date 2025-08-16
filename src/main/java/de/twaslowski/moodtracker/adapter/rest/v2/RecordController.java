@@ -40,7 +40,7 @@ public class RecordController {
     log.info("Getting records for user {}", user.getId());
 
     // Fetch all metrics tracked by the user and all records
-    var trackedMetrics = metricService.findUserMetrics(user.getId());
+    var trackedMetrics = metricService.findUserMetricConfigurations(user.getId());
     var records = recordService.getRecords(user.getId()).stream()
         .sorted(Comparator.comparing(record -> record.getCreationTimestamp().toInstant()))
         .toList();

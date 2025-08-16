@@ -1,21 +1,24 @@
 package de.twaslowski.moodtracker.integration;
 
-import static java.lang.String.format;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import de.twaslowski.moodtracker.Annotation.IntegrationTest;
 import de.twaslowski.moodtracker.IntegrationTestBase;
+import de.twaslowski.moodtracker.domain.dto.MetricDTO;
+import de.twaslowski.moodtracker.domain.entity.Metric;
 import de.twaslowski.moodtracker.entity.UserSpec;
 import lombok.SneakyThrows;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import static java.lang.String.format;
+import java.util.List;
 
 @SpringBootTest
 @IntegrationTest
@@ -30,11 +33,30 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
   void shouldReturnUserMetrics() {
     var user = initializeUser(UserSpec.valid().build());
 
-    mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/metric")
+    var metric = Metric.builder()
+        .ownerId(user.getId())
+        .name("metric")
+        .description("metric")
+        .minValue(-1)
+        .defaultValue(1)
+        .maxValue(1)
+        .defaultMetric(false)
+        .sortOrder(Metric.SortOrder.ASC)
+        .build();
+    metricRepository.save(metric);
+
+    var result = mockMvc.perform(MockMvcRequestBuilders.get("/api/v1/metric")
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andReturn();
+
+    List<MetricDTO> data = objectMapper.readValue(result.getResponse().getContentAsString(),
+        objectMapper.getTypeFactory().constructCollectionType(List.class, MetricDTO.class));
+
+    // There should be exactly 3 metrics: 2 default metrics and the one we just created.
+    assertThat(data).hasSize(3);
+    assertThat(data.stream().filter(MetricDTO::isDefault)).hasSize(2);
   }
 
   @Test

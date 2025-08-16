@@ -4,7 +4,6 @@ import de.twaslowski.moodtracker.domain.dto.MetricDTO;
 import de.twaslowski.moodtracker.domain.entity.MetricConfiguration;
 import de.twaslowski.moodtracker.domain.entity.User;
 import de.twaslowski.moodtracker.service.MetricService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -45,9 +46,7 @@ public class MetricController {
   @GetMapping("/metric")
   public ResponseEntity<List<MetricDTO>> getUserMetrics(@AuthenticationPrincipal User user) {
     log.info("Retrieving metrics for user {}", user.getId());
-    return ResponseEntity.ok(metricService.findUserMetrics(user.getId()).stream()
-        .map(MetricDTO::from)
-        .toList());
+    return ResponseEntity.ok(metricService.findUserMetrics(user.getId()));
   }
 
   @PostMapping("/metric/tracking/{metricId}")

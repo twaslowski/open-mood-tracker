@@ -8,11 +8,12 @@ import de.twaslowski.moodtracker.exception.MetricNotFoundException;
 import de.twaslowski.moodtracker.exception.MetricNotTrackedException;
 import de.twaslowski.moodtracker.repository.MetricConfigurationRepository;
 import de.twaslowski.moodtracker.repository.MetricRepository;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -22,9 +23,31 @@ public class MetricService {
   private final MetricRepository metricRepository;
   private final MetricConfigurationRepository metricConfigurationRepository;
 
-  public List<MetricConfiguration> findUserMetrics(String userId) {
+  public List<MetricConfiguration> findUserMetricConfigurations(String userId) {
     return metricConfigurationRepository.findByUserId(userId);
   }
+
+  // Finds metrics tracked or owned by user as well as
+  public List<MetricDTO> findUserMetrics(String userId) {
+    List<Metric> metrics = metricRepository.findMetricsByDefaultMetricIsTrueOrOwnerIdEquals(userId);
+
+    List<MetricConfiguration> metricConfigurations = metricConfigurationRepository.findByUserId(userId);
+    List<MetricDTO> trackedMetricDTOs = metricConfigurations.stream()
+        .map(MetricDTO::from)
+        .toList();
+
+    List<MetricDTO> untrackedMetricDTOs = metrics.stream()
+        .filter(metric -> metricConfigurations.stream()
+            .noneMatch(trackedMetric -> trackedMetric.getMetric().getId() == metric.getId()))
+        .map(MetricDTO::from)
+        .toList();
+
+    List<MetricDTO> consolidatedMetrics = new ArrayList<>();
+    consolidatedMetrics.addAll(trackedMetricDTOs);
+    consolidatedMetrics.addAll(untrackedMetricDTOs);
+    return consolidatedMetrics;
+  }
+
 
   public Metric getMetricById(long id) {
     return metricRepository.findById(id)
