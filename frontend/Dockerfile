@@ -13,7 +13,7 @@ ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
 # Valid for both the suggested docker-compose setup as well as the default Helm setup
-ENV BACKEND_HOST=http://mood-tracker:8000
+ENV BACKEND_HOST=http://mood-tracker:8080
 
 RUN pnpm run build
 

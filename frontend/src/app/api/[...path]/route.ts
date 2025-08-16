@@ -1,38 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { path: string[] } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { path: string[] } }) {
   return proxyRequest(request, params.path);
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { path: string[] } }
-) {
-  console.log(params.path);
+export async function POST(request: NextRequest, { params }: { params: { path: string[] } }) {
   return proxyRequest(request, params.path);
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { path: string[] } }
-) {
+export async function PUT(request: NextRequest, { params }: { params: { path: string[] } }) {
   return proxyRequest(request, params.path);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { path: string[] } }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: { path: string[] } }) {
   return proxyRequest(request, params.path);
 }
 
-export async function PATCH(
-  request: NextRequest,
-  { params }: { params: { path: string[] } }
-) {
+export async function PATCH(request: NextRequest, { params }: { params: { path: string[] } }) {
   return proxyRequest(request, params.path);
 }
 
@@ -43,11 +27,6 @@ async function proxyRequest(request: NextRequest, path: string[]) {
   if (!serverHost) {
     const errorMessage =
       'BACKEND_HOST environment variable is not configured. Please set BACKEND_HOST when starting the container.';
-    console.error('❌ API Proxy Error:', errorMessage);
-    console.error(
-      '💡 Solution: Set BACKEND_HOST environment variable when running the container:'
-    );
-    console.error('   docker run -e BACKEND_HOST=http://your-backend:8080 ...');
 
     return NextResponse.json(
       {
@@ -55,7 +34,7 @@ async function proxyRequest(request: NextRequest, path: string[]) {
         message: errorMessage,
         help: 'Set the BACKEND_HOST environment variable to your backend server URL',
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -64,7 +43,6 @@ async function proxyRequest(request: NextRequest, path: string[]) {
     new URL(serverHost);
   } catch (error) {
     const errorMessage = `Invalid BACKEND_HOST format: "${serverHost}". Must be a valid URL (e.g., http://localhost:8080)`;
-    console.error('❌ API Proxy Error:', errorMessage);
 
     return NextResponse.json(
       {
@@ -72,7 +50,7 @@ async function proxyRequest(request: NextRequest, path: string[]) {
         message: errorMessage,
         received: serverHost,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 
@@ -98,7 +76,7 @@ async function proxyRequest(request: NextRequest, path: string[]) {
       'x-requested-with',
     ];
 
-    headersToProxy.forEach(headerName => {
+    headersToProxy.forEach((headerName) => {
       const headerValue = request.headers.get(headerName);
       if (headerValue) {
         headers.set(headerName, headerValue);
@@ -133,14 +111,9 @@ async function proxyRequest(request: NextRequest, path: string[]) {
     });
 
     // Copy relevant response headers
-    const responseHeadersToProxy = [
-      'content-type',
-      'cache-control',
-      'etag',
-      'last-modified',
-    ];
+    const responseHeadersToProxy = ['content-type', 'cache-control', 'etag', 'last-modified'];
 
-    responseHeadersToProxy.forEach(headerName => {
+    responseHeadersToProxy.forEach((headerName) => {
       const headerValue = response.headers.get(headerName);
       if (headerValue) {
         proxyResponse.headers.set(headerName, headerValue);
@@ -150,12 +123,6 @@ async function proxyRequest(request: NextRequest, path: string[]) {
     return proxyResponse;
   } catch (error) {
     const errorMessage = `Failed to proxy request to backend server at ${serverHost}`;
-    console.error('❌ API Proxy Error:', errorMessage);
-    console.error('Error details:', error);
-    console.error(
-      '💡 Check if the backend server is running and accessible at:',
-      serverHost
-    );
 
     return NextResponse.json(
       {
@@ -164,7 +131,7 @@ async function proxyRequest(request: NextRequest, path: string[]) {
         serverHost,
         details: error instanceof Error ? error.message : 'Unknown error',
       },
-      { status: 502 }
+      { status: 502 },
     );
   }
 }
