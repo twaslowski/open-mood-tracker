@@ -1,8 +1,8 @@
 'use client';
 
+import { CogIcon, RocketIcon } from 'lucide-react';
 import Image from 'next/image';
 import React from 'react';
-import {CogIcon, RocketIcon} from "lucide-react";
 
 const MoodTrackerCover = () => {
   return (
@@ -21,14 +21,14 @@ const MoodTrackerCover = () => {
       <div className='justify-center flex space-x-2'>
         <a href={`https://t.me/${process.env.NEXT_PUBLIC_TELEGRAM_BOT_NAME}`}>
           <button className='btn-action-primary'>
-          <RocketIcon/>
-          <p>Get Started</p>
+            <RocketIcon />
+            <p>Get Started</p>
           </button>
         </a>
-        <a href={`/configure`}>
+        <a href='/configure'>
           <button className='btn-action-secondary'>
-              <CogIcon/>
-              <p>Configure Bot</p>
+            <CogIcon />
+            <p>Configure Bot</p>
           </button>
         </a>
       </div>
