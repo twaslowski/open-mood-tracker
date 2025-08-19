@@ -27,7 +27,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className='min-h-screen bg-gray-50 p-8'>
+    <main className='min-h-screen bg-gray-50 pt-4 px-2'>
       {error ? (
         <ErrorBox title='Could not load chart data'>
           There was a problem loading or displaying the chart. Please try again later.

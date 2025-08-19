@@ -15,6 +15,7 @@ import {
 } from 'recharts';
 
 import { MetricData } from '@/types/recording-data_v2';
+import {ArrowLeft} from "lucide-react";
 
 interface Props {
   data: MetricData[];
@@ -183,7 +184,13 @@ export default function MentalHealthChart({ data }: Props) {
   const visibleMetrics = metricsInfo.filter((metric) => visibleMetricIds.has(metric.id));
 
   return (
-    <div className='p-4 bg-white rounded-2xl shadow-md'>
+    <>
+      <a href='/configure'>
+        <button className='flex items-center text-blue-600 hover:underline mb-4'>
+          <ArrowLeft />
+          Back to Configuration
+        </button>
+      </a>
       <div className='flex justify-between items-center mb-4'>
         <div className='flex items-center gap-3'>
           <button
@@ -225,8 +232,6 @@ export default function MentalHealthChart({ data }: Props) {
             </svg>
           </button>
         </div>
-
-        <div className='text-sm text-gray-600'>Showing all metrics with daily averages</div>
       </div>
 
       <ResponsiveContainer width='100%' height={400}>
@@ -305,6 +310,6 @@ export default function MentalHealthChart({ data }: Props) {
           </button>
         ))}
       </div>
-    </div>
+    </>
   );
 }
