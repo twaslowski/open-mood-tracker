@@ -1,6 +1,7 @@
 'use client';
 
 import { format } from 'date-fns';
+import { ArrowLeft } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import {
   CartesianGrid,
@@ -15,7 +16,6 @@ import {
 } from 'recharts';
 
 import { MetricData } from '@/types/recording-data_v2';
-import {ArrowLeft} from "lucide-react";
 
 interface Props {
   data: MetricData[];
