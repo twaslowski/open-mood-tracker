@@ -120,14 +120,15 @@ export default function MentalHealthChart({ data }: Props) {
       ),
     }));
 
-    // Collect all unique days in the selected month
-    const allDays = Array.from(
-      new Set(
-        filteredMetrics.flatMap((metric) =>
-          metric.trackingData.map((dp) => format(new Date(dp.timestamp), 'yyyy-MM-dd')),
-        ),
-      ),
-    ).sort();
+    // Generate all days in the selected month
+    const year = parseInt(selectedMonth.split('-')[0]);
+    const month = parseInt(selectedMonth.split('-')[1]) - 1; // Month is 0-indexed in Date constructor
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const allDays = Array.from({ length: daysInMonth }, (_, i) => {
+      const day = i + 1;
+      return format(new Date(year, month, day), 'yyyy-MM-dd');
+    });
 
     // Build chart data points for each day
     return allDays.map((day) => {
