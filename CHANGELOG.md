@@ -1,5 +1,40 @@
 # Changelog
 
+## [1.1.0](https://github.com/twaslowski/open-mood-tracker/compare/v1.0.0...v1.1.0) (2025-10-17)
+
+
+### Features
+
+* add observability to auto-baseline, reschedule it to be earlier ([20c94e1](https://github.com/twaslowski/open-mood-tracker/commit/20c94e1bb2f0085ef42ab42a118f51a18f7591eb))
+* **chart:** graph all days of months instead of only the ones with data available ([e2f3304](https://github.com/twaslowski/open-mood-tracker/commit/e2f3304f2e61ddb98be10cd56081caa45967b232))
+* create notification crud service ([65ebc68](https://github.com/twaslowski/open-mood-tracker/commit/65ebc685140366c26e29acd656aaf9022015bb31))
+* **frontend:** build standalone docker image ([3534379](https://github.com/twaslowski/open-mood-tracker/commit/353437934bd0bc3dffdaec1a8370c0687444831f))
+* **frontend:** display loading screen while waiting for authentication ([bd55659](https://github.com/twaslowski/open-mood-tracker/commit/bd55659f5e84b7170c50757c983af7a8a76716db))
+* **frontend:** enable dynamic backend targets by directly proxying requests instead of using rewrites ([0d1d095](https://github.com/twaslowski/open-mood-tracker/commit/0d1d0959659ff1cf41357d1b9abc1ed3978cc11b))
+* make config tokens more long-lived, expose telegram bot name publicly ([7ddcce5](https://github.com/twaslowski/open-mood-tracker/commit/7ddcce58f88a12235f46bbd4f631f57413fddc1c))
+
+
+### Bug Fixes
+
+* **backend:** eagerly fetch metrics to avoid 'no session active' error ([edf5990](https://github.com/twaslowski/open-mood-tracker/commit/edf599045a6cc8b94a88100e09acc0d90f93ac0a))
+* **backend:** revert and test logic around retrieving metrics ([26ac87d](https://github.com/twaslowski/open-mood-tracker/commit/26ac87dd0fb0f9d5f7e65e5484b36f04a590f0f7))
+* **chart:** change deployment type to Recreate to ensure Bots do not interefere with one another ([1820c71](https://github.com/twaslowski/open-mood-tracker/commit/1820c71ad6f725144c6b4876e980866dffe8a97f))
+* **chart:** import order ([787116f](https://github.com/twaslowski/open-mood-tracker/commit/787116f4241781aedb145b9238a0643c014a0ca5))
+* **ci:** also run build pipeline on changes to frontend/** ([90b1635](https://github.com/twaslowski/open-mood-tracker/commit/90b16350c61e859bbe39376fda44d483865b726e))
+* **ci:** properly supply path to pnpm-lock.yaml ([734f6a1](https://github.com/twaslowski/open-mood-tracker/commit/734f6a1f3383df1abb50d9fcb01d60fe21f0a0d7))
+* **ci:** remove bad caching step from frontend build job ([535d0c1](https://github.com/twaslowski/open-mood-tracker/commit/535d0c1b562c23fd0e5ad5be2ebab2dcb368f358))
+* **ci:** run 'setup-node' in pnpm root dir ([8323ec4](https://github.com/twaslowski/open-mood-tracker/commit/8323ec44ad77daf28c9c0fb9ac52826ee4f32532))
+* **frontend:** access telegram bot name directly ([43b1fb5](https://github.com/twaslowski/open-mood-tracker/commit/43b1fb59f39bf3d07bfbe384789d2edf4dbfb9fa))
+* **frontend:** disable frontend image build temporarily; revert next.config.js ([128e408](https://github.com/twaslowski/open-mood-tracker/commit/128e4083487732d1cd7d132728067af2ff16504c))
+* **frontend:** enable runtime container parameterization by dropping 'standalone' ([0d6b509](https://github.com/twaslowski/open-mood-tracker/commit/0d6b50997540f775ba2280f56d14135caadc3c2c))
+* **frontend:** ensure environment variables are not fixed at docker build time ([630af98](https://github.com/twaslowski/open-mood-tracker/commit/630af989cd3241ca4dabd2e1c5d34a19d09afaef))
+* **frontend:** install sharp for production usage ([89c897b](https://github.com/twaslowski/open-mood-tracker/commit/89c897b0370d1ec3b2b15417283d8d0045f1a946))
+* **frontend:** linter issues ([6752ddd](https://github.com/twaslowski/open-mood-tracker/commit/6752ddd8ab06bc6fd130929fe07c28cb3f457cd2))
+* **frontend:** re-add Suspense block so Next compiles ([a9e81a3](https://github.com/twaslowski/open-mood-tracker/commit/a9e81a3d714df028fef8126a15ce58b0e02620a8))
+* **frontend:** remove console statements ([b3560de](https://github.com/twaslowski/open-mood-tracker/commit/b3560dedf50b58a808aa9ed58458b8417b50c23e))
+* **frontend:** supply default value for NextJS backend rewrite ([f3fd8b9](https://github.com/twaslowski/open-mood-tracker/commit/f3fd8b99f0caa5447af1b6a5b1179b19b782d5ef))
+* **ops:** frontend docker build context; remove obsolete 'runtime' profile ([892d4cc](https://github.com/twaslowski/open-mood-tracker/commit/892d4ccf07ef2d39affda204562129e2e5f20ef9))
+
 ## 1.0.0 (2025-08-14)
 
 
