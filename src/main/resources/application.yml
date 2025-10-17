@@ -33,7 +33,7 @@ mood-tracker:
       token: ${TELEGRAM_TOKEN}
     scheduled:
       auto-baseline:
-        cron: 0 0 22 * * *
+        cron: 0 0 20 * * *
       notification:
         recording-reminder:
           cron: 0 0 18 * * *

@@ -24,6 +24,7 @@ public class AutoBaselineService {
 
   @Scheduled(cron = "${mood-tracker.telegram.scheduled.auto-baseline.cron}")
   public void createAutoBaselines() {
+    log.info("Starting auto-baseline creation process");
     userService.findAutoBaselineEligibleUsers().stream()
         .filter(this::shouldCreateBaseline)
         .forEach(this::createBaselineRecord);

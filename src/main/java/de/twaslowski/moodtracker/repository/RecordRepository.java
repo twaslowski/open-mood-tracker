@@ -18,9 +18,5 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
       AND status = 'COMPLETE'""", nativeQuery = true)
   List<Record> findCompleteRecordByUserAndDate(String userId, @Param("date") LocalDate date);
 
-  List<Record> findByStatus(Status status);
-
-  Iterable<Object> deleteByStatus(Status status);
-
   void deleteByStatusAndUserId(Status status, String userId);
 }

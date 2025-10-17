@@ -37,10 +37,6 @@ public class User implements UserDetails {
     autoBaselineEnabled = !autoBaselineEnabled;
   }
 
-  // todo: It makes sense to extend this user entity in the future to improve interoperability
-  // with technologies beyond Telegram. For now, this is required for Spring Security integration
-  // tests to work.
-
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
     return List.of();
