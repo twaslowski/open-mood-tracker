@@ -117,7 +117,7 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
 
   @Test
   @SneakyThrows
-  void shouldReturnBadRequestOnMetricNotFound() {
+  void shouldReturnNotFound() {
     long nonexistentMetricId = 0L;
     var user = initializeUser(UserSpec.valid().build());
 
@@ -127,7 +127,7 @@ public class MetricControllerIntegrationTest extends IntegrationTestBase {
     mockMvc.perform(MockMvcRequestBuilders.post(format("/api/v1/metric/tracking/%d", nonexistentMetricId))
             .with(user(user))
             .contentType(MediaType.APPLICATION_JSON))
-        .andExpect(status().is(400))
+        .andExpect(status().is(404))
         .andReturn();
   }
 

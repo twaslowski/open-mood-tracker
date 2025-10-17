@@ -37,6 +37,8 @@ public class SpringSecurityConfiguration {
         .requestMatchers("/api/v1/metric/**").authenticated()
         .requestMatchers("/api/v1/records").authenticated()
         .requestMatchers("/api/v1/record/**").authenticated()
+        .requestMatchers("/api/v1/notification").authenticated()
+        .requestMatchers("/api/v1/notification/**").authenticated()
         .requestMatchers("/api/v2/records").authenticated()
         .anyRequest().denyAll();
   }
