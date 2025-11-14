@@ -3,6 +3,11 @@
 ![License](https://img.shields.io/github/license/twaslowski/open-mood-tracker)
 [![Vercel Deployment](https://deploy-badge.vercel.app/vercel/mood-tracker)](https://vercel.com/tobias-waslowskis-projects/open-mood-tracker)
 
+> [!WARNING] This repository is now archived. There is a follow-up project that you can check out if you're interested.
+> Essentially, it turned out that Telegram was simply unsuited for more complex user interactions. Therefore, I implemented a frontend-first
+> iteration of this project built on NextJS. It maintains the same features as well as a lightweight Telegram integration.
+> Check it out [here](https://github.com/twaslowski/mood-tracker).
+
 This is a Telegram-based Mood Tracking bot. 
 
 It allows users to record their mood states and other health-related metrics. 
